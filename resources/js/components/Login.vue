@@ -3,7 +3,7 @@
   <b-row>
   <b-col class="col-lg-6 offset-lg-3 col-md-8 offset-md-2">
     <b-card class="mt-3" header="Войти">
-        <b-form @submit="onSubmit">
+        <b-form>
         <b-form-group
             id="input-group-1"
             label="Электронная почта:"
@@ -14,8 +14,12 @@
             v-model="form.email"
             type="email"
             required
+            :state="emailValidation"
             placeholder="my-super@email.com"
             ></b-form-input>
+            <b-form-invalid-feedback :state="emailValidation">
+              введенный email некорректен
+            </b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group 
@@ -25,11 +29,15 @@
             <b-form-input
             type="password"
             id="input-2"
-            v-model="form.name"
+            v-model="form.password"
+             :state="passwordValidation"
             required></b-form-input>
+            <b-form-invalid-feedback :state="passwordValidation">
+              длина пароля должна быть равно или больше шести символов
+            </b-form-invalid-feedback>
         </b-form-group>
 
-        <b-button type="button" variant="primary" class="btn-block col-8 offset-2">Войти</b-button>
+        <b-button @click="login" type="button" variant="primary" class="btn-block col-8 offset-2">Войти</b-button>
         </b-form>
     
     </b-card>
@@ -42,33 +50,33 @@
   export default {
     data() {
       return {
+        mustBeValidated:false,
         form: {
           email: '',
           name: '',
-          food: null,
-          checked: []
-        },
-        foods: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
-        show: true
+          password: '',
+        }
       }
     },
     methods: {
-      onSubmit(evt) {
-        evt.preventDefault()
-        alert(JSON.stringify(this.form))
+      login(){
+        this.mustBeValidated=true;
+        if(!this.emailValidation || !this.passwordValidation)
+          return;
+          window.alert('login');
       },
-      onReset(evt) {
-        evt.preventDefault()
-        // Reset our form values
-        this.form.email = ''
-        this.form.name = ''
-        this.form.food = null
-        this.form.checked = []
-        // Trick to reset/clear native browser form validation state
-        this.show = false
-        this.$nextTick(() => {
-          this.show = true
-        })
+    },
+    computed:{
+      emailValidation(){
+        if(!this.mustBeValidated)
+          return null;
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(this.form.email).toLowerCase());
+      },
+      passwordValidation(){
+        if(!this.mustBeValidated)
+          return null;
+        return this.form.password.length >= 6;
       }
     }
   }
