@@ -10,4 +10,8 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    public function makeError($text = "Ошибка запроса", $status = 400)
+    {
+        return response()->json(['status' => 'error', 'text' => $text], $status);
+    }
 }
