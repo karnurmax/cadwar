@@ -1,90 +1,122 @@
 <template>
-<b-container>
-  <b-row>
-  <b-col cols-md="8">
-    <b-card class="mt-3" header="Войти">
-        <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-        <b-form-group
-            id="input-group-1"
-            label="Электронная почта:"
-            label-for="input-1"
-        >
-            <b-form-input
-            id="input-1"
-            v-model="form.email"
-            type="email"
-            required
-            placeholder="my-super@email.com"
-            ></b-form-input>
-        </b-form-group>
+    <b-container>
+        <b-row>
+            <b-col class="col-lg-6 offset-lg-3 col-md-8 offset-md-2">
+                <b-card class="mt-3" header="Регистрация">
+                    <b-form>
+                        <b-form-group
+                            id="input-group-1"
+                            label="Электронная почта:"
+                            label-for="input-1"
+                        >
+                            <b-form-input
+                                id="input-1"
+                                v-model="form.email"
+                                type="email"
+                                required
+                                :state="emailValidation"
+                                placeholder="my-super@email.com"
+                            ></b-form-input>
+                            <b-form-invalid-feedback :state="emailValidation">
+                                введенный email некорректен
+                            </b-form-invalid-feedback>
+                        </b-form-group>
 
-        <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
-            <b-form-input
-            id="input-2"
-            v-model="form.name"
-            required
-            placeholder="Enter name"
-            ></b-form-input>
-        </b-form-group>
+                        <b-form-group
+                            id="input-group-2"
+                            label="Пароль:"
+                            label-for="input-2"
+                        >
+                            <b-form-input
+                                type="password"
+                                id="input-2"
+                                v-model="form.password"
+                                required
+                                :state="passwordValidation"
+                            ></b-form-input>
+                            <b-form-invalid-feedback
+                                :state="passwordValidation"
+                            >
+                                длина пароля должна быть равно или больше шести
+                                символов
+                            </b-form-invalid-feedback>
+                        </b-form-group>
 
-        <b-form-group id="input-group-3" label="Food:" label-for="input-3">
-            <b-form-select
-            id="input-3"
-            v-model="form.food"
-            :options="foods"
-            required
-            ></b-form-select>
-        </b-form-group>
+                        <b-form-group
+                            id="input-group-3"
+                            label="Подтверждение:"
+                            label-for="input-3"
+                        >
+                            <b-form-input
+                                type="password"
+                                id="input-3"
+                                v-model="form.confirm"
+                                required
+                                :state="confirmValidation"
+                            ></b-form-input>
+                            <b-form-invalid-feedback :state="confirmValidation">
+                                подтверждение не совпадает с паролем
+                            </b-form-invalid-feedback>
+                        </b-form-group>
 
-        <b-form-group id="input-group-4">
-            <b-form-checkbox-group v-model="form.checked" id="checkboxes-4">
-            <b-form-checkbox value="me">Check me out</b-form-checkbox>
-            <b-form-checkbox value="that">Check that out</b-form-checkbox>
-            </b-form-checkbox-group>
-        </b-form-group>
-
-        <b-button type="submit" variant="primary">Submit</b-button>
-        <b-button type="reset" variant="danger">Reset</b-button>
-        </b-form>
-    
-    </b-card>
-  </b-col>
-  </b-row>
-</b-container>  
+                        <b-button
+                            type="button"
+                            variant="primary"
+                            class="btn-block col-8 offset-2"
+                            @click="register"
+                            >Регистрация</b-button
+                        >
+                    </b-form>
+                </b-card>
+            </b-col>
+            <b-col class="col-lg-6 offset-lg-3 col-md-8 offset-md-2">
+                <b-link to="/login">Уже есть аккаунт? Войдите</b-link>
+            </b-col>
+        </b-row>
+    </b-container>
 </template>
 
 <script>
-  export default {
+export default {
     data() {
-      return {
-        form: {
-          email: '',
-          name: '',
-          food: null,
-          checked: []
-        },
-        foods: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
-        show: true
-      }
+        return {
+            mustBeValidated: false,
+            form: {
+                email: "",
+                password: "",
+                confirm: ""
+            }
+        };
     },
     methods: {
-      onSubmit(evt) {
-        evt.preventDefault()
-        alert(JSON.stringify(this.form))
-      },
-      onReset(evt) {
-        evt.preventDefault()
-        // Reset our form values
-        this.form.email = ''
-        this.form.name = ''
-        this.form.food = null
-        this.form.checked = []
-        // Trick to reset/clear native browser form validation state
-        this.show = false
-        this.$nextTick(() => {
-          this.show = true
-        })
-      }
+        register() {
+            this.mustBeValidated = true;
+            if (
+                !this.emailValidation ||
+                !this.passwordValidation ||
+                !this.confirmValidation
+            )
+                return;
+            window.alert("register");
+        }
+    },
+    computed: {
+        emailValidation() {
+            if (!this.mustBeValidated) return null;
+            let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(this.form.email).toLowerCase());
+        },
+        passwordValidation() {
+            if (!this.mustBeValidated) return null;
+            return this.form.password.length >= 6;
+        },
+        confirmValidation() {
+            return !this.mustBeValidated
+                ? null
+                : this.form.password
+                ? this.form.password === this.form.confirm
+                : null;
+        }
     }
-  }
+};
 </script>
