@@ -86367,10 +86367,10 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
-  API_URL: 'http://localhost:8000/',
-  login: 'auth/login',
-  register: 'auth/register',
-  resetPassword: 'auth/reset'
+  API_URL: location.origin,
+  login: "auth/login",
+  register: "auth/register",
+  resetPassword: "auth/reset"
 });
 
 /***/ }),
