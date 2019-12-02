@@ -36,7 +36,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('test')->group(function () {
     Route::get('mail', function () {
         try {
-            mail('karnurmax@mail.ru', 'test subject', 'test body');
+            $headers = 'MIME-Version: 1.0' . "\r\n";
+            $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+            mail('karnurmax@mail.ru', 'test subject', '<h1>EEE</H1>', $headers);
         } catch (Exception $ex) {
             return $ex->getMessage();
         }
