@@ -2024,41 +2024,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      mustBeValidated: false,
       form: {
-        email: '',
-        name: '',
-        food: null,
-        checked: []
-      },
-      foods: [{
-        text: 'Select One',
-        value: null
-      }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
-      show: true
+        email: "",
+        name: "",
+        password: ""
+      }
     };
   },
   methods: {
-    onSubmit: function onSubmit(evt) {
-      evt.preventDefault();
-      alert(JSON.stringify(this.form));
+    login: function login() {
+      this.mustBeValidated = true;
+      if (!this.emailValidation || !this.passwordValidation) return;
+      window.alert("login");
+    }
+  },
+  computed: {
+    emailValidation: function emailValidation() {
+      if (!this.mustBeValidated) return null;
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(this.form.email).toLowerCase());
     },
-    onReset: function onReset(evt) {
-      var _this = this;
-
-      evt.preventDefault(); // Reset our form values
-
-      this.form.email = '';
-      this.form.name = '';
-      this.form.food = null;
-      this.form.checked = []; // Trick to reset/clear native browser form validation state
-
-      this.show = false;
-      this.$nextTick(function () {
-        _this.show = true;
-      });
+    passwordValidation: function passwordValidation() {
+      if (!this.mustBeValidated) return null;
+      return this.form.password.length >= 6;
     }
   }
 });
@@ -2111,6 +2121,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/auth */ "./resources/js/services/auth.js");
 //
 //
 //
@@ -2166,41 +2177,62 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      mustBeValidated: false,
       form: {
-        email: '',
-        name: '',
-        food: null,
-        checked: []
-      },
-      foods: [{
-        text: 'Select One',
-        value: null
-      }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
-      show: true
+        email: "",
+        password: "",
+        confirm: ""
+      }
     };
   },
   methods: {
-    onSubmit: function onSubmit(evt) {
-      evt.preventDefault();
-      alert(JSON.stringify(this.form));
-    },
-    onReset: function onReset(evt) {
-      var _this = this;
-
-      evt.preventDefault(); // Reset our form values
-
-      this.form.email = '';
-      this.form.name = '';
-      this.form.food = null;
-      this.form.checked = []; // Trick to reset/clear native browser form validation state
-
-      this.show = false;
-      this.$nextTick(function () {
-        _this.show = true;
+    register: function register() {
+      this.mustBeValidated = true;
+      if (!this.emailValidation || !this.passwordValidation || !this.confirmValidation) return;
+      _services_auth__WEBPACK_IMPORTED_MODULE_0__["default"].register(this.form).then(function (res) {
+        window.console.log(res);
       });
+    }
+  },
+  computed: {
+    emailValidation: function emailValidation() {
+      if (!this.mustBeValidated) return null;
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(this.form.email).toLowerCase());
+    },
+    passwordValidation: function passwordValidation() {
+      if (!this.mustBeValidated) return null;
+      return this.form.password.length >= 6;
+    },
+    confirmValidation: function confirmValidation() {
+      return !this.mustBeValidated ? null : this.form.password ? this.form.password === this.form.confirm : null;
     }
   }
 });
@@ -64079,6 +64111,66 @@ return jQuery;
 
 /***/ }),
 
+/***/ "./node_modules/os-browserify/browser.js":
+/*!***********************************************!*\
+  !*** ./node_modules/os-browserify/browser.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+exports.endianness = function () { return 'LE' };
+
+exports.hostname = function () {
+    if (typeof location !== 'undefined') {
+        return location.hostname
+    }
+    else return '';
+};
+
+exports.loadavg = function () { return [] };
+
+exports.uptime = function () { return 0 };
+
+exports.freemem = function () {
+    return Number.MAX_VALUE;
+};
+
+exports.totalmem = function () {
+    return Number.MAX_VALUE;
+};
+
+exports.cpus = function () { return [] };
+
+exports.type = function () { return 'Browser' };
+
+exports.release = function () {
+    if (typeof navigator !== 'undefined') {
+        return navigator.appVersion;
+    }
+    return '';
+};
+
+exports.networkInterfaces
+= exports.getNetworkInterfaces
+= function () { return {} };
+
+exports.arch = function () { return 'javascript' };
+
+exports.platform = function () { return 'browser' };
+
+exports.tmpdir = exports.tmpDir = function () {
+    return '/tmp';
+};
+
+exports.EOL = '\n';
+
+exports.homedir = function () {
+	return '/'
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/popper.js/dist/esm/popper.js":
 /*!***************************************************!*\
   !*** ./node_modules/popper.js/dist/esm/popper.js ***!
@@ -68703,7 +68795,6 @@ var render = function() {
                 [
                   _c(
                     "b-form",
-                    { on: { submit: _vm.onSubmit } },
                     [
                       _c(
                         "b-form-group",
@@ -68720,6 +68811,7 @@ var render = function() {
                               id: "input-1",
                               type: "email",
                               required: "",
+                              state: _vm.emailValidation,
                               placeholder: "my-super@email.com"
                             },
                             model: {
@@ -68729,7 +68821,17 @@ var render = function() {
                               },
                               expression: "form.email"
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            { attrs: { state: _vm.emailValidation } },
+                            [
+                              _vm._v(
+                                "\n                            введенный email некорректен\n                        "
+                              )
+                            ]
+                          )
                         ],
                         1
                       ),
@@ -68748,16 +68850,27 @@ var render = function() {
                             attrs: {
                               type: "password",
                               id: "input-2",
+                              state: _vm.passwordValidation,
                               required: ""
                             },
                             model: {
-                              value: _vm.form.name,
+                              value: _vm.form.password,
                               callback: function($$v) {
-                                _vm.$set(_vm.form, "name", $$v)
+                                _vm.$set(_vm.form, "password", $$v)
                               },
-                              expression: "form.name"
+                              expression: "form.password"
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            { attrs: { state: _vm.passwordValidation } },
+                            [
+                              _vm._v(
+                                "\n                            длина пароля должна быть равно или больше шести\n                            символов\n                        "
+                              )
+                            ]
+                          )
                         ],
                         1
                       ),
@@ -68766,7 +68879,8 @@ var render = function() {
                         "b-button",
                         {
                           staticClass: "btn-block col-8 offset-2",
-                          attrs: { type: "button", variant: "primary" }
+                          attrs: { type: "button", variant: "primary" },
+                          on: { click: _vm.login }
                         },
                         [_vm._v("Войти")]
                       )
@@ -68871,155 +68985,159 @@ var render = function() {
         [
           _c(
             "b-col",
-            { attrs: { "cols-md": "8" } },
+            { staticClass: "col-lg-6 offset-lg-3 col-md-8 offset-md-2" },
             [
               _c(
                 "b-card",
-                { staticClass: "mt-3", attrs: { header: "Войти" } },
+                { staticClass: "mt-3", attrs: { header: "Регистрация" } },
                 [
-                  _vm.show
-                    ? _c(
-                        "b-form",
-                        { on: { submit: _vm.onSubmit, reset: _vm.onReset } },
+                  _c(
+                    "b-form",
+                    [
+                      _c(
+                        "b-form-group",
+                        {
+                          attrs: {
+                            id: "input-group-1",
+                            label: "Электронная почта:",
+                            "label-for": "input-1"
+                          }
+                        },
                         [
-                          _c(
-                            "b-form-group",
-                            {
-                              attrs: {
-                                id: "input-group-1",
-                                label: "Электронная почта:",
-                                "label-for": "input-1"
-                              }
+                          _c("b-form-input", {
+                            attrs: {
+                              id: "input-1",
+                              type: "email",
+                              required: "",
+                              state: _vm.emailValidation,
+                              placeholder: "my-super@email.com"
                             },
-                            [
-                              _c("b-form-input", {
-                                attrs: {
-                                  id: "input-1",
-                                  type: "email",
-                                  required: "",
-                                  placeholder: "my-super@email.com"
-                                },
-                                model: {
-                                  value: _vm.form.email,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "email", $$v)
-                                  },
-                                  expression: "form.email"
-                                }
-                              })
-                            ],
-                            1
-                          ),
+                            model: {
+                              value: _vm.form.email,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "email", $$v)
+                              },
+                              expression: "form.email"
+                            }
+                          }),
                           _vm._v(" "),
                           _c(
-                            "b-form-group",
-                            {
-                              attrs: {
-                                id: "input-group-2",
-                                label: "Your Name:",
-                                "label-for": "input-2"
-                              }
-                            },
+                            "b-form-invalid-feedback",
+                            { attrs: { state: _vm.emailValidation } },
                             [
-                              _c("b-form-input", {
-                                attrs: {
-                                  id: "input-2",
-                                  required: "",
-                                  placeholder: "Enter name"
-                                },
-                                model: {
-                                  value: _vm.form.name,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "name", $$v)
-                                  },
-                                  expression: "form.name"
-                                }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "b-form-group",
-                            {
-                              attrs: {
-                                id: "input-group-3",
-                                label: "Food:",
-                                "label-for": "input-3"
-                              }
-                            },
-                            [
-                              _c("b-form-select", {
-                                attrs: {
-                                  id: "input-3",
-                                  options: _vm.foods,
-                                  required: ""
-                                },
-                                model: {
-                                  value: _vm.form.food,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "food", $$v)
-                                  },
-                                  expression: "form.food"
-                                }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "b-form-group",
-                            { attrs: { id: "input-group-4" } },
-                            [
-                              _c(
-                                "b-form-checkbox-group",
-                                {
-                                  attrs: { id: "checkboxes-4" },
-                                  model: {
-                                    value: _vm.form.checked,
-                                    callback: function($$v) {
-                                      _vm.$set(_vm.form, "checked", $$v)
-                                    },
-                                    expression: "form.checked"
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "b-form-checkbox",
-                                    { attrs: { value: "me" } },
-                                    [_vm._v("Check me out")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "b-form-checkbox",
-                                    { attrs: { value: "that" } },
-                                    [_vm._v("Check that out")]
-                                  )
-                                ],
-                                1
+                              _vm._v(
+                                "\n                            введенный email некорректен\n                        "
                               )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "b-button",
-                            { attrs: { type: "submit", variant: "primary" } },
-                            [_vm._v("Submit")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "b-button",
-                            { attrs: { type: "reset", variant: "danger" } },
-                            [_vm._v("Reset")]
+                            ]
                           )
                         ],
                         1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-form-group",
+                        {
+                          attrs: {
+                            id: "input-group-2",
+                            label: "Пароль:",
+                            "label-for": "input-2"
+                          }
+                        },
+                        [
+                          _c("b-form-input", {
+                            attrs: {
+                              type: "password",
+                              id: "input-2",
+                              required: "",
+                              state: _vm.passwordValidation
+                            },
+                            model: {
+                              value: _vm.form.password,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "password", $$v)
+                              },
+                              expression: "form.password"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            { attrs: { state: _vm.passwordValidation } },
+                            [
+                              _vm._v(
+                                "\n                            длина пароля должна быть равно или больше шести\n                            символов\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-form-group",
+                        {
+                          attrs: {
+                            id: "input-group-3",
+                            label: "Подтверждение:",
+                            "label-for": "input-3"
+                          }
+                        },
+                        [
+                          _c("b-form-input", {
+                            attrs: {
+                              type: "password",
+                              id: "input-3",
+                              required: "",
+                              state: _vm.confirmValidation
+                            },
+                            model: {
+                              value: _vm.form.confirm,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "confirm", $$v)
+                              },
+                              expression: "form.confirm"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            { attrs: { state: _vm.confirmValidation } },
+                            [
+                              _vm._v(
+                                "\n                            подтверждение не совпадает с паролем\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-button",
+                        {
+                          staticClass: "btn-block col-8 offset-2",
+                          attrs: { type: "button", variant: "primary" },
+                          on: { click: _vm.register }
+                        },
+                        [_vm._v("Регистрация")]
                       )
-                    : _vm._e()
+                    ],
+                    1
+                  )
                 ],
                 1
               )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-col",
+            { staticClass: "col-lg-6 offset-lg-3 col-md-8 offset-md-2" },
+            [
+              _c("b-link", { attrs: { to: "/login" } }, [
+                _vm._v("Уже есть аккаунт? Войдите")
+              ])
             ],
             1
           )
@@ -86184,6 +86302,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/models/user.js":
+/*!*************************************!*\
+  !*** ./resources/js/models/user.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function (email, name) {
+  this.id = -1;
+  this.email = email;
+  this.name = name;
+});
+
+/***/ }),
+
 /***/ "./resources/js/routes.js":
 /*!********************************!*\
   !*** ./resources/js/routes.js ***!
@@ -86219,6 +86354,99 @@ __webpack_require__.r(__webpack_exports__);
   path: '*',
   component: __webpack_require__(/*! ./components/NotFound404.vue */ "./resources/js/components/NotFound404.vue")["default"]
 }]);
+
+/***/ }),
+
+/***/ "./resources/js/services/apiUrls.js":
+/*!******************************************!*\
+  !*** ./resources/js/services/apiUrls.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  API_URL: 'http://localhost:8000/',
+  login: 'auth/login',
+  register: 'auth/register',
+  resetPassword: 'auth/reset'
+});
+
+/***/ }),
+
+/***/ "./resources/js/services/auth.js":
+/*!***************************************!*\
+  !*** ./resources/js/services/auth.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../models/user */ "./resources/js/models/user.js");
+/* harmony import */ var _http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./http */ "./resources/js/services/http.js");
+/* harmony import */ var _apiUrls__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./apiUrls */ "./resources/js/services/apiUrls.js");
+/* harmony import */ var os__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! os */ "./node_modules/os-browserify/browser.js");
+/* harmony import */ var os__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(os__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  register: function register(data) {
+    window.console.log('register', data);
+    return _http__WEBPACK_IMPORTED_MODULE_1__["default"].post(_apiUrls__WEBPACK_IMPORTED_MODULE_2__["default"].register, data);
+  },
+  getCurrentUser: function getCurrentUser() {
+    return new _models_user__WEBPACK_IMPORTED_MODULE_0__["default"]("qwe@qwe.qwe", "user1");
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/services/http.js":
+/*!***************************************!*\
+  !*** ./resources/js/services/http.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _apiUrls__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./apiUrls */ "./resources/js/services/apiUrls.js");
+
+
+axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.baseURL = _apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].API_URL;
+axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common = {
+  "X-Requested-With": "XMLHttpRequest",
+  "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+}; // document.querySelector('meta[name="csrf-token"]').content
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  get: function get(url) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url)["catch"](function (err) {
+      console.error(err);
+    });
+  },
+  post: function post(url, data) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, data)["catch"](function (err) {
+      console.error(err);
+    });
+  },
+  put: function put(url, data) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(url, data)["catch"](function (err) {
+      console.error(err);
+    });
+  },
+  remove: function remove(url) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](url)["catch"](function (err) {
+      console.error(err);
+    });
+  }
+});
 
 /***/ }),
 
