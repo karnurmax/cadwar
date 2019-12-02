@@ -83,8 +83,8 @@ class AuthController extends Controller
         if ($isLocalhost === true) {
             return true;
         }
-        $httpOrigin = $_SERVER['HTTP_ORIGIN'];
-        $body = "<a href='$httpOrigin/auth/code/$code'>$httpOrigin/auth/code/$code</a>";
+        $httpOrigin = 'https://cadwar.karnurmax.kz';
+        $body = "<a href='https://cadwar.karnurmax.kz/auth/code/$code'>https://cadwar.karnurmax.kz/auth/code/$code</a>";
         return Mailer::Send($email, 'Подтверждение кода для регистрации на сайте', $body);
     }
 }
