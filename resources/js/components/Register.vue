@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import authService from "../services/auth";
 export default {
     data() {
         return {
@@ -97,7 +98,9 @@ export default {
                 !this.confirmValidation
             )
                 return;
-            window.alert("register");
+            authService.register(this.form).then(res => {
+                window.console.log(res);
+            });
         }
     },
     computed: {
