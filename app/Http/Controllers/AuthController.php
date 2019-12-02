@@ -83,8 +83,8 @@ class AuthController extends Controller
         if ($isLocalhost === true) {
             return true;
         }
-
-        $body = "<a href='http://localhost:8000/auth/code/$code'>http://localhost:8000/auth/code/$code</a>";
+        $httpOrigin = $_SERVER['HTTP_ORIGIN'];
+        $body = "<a href='$httpOrigin/auth/code/$code'>$httpOrigin/auth/code/$code</a>";
         return Mailer::Send($email, 'Подтверждение кода для регистрации на сайте', $body);
     }
 }
