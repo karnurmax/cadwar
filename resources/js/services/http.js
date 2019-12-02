@@ -1,7 +1,11 @@
 import axios from "axios";
 import apiUrl from "./apiUrls";
 axios.defaults.baseURL = apiUrl.API_URL;
-
+axios.defaults.headers.common = {
+    "X-Requested-With": "XMLHttpRequest",
+    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+};
+// document.querySelector('meta[name="csrf-token"]').content
 export default {
     get(url) {
         return axios.get(url).catch(err => {
