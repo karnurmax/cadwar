@@ -84,7 +84,10 @@ class AuthController extends Controller
             return true;
         }
         $httpOrigin = 'https://cadwar.karnurmax.kz';
-        $body = "<a href='https://cadwar.karnurmax.kz/auth/code/$code'>https://cadwar.karnurmax.kz/auth/code/$code</a>";
-        return Mailer::Send($email, 'Подтверждение кода для регистрации на сайте', $body);
+        $message = "<a href='https://cadwar.karnurmax.kz/auth/code/$code'>https://cadwar.karnurmax.kz/auth/code/$code</a>";
+        
+        $headers[] = 'MIME-Version: 1.0';
+        $headers[] = 'Content-type: text/html; charset=UTF-8';
+        return mail($to, 'Подтверждение кода для регистрации на сайте', $message, implode("\r\n", $headers));
     }
 }
