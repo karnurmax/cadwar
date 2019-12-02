@@ -31,7 +31,7 @@ class AuthController extends Controller
 
         $code = Randomizer::GetString(500);
         $sent = $this->sendVerificationCodeToEmail($code, $email);
-        if ($sent === false) {
+        if ($sent !== true) {
             return $this->makeError('Произошла ошибка на стороне сервера. Не удалось отправить код на почту', 500);
         }
         $created = EmailConfirmCode::create(['code' => $code, 'user_id' => $user->id]);

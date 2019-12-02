@@ -13,7 +13,7 @@ class Mailer
             $headers[] = 'Content-type: text/html; charset=UTF-8';
             return mail($to, $subject, $message, implode("\r\n", $headers));
         } catch (Exception $ex) {
-            return false;
+            return $ex->getMessage();
         }
     }
 }
