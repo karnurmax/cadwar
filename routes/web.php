@@ -32,3 +32,9 @@ if ($allowedToRegister) {
 }
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::prefix('test')->group(function () {
+    Route::get('mail', function () {
+        return mail('karnurmax@mail.ru', 'test subject', 'test body');
+    });
+});
