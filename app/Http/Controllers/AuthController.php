@@ -89,7 +89,8 @@ class AuthController extends Controller
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=UTF-8';
         try {
-            mail('karnurmax@mail.ru', 'Подтверждение кода для регистрации на сайте', $message, implode("\r\n", $headers));
+            // mail('karnurmax@mail.ru', 'Подтверждение кода для регистрации на сайте', $message, implode("\r\n", $headers));
+            mail('karnurmax@mail.ru', 'Подтверждение кода для регистрации на сайте', 'test');
             return 'sent';
         } catch (Exception $ex) {
             return $ex->getMessage();
