@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\EmailConfirmCode;
 use App\Helpers\IsLocalhost;
-use App\Helpers\Mailer;
 use App\Helpers\Randomizer;
 use App\User;
 use Illuminate\Http\Request;
@@ -31,6 +30,7 @@ class AuthController extends Controller
 
         $code = Randomizer::GetString(500);
         $sent = $this->sendVerificationCodeToEmail($code, $email);
+        return $sent;
         if ($sent !== true) {
             return $this->makeError('Произошла ошибка на стороне сервера. Не удалось отправить код на почту', 500);
         }
@@ -85,9 +85,14 @@ class AuthController extends Controller
         }
         $httpOrigin = 'https://cadwar.karnurmax.kz';
         $message = "<a href='https://cadwar.karnurmax.kz/auth/code/$code'>https://cadwar.karnurmax.kz/auth/code/$code</a>";
-        
+
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=UTF-8';
-        return mail($to, 'Подтверждение кода для регистрации на сайте', $message, implode("\r\n", $headers));
+        try {
+            mail('karnurmax@mail.ru', 'Подтверждение кода для регистрации на сайте', $message, implode("\r\n", $headers));
+            return 'sent';
+        } catch (Exception $ex) {
+            return $ex->getMessage();
+        }
     }
 }
