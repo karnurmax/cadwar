@@ -8,23 +8,15 @@ axios.defaults.headers.common = {
 // document.querySelector('meta[name="csrf-token"]').content
 export default {
     get(url) {
-        return axios.get(url).catch(err => {
-            console.error(err);
-        });
+        return axios.get(url);
     },
     post(url, data) {
-        return axios.post(url, data).catch(err => {
-            console.error(err);
-        });
+        return axios.post(url, data);
     },
     put(url, data) {
-        return axios.put(url, data).catch(err => {
-            console.error(err);
-        });
+        return axios.put(url, data);
     },
     remove(url) {
-        return axios.delete(url).catch(err => {
-            console.error(err);
-        });
+        return axios.delete(url);
     }
 };
