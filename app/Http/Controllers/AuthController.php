@@ -43,7 +43,7 @@ class AuthController extends Controller
 
     public function code(Request $request)
     {
-
+return "OK";
     }
 
     public function login(Request $request)
