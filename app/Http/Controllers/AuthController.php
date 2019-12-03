@@ -43,7 +43,17 @@ class AuthController extends Controller
 
     public function code(Request $request, $code)
     {
-        return $code;
+        $confirmCode = EmailConfirmCode::where('code', $code)->first();
+        if (isset($confirmCode)) {
+            $user = User::find($confirmCode->user_id);
+            $user->email_verified = true;
+            $user->is_active = true;
+            $activated = $user->save();
+            if ($activated) {
+                return redirect()->route('login');
+            }
+        }
+        return response(400);
     }
 
     public function login(Request $request)
