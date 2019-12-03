@@ -80,22 +80,17 @@ class AuthController extends Controller
     {
         $isLocalhost = IsLocalhost::Check();
 
-        if ($isLocalhost === true && false) {
+        if ($isLocalhost === true) {
             return true;
         }
         $httpOrigin = 'https://cadwar.karnurmax.kz';
         $message = "https://cadwar.karnurmax.kz/auth/code/$code";
 
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-        try {
-            // mail('karnurmax@mail.ru', 'Подтверждение кода для регистрации на сайте', $message, implode("\r\n", $headers));
-            $headers = 'MIME-Version: 1.0' . "\r\n";
-            $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-            mail($email, 'Регистрация', $message);
-            return 'sent';
-        } catch (Exception $ex) {
-            return $ex->getMessage();
-        }
+        // $headers = 'MIME-Version: 1.0' . "\r\n";
+        // $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+
+        mail($email, 'Регистрация', $message);
+        return repsonse(201);
+
     }
 }
