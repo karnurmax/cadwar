@@ -16,7 +16,11 @@ Route::get('/', function () {
 });
 
 Route::prefix('auth')->group(function () {
-    Route::post('register', 'AuthController@register');
+
+    if (filter_var(env('ALLOWED_TO_REGISTER'), FILTER_VALIDATE_BOOLEAN)) {
+        Route::post('register', 'AuthController@register');
+    }
+
     Route::get('code', 'AuthController@code');
     Route::post('login', 'AuthController@login');
     Route::post('reset', 'AuthController@reset');
@@ -24,12 +28,12 @@ Route::prefix('auth')->group(function () {
 
 Route::get('/artisan/migraterefresh', 'ArtisanController@MigrateRefresh');
 
-$allowedToRegister = true; //TODO: env (allowedToRegister)
-if ($allowedToRegister) {
-    Auth::routes();
-} else {
-    Auth::routes(['register' => false]);
-}
+// $allowedToRegister = filter_var(env('ALLOWED_TO_REGISTER'), FILTER_VALIDATE_BOOLEAN);
+// if ($allowedToRegister) {
+//     Auth::routes();
+// } else {
+//     Auth::routes(['register' => false]);
+// }
 
 Route::get('/home', 'HomeController@index')->name('home');
 
