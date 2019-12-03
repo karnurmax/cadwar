@@ -21,7 +21,7 @@ Route::prefix('auth')->group(function () {
         Route::post('register', 'AuthController@register');
     }
 
-    Route::get('code', 'AuthController@code');
+    Route::get('code/{code}', 'AuthController@code');
     Route::post('login', 'AuthController@login');
     Route::post('reset', 'AuthController@reset');
 });

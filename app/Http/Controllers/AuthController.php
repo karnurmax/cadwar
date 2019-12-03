@@ -41,9 +41,9 @@ class AuthController extends Controller
         return response("OK", 200);
     }
 
-    public function code(Request $request)
+    public function code(Request $request, $code)
     {
-return "OK";
+        return $code;
     }
 
     public function login(Request $request)
