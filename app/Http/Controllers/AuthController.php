@@ -26,7 +26,7 @@ class AuthController extends Controller
         $user = new User;
         $user->email = $email;
         $user->password = Hash::make($password);
-        $user->save();
+        // $user->save();
 
         $code = Randomizer::GetString(500);
         $sent = $this->sendVerificationCodeToEmail($code, $email);
@@ -80,17 +80,19 @@ class AuthController extends Controller
     {
         $isLocalhost = IsLocalhost::Check();
 
-        if ($isLocalhost === true) {
+        if ($isLocalhost === true && false) {
             return true;
         }
         $httpOrigin = 'https://cadwar.karnurmax.kz';
-        $message = "<a href='https://cadwar.karnurmax.kz/auth/code/$code'>https://cadwar.karnurmax.kz/auth/code/$code</a>";
+        $message = "https://cadwar.karnurmax.kz/auth/code/$code";
 
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
         try {
             // mail('karnurmax@mail.ru', 'Подтверждение кода для регистрации на сайте', $message, implode("\r\n", $headers));
-            mail('karnurmax@mail.ru', 'Подтверждение кода для регистрации на сайте', '<p>test</p>', $headers);
+            $headers = 'MIME-Version: 1.0' . "\r\n";
+            $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+            mail($email, 'Регистрация', $message);
             return 'sent';
         } catch (Exception $ex) {
             return $ex->getMessage();
