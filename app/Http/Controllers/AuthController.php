@@ -86,11 +86,11 @@ class AuthController extends Controller
         $httpOrigin = 'https://cadwar.karnurmax.kz';
         $message = "<a href='https://cadwar.karnurmax.kz/auth/code/$code'>https://cadwar.karnurmax.kz/auth/code/$code</a>";
 
-        $headers[] = 'MIME-Version: 1.0';
-        $headers[] = 'Content-type: text/html; charset=UTF-8';
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
         try {
             // mail('karnurmax@mail.ru', 'Подтверждение кода для регистрации на сайте', $message, implode("\r\n", $headers));
-            mail('karnurmax@mail.ru', 'Подтверждение кода для регистрации на сайте', 'test');
+            mail('karnurmax@mail.ru', 'Подтверждение кода для регистрации на сайте', '<p>test</p>', $headers);
             return 'sent';
         } catch (Exception $ex) {
             return $ex->getMessage();
