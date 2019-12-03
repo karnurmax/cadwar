@@ -26,11 +26,11 @@ class AuthController extends Controller
         $user = new User;
         $user->email = $email;
         $user->password = Hash::make($password);
-        // $user->save();
+        $user->save();
 
         $code = Randomizer::GetString(500);
         $sent = $this->sendVerificationCodeToEmail($code, $email);
-        return $sent;
+        
         if ($sent !== true) {
             return $this->makeError('Произошла ошибка на стороне сервера. Не удалось отправить код на почту', 500);
         }
