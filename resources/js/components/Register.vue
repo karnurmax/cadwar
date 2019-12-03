@@ -98,9 +98,21 @@ export default {
                 !this.confirmValidation
             )
                 return;
-            authService.register(this.form).then(res => {
-                window.console.log(res);
-            });
+            authService
+                .register(this.form)
+                .then(res => {
+                    if (res.status === 200) {
+                        window.alert("register suceess");
+                    }
+                })
+                .catch(err => {
+                    if (err.response.status === 400) {
+                        let data = err.response.data;
+                        if (data.status === "error" && data.text) {
+                            window.alert(data.text);
+                        }
+                    }
+                });
         }
     },
     computed: {
