@@ -50,7 +50,7 @@ class AuthController extends Controller
             $user->is_active = true;
             $activated = $user->save();
             if ($activated) {
-                return redirect()->route('login');
+                return redirect('/#/login');
             }
         }
         return response(400);
