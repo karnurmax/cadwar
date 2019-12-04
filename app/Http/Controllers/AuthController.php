@@ -100,7 +100,7 @@ class AuthController extends Controller
         // $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
 
         mail($email, 'Регистрация', $message);
-        return repsonse(201);
+        return true;
 
     }
 }
