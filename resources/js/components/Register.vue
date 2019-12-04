@@ -102,14 +102,41 @@ export default {
                 .register(this.form)
                 .then(res => {
                     if (res.status === 200) {
-                        window.alert("register suceess");
+                        this.toastMessage(
+                            "Проверьте почту и активируйте аккаунт",
+                            {
+                                title: "Успешно!",
+                                variant: "success",
+                                toaster: "b-toaster-top-center",
+                                noAutoHide: true
+                            }
+                        );
+                    } else {
+                        this.toastMessage("Произошла ошибка", {
+                            title: "Ошибка!",
+                            variant: "danger",
+                            toaster: "b-toaster-top-center",
+                            noAutoHide: true
+                        });
                     }
                 })
                 .catch(err => {
                     if (err.response.status === 400) {
                         let data = err.response.data;
                         if (data.status === "error" && data.text) {
-                            window.alert(data.text);
+                            this.toastMessage(data.text, {
+                                title: "Ошибка!",
+                                variant: "danger",
+                                toaster: "b-toaster-top-center",
+                                noAutoHide: true
+                            });
+                        } else {
+                            this.toastMessage("Произошла ошибка", {
+                                title: "Ошибка!",
+                                variant: "danger",
+                                toaster: "b-toaster-top-center",
+                                noAutoHide: true
+                            });
                         }
                     }
                 });
