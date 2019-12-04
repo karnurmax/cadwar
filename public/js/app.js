@@ -1984,6 +1984,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/auth */ "./resources/js/services/auth.js");
 //
 //
 //
@@ -2042,6 +2043,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2055,9 +2057,42 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     login: function login() {
+      var _this = this;
+
       this.mustBeValidated = true;
       if (!this.emailValidation || !this.passwordValidation) return;
-      window.alert("login");
+      _services_auth__WEBPACK_IMPORTED_MODULE_0__["default"].login(this.form).then(function (res) {
+        if (res.status === 200) {
+          return _this.$router.replace("/"); //location.hash = "#/";
+        } else {
+          _this.toastMessage("Произошла ошибка", {
+            title: "Ошибка!",
+            variant: "danger",
+            toaster: "b-toaster-top-center",
+            noAutoHide: true
+          });
+        }
+      })["catch"](function (err) {
+        if (err.response.status === 400) {
+          var data = err.response.data;
+
+          if (data.status === "error" && data.text) {
+            _this.toastMessage(data.text, {
+              title: "Ошибка!",
+              variant: "danger",
+              toaster: "b-toaster-top-center",
+              noAutoHide: true
+            });
+          } else {
+            _this.toastMessage("Произошла ошибка", {
+              title: "Ошибка!",
+              variant: "danger",
+              toaster: "b-toaster-top-center",
+              noAutoHide: true
+            });
+          }
+        }
+      });
     }
   },
   computed: {
@@ -64147,66 +64182,6 @@ return jQuery;
 
 /***/ }),
 
-/***/ "./node_modules/os-browserify/browser.js":
-/*!***********************************************!*\
-  !*** ./node_modules/os-browserify/browser.js ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-exports.endianness = function () { return 'LE' };
-
-exports.hostname = function () {
-    if (typeof location !== 'undefined') {
-        return location.hostname
-    }
-    else return '';
-};
-
-exports.loadavg = function () { return [] };
-
-exports.uptime = function () { return 0 };
-
-exports.freemem = function () {
-    return Number.MAX_VALUE;
-};
-
-exports.totalmem = function () {
-    return Number.MAX_VALUE;
-};
-
-exports.cpus = function () { return [] };
-
-exports.type = function () { return 'Browser' };
-
-exports.release = function () {
-    if (typeof navigator !== 'undefined') {
-        return navigator.appVersion;
-    }
-    return '';
-};
-
-exports.networkInterfaces
-= exports.getNetworkInterfaces
-= function () { return {} };
-
-exports.arch = function () { return 'javascript' };
-
-exports.platform = function () { return 'browser' };
-
-exports.tmpdir = exports.tmpDir = function () {
-    return '/tmp';
-};
-
-exports.EOL = '\n';
-
-exports.homedir = function () {
-	return '/'
-};
-
-
-/***/ }),
-
 /***/ "./node_modules/popper.js/dist/esm/popper.js":
 /*!***************************************************!*\
   !*** ./node_modules/popper.js/dist/esm/popper.js ***!
@@ -86450,16 +86425,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../models/user */ "./resources/js/models/user.js");
 /* harmony import */ var _http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./http */ "./resources/js/services/http.js");
 /* harmony import */ var _apiUrls__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./apiUrls */ "./resources/js/services/apiUrls.js");
-/* harmony import */ var os__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! os */ "./node_modules/os-browserify/browser.js");
-/* harmony import */ var os__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(os__WEBPACK_IMPORTED_MODULE_3__);
-
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   register: function register(data) {
-    window.console.log('register', data);
     return _http__WEBPACK_IMPORTED_MODULE_1__["default"].post(_apiUrls__WEBPACK_IMPORTED_MODULE_2__["default"].register, data);
+  },
+  login: function login(data) {
+    return _http__WEBPACK_IMPORTED_MODULE_1__["default"].post(_apiUrls__WEBPACK_IMPORTED_MODULE_2__["default"].login, data);
+  },
+  reset: function reset(data) {
+    return _http__WEBPACK_IMPORTED_MODULE_1__["default"].post(_apiUrls__WEBPACK_IMPORTED_MODULE_2__["default"].resetPassword, data);
   },
   getCurrentUser: function getCurrentUser() {
     return new _models_user__WEBPACK_IMPORTED_MODULE_0__["default"]("qwe@qwe.qwe", "user1");
