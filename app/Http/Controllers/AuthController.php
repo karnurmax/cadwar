@@ -30,7 +30,7 @@ class AuthController extends Controller
 
         $code = Randomizer::GetString(50);
         $sent = $this->sendVerificationCodeToEmail($code, $email);
-        
+
         if ($sent !== true) {
             return $this->makeError('Произошла ошибка на стороне сервера. Не удалось отправить код на почту', 500);
         }
@@ -58,12 +58,12 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-
+        return "login";
     }
 
     public function reset(Request $request)
     {
-
+        return "reset";
     }
     private function validateData($data)
     {
