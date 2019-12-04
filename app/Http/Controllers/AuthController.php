@@ -28,7 +28,7 @@ class AuthController extends Controller
         $user->password = Hash::make($password);
         $user->save();
 
-        $code = Randomizer::GetString(500);
+        $code = Randomizer::GetString(50);
         $sent = $this->sendVerificationCodeToEmail($code, $email);
         
         if ($sent !== true) {
