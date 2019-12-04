@@ -2214,10 +2214,46 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     register: function register() {
+      var _this = this;
+
       this.mustBeValidated = true;
       if (!this.emailValidation || !this.passwordValidation || !this.confirmValidation) return;
       _services_auth__WEBPACK_IMPORTED_MODULE_0__["default"].register(this.form).then(function (res) {
-        window.console.log(res);
+        if (res.status === 200) {
+          _this.toastMessage("Проверьте почту и активируйте аккаунт", {
+            title: "Успешно!",
+            variant: "success",
+            toaster: "b-toaster-top-center",
+            noAutoHide: true
+          });
+        } else {
+          _this.toastMessage("Произошла ошибка", {
+            title: "Ошибка!",
+            variant: "danger",
+            toaster: "b-toaster-top-center",
+            noAutoHide: true
+          });
+        }
+      })["catch"](function (err) {
+        if (err.response.status === 400) {
+          var data = err.response.data;
+
+          if (data.status === "error" && data.text) {
+            _this.toastMessage(data.text, {
+              title: "Ошибка!",
+              variant: "danger",
+              toaster: "b-toaster-top-center",
+              noAutoHide: true
+            });
+          } else {
+            _this.toastMessage("Произошла ошибка", {
+              title: "Ошибка!",
+              variant: "danger",
+              toaster: "b-toaster-top-center",
+              noAutoHide: true
+            });
+          }
+        }
       });
     }
   },
@@ -85329,6 +85365,7 @@ module.exports = function(module) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/index.js");
+/* harmony import */ var _di_index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./di/index */ "./resources/js/di/index.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -85347,6 +85384,8 @@ var routes = __webpack_require__(/*! ./routes.js */ "./resources/js/routes.js")[
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
   routes: routes
 });
+
+Vue.use(_di_index__WEBPACK_IMPORTED_MODULE_2__["default"]);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -85357,20 +85396,20 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
+Vue.component("example-component", __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('passport-clients', __webpack_require__(/*! ./components/passport/Clients.vue */ "./resources/js/components/passport/Clients.vue")["default"]);
-Vue.component('passport-authorized-clients', __webpack_require__(/*! ./components/passport/AuthorizedClients.vue */ "./resources/js/components/passport/AuthorizedClients.vue")["default"]);
-Vue.component('passport-personal-access-tokens', __webpack_require__(/*! ./components/passport/PersonalAccessTokens.vue */ "./resources/js/components/passport/PersonalAccessTokens.vue")["default"]);
-Vue.component('app', __webpack_require__(/*! ./components/App.vue */ "./resources/js/components/App.vue")["default"]);
+Vue.component("passport-clients", __webpack_require__(/*! ./components/passport/Clients.vue */ "./resources/js/components/passport/Clients.vue")["default"]);
+Vue.component("passport-authorized-clients", __webpack_require__(/*! ./components/passport/AuthorizedClients.vue */ "./resources/js/components/passport/AuthorizedClients.vue")["default"]);
+Vue.component("passport-personal-access-tokens", __webpack_require__(/*! ./components/passport/PersonalAccessTokens.vue */ "./resources/js/components/passport/PersonalAccessTokens.vue")["default"]);
+Vue.component("app", __webpack_require__(/*! ./components/App.vue */ "./resources/js/components/App.vue")["default"]);
 var app = new Vue({
   router: router,
-  el: '#app'
+  el: "#app"
 });
 
 /***/ }),
@@ -86302,6 +86341,30 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/di/index.js":
+/*!**********************************!*\
+  !*** ./resources/js/di/index.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var arr = {
+  toastMessage: function toastMessage(msg, options) {
+    this.$bvToast.toast(msg, options);
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (function (Vue) {
+  for (var k in arr) {
+    if (arr.hasOwnProperty(k)) {
+      Vue.prototype[k] = arr[k];
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/models/user.js":
 /*!*************************************!*\
   !*** ./resources/js/models/user.js ***!
@@ -86427,24 +86490,16 @@ axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common = {
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   get: function get(url) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url)["catch"](function (err) {
-      console.error(err);
-    });
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url);
   },
   post: function post(url, data) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, data)["catch"](function (err) {
-      console.error(err);
-    });
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, data);
   },
   put: function put(url, data) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(url, data)["catch"](function (err) {
-      console.error(err);
-    });
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(url, data);
   },
   remove: function remove(url) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](url)["catch"](function (err) {
-      console.error(err);
-    });
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](url);
   }
 });
 
