@@ -22,7 +22,7 @@ Route::prefix('auth')->group(function () {
     }
 
     Route::get('code/{code}', 'AuthController@code');
-    Route::post('login', 'AuthController@login');
+    Route::post('login', 'AuthController@login')->name('login');
     Route::post('reset', 'AuthController@reset');
 });
 
