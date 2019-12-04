@@ -58,6 +58,11 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $data = $request->all();
+        $user = User::where([
+            ['email', '=', $data['email']],
+            ['password', '=', Hash::make($data['password'])],
+        ])->firstOrFail();
         return "login";
     }
 

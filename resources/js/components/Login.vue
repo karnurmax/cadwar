@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import authService from "../services/auth";
 export default {
     data() {
         return {
@@ -72,7 +73,41 @@ export default {
         login() {
             this.mustBeValidated = true;
             if (!this.emailValidation || !this.passwordValidation) return;
-            window.alert("login");
+            authService
+                .login(this.form)
+                .then(res => {
+                    if (res.status === 200) {
+                        return this.$router.replace("/");
+                        //location.hash = "#/";
+                    } else {
+                        this.toastMessage("Произошла ошибка", {
+                            title: "Ошибка!",
+                            variant: "danger",
+                            toaster: "b-toaster-top-center",
+                            noAutoHide: true
+                        });
+                    }
+                })
+                .catch(err => {
+                    if (err.response.status === 400) {
+                        let data = err.response.data;
+                        if (data.status === "error" && data.text) {
+                            this.toastMessage(data.text, {
+                                title: "Ошибка!",
+                                variant: "danger",
+                                toaster: "b-toaster-top-center",
+                                noAutoHide: true
+                            });
+                        } else {
+                            this.toastMessage("Произошла ошибка", {
+                                title: "Ошибка!",
+                                variant: "danger",
+                                toaster: "b-toaster-top-center",
+                                noAutoHide: true
+                            });
+                        }
+                    }
+                });
         }
     },
     computed: {
