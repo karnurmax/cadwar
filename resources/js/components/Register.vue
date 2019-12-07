@@ -54,7 +54,7 @@
                             <b-form-invalid-feedback
                                 :state="passwordValidation"
                             >
-                                длина пароля должна быть равно или больше шести
+                                длина пароля должна быть равно или больше восьми
                                 символов
                             </b-form-invalid-feedback>
                         </b-form-group>
@@ -167,7 +167,7 @@ export default {
         },
         passwordValidation() {
             if (!this.mustBeValidated) return null;
-            return this.form.password.length >= 6;
+            return this.form.password.length >= 8;
         },
         confirmValidation() {
             return !this.mustBeValidated
