@@ -23,6 +23,23 @@
                         </b-form-group>
 
                         <b-form-group
+                            id="input-group-5"
+                            label="Имя:"
+                            label-for="input-5"
+                        >
+                            <b-form-input
+                                type="text"
+                                id="input-5"
+                                v-model="form.name"
+                                required
+                                :state="nameValidation"
+                            ></b-form-input>
+                            <b-form-invalid-feedback :state="nameValidation">
+                                это поле обязательное
+                            </b-form-invalid-feedback>
+                        </b-form-group>
+
+                        <b-form-group
                             id="input-group-2"
                             label="Пароль:"
                             label-for="input-2"
@@ -84,6 +101,7 @@ export default {
             mustBeValidated: false,
             form: {
                 email: "",
+                name: "",
                 password: "",
                 confirm: ""
             }
@@ -98,8 +116,10 @@ export default {
                 !this.confirmValidation
             )
                 return;
+            let postData = { ...this.form };
+            postData.password_confirmation = postData.confirm;
             authService
-                .register(this.form)
+                .register(postData)
                 .then(res => {
                     if (res.status === 200) {
                         this.toastMessage(
@@ -121,23 +141,16 @@ export default {
                     }
                 })
                 .catch(err => {
-                    if (err.response.status === 400) {
-                        let data = err.response.data;
-                        if (data.status === "error" && data.text) {
-                            this.toastMessage(data.text, {
-                                title: "Ошибка!",
-                                variant: "danger",
-                                toaster: "b-toaster-top-center",
-                                noAutoHide: true
-                            });
-                        } else {
-                            this.toastMessage("Произошла ошибка", {
-                                title: "Ошибка!",
-                                variant: "danger",
-                                toaster: "b-toaster-top-center",
-                                noAutoHide: true
-                            });
-                        }
+                    if (
+                        err.response.status >= 400 &&
+                        err.response.status <= 500
+                    ) {
+                        this.toastMessage("Произошла ошибка", {
+                            title: "Ошибка!",
+                            variant: "danger",
+                            toaster: "b-toaster-top-center",
+                            noAutoHide: true
+                        });
                     }
                 });
         }
@@ -147,6 +160,10 @@ export default {
             if (!this.mustBeValidated) return null;
             let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(String(this.form.email).toLowerCase());
+        },
+        nameValidation() {
+            if (!this.mustBeValidated) return null;
+            return !!this.form.name;
         },
         passwordValidation() {
             if (!this.mustBeValidated) return null;
