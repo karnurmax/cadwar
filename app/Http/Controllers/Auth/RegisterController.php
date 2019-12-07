@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\EmailConfirmCode;
+use App\Helpers\IsLocalhost;
+use App\Helpers\Randomizer;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -19,7 +22,7 @@ class RegisterController extends Controller
     | validation and creation. By default this controller uses a trait to
     | provide this functionality without requiring any additional code.
     |
-    */
+     */
 
     use RegistersUsers;
 
@@ -63,10 +66,39 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $email = $data['email'];
+        $password = $data['password'];
+        $name = $data['name'];
+
+        $code = Randomizer::GetString(50);
+        $sent = $this->sendVerificationCodeToEmail($code, $email);
+
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        EmailConfirmCode::create(['code' => $code, 'user_id' => $user->id]);
+
+        return $user;
+    }
+
+    public function sendVerificationCodeToEmail($code, $email)
+    {
+        $isLocalhost = IsLocalhost::Check();
+
+        if ($isLocalhost === true) {
+            return true;
+        }
+        $httpOrigin = 'https://cadwar.karnurmax.kz';
+        $message = "https://cadwar.karnurmax.kz/auth/code/$code";
+
+        // $headers = 'MIME-Version: 1.0' . "\r\n";
+        // $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+
+        mail($email, 'Регистрация', $message);
+        return true;
+
     }
 }
