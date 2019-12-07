@@ -2157,6 +2157,29 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/auth */ "./resources/js/services/auth.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2242,6 +2265,7 @@ __webpack_require__.r(__webpack_exports__);
       mustBeValidated: false,
       form: {
         email: "",
+        name: "",
         password: "",
         confirm: ""
       }
@@ -2253,7 +2277,11 @@ __webpack_require__.r(__webpack_exports__);
 
       this.mustBeValidated = true;
       if (!this.emailValidation || !this.passwordValidation || !this.confirmValidation) return;
-      _services_auth__WEBPACK_IMPORTED_MODULE_0__["default"].register(this.form).then(function (res) {
+
+      var postData = _objectSpread({}, this.form);
+
+      postData.password_confirmation = postData.confirm;
+      _services_auth__WEBPACK_IMPORTED_MODULE_0__["default"].register(postData).then(function (res) {
         if (res.status === 200) {
           _this.toastMessage("Проверьте почту и активируйте аккаунт", {
             title: "Успешно!",
@@ -2270,24 +2298,13 @@ __webpack_require__.r(__webpack_exports__);
           });
         }
       })["catch"](function (err) {
-        if (err.response.status === 400) {
-          var data = err.response.data;
-
-          if (data.status === "error" && data.text) {
-            _this.toastMessage(data.text, {
-              title: "Ошибка!",
-              variant: "danger",
-              toaster: "b-toaster-top-center",
-              noAutoHide: true
-            });
-          } else {
-            _this.toastMessage("Произошла ошибка", {
-              title: "Ошибка!",
-              variant: "danger",
-              toaster: "b-toaster-top-center",
-              noAutoHide: true
-            });
-          }
+        if (err.response.status >= 400 && err.response.status <= 500) {
+          _this.toastMessage("Произошла ошибка", {
+            title: "Ошибка!",
+            variant: "danger",
+            toaster: "b-toaster-top-center",
+            noAutoHide: true
+          });
         }
       });
     }
@@ -2298,9 +2315,13 @@ __webpack_require__.r(__webpack_exports__);
       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(String(this.form.email).toLowerCase());
     },
+    nameValidation: function nameValidation() {
+      if (!this.mustBeValidated) return null;
+      return !!this.form.name;
+    },
     passwordValidation: function passwordValidation() {
       if (!this.mustBeValidated) return null;
-      return this.form.password.length >= 6;
+      return this.form.password.length >= 8;
     },
     confirmValidation: function confirmValidation() {
       return !this.mustBeValidated ? null : this.form.password ? this.form.password === this.form.confirm : null;
@@ -69049,6 +69070,45 @@ var render = function() {
                         "b-form-group",
                         {
                           attrs: {
+                            id: "input-group-5",
+                            label: "Имя:",
+                            "label-for": "input-5"
+                          }
+                        },
+                        [
+                          _c("b-form-input", {
+                            attrs: {
+                              type: "text",
+                              id: "input-5",
+                              required: "",
+                              state: _vm.nameValidation
+                            },
+                            model: {
+                              value: _vm.form.name,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "name", $$v)
+                              },
+                              expression: "form.name"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-invalid-feedback",
+                            { attrs: { state: _vm.nameValidation } },
+                            [
+                              _vm._v(
+                                "\n                            это поле обязательное\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-form-group",
+                        {
+                          attrs: {
                             id: "input-group-2",
                             label: "Пароль:",
                             "label-for": "input-2"
@@ -69076,7 +69136,7 @@ var render = function() {
                             { attrs: { state: _vm.passwordValidation } },
                             [
                               _vm._v(
-                                "\n                            длина пароля должна быть равно или больше шести\n                            символов\n                        "
+                                "\n                            длина пароля должна быть равно или больше восьми\n                            символов\n                        "
                               )
                             ]
                           )
@@ -86407,7 +86467,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   API_URL: location.origin,
   login: "auth/login",
-  register: "auth/register",
+  register: "/register",
   resetPassword: "auth/reset"
 });
 
