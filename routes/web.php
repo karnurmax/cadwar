@@ -18,11 +18,16 @@ Route::get('/', function () {
 Route::get('/artisan/migraterefresh', 'ArtisanController@MigrateRefresh');
 
 if (filter_var(env('ALLOWED_TO_REGISTER'), FILTER_VALIDATE_BOOLEAN)) {
-    Auth::routes();
+    Auth::routes(['verify' => true]);
 } else {
-    Auth::routes(['register' => false]);
+    Auth::routes([
+        'register' => false,
+        'verify' => true,
+    ]);
 }
-
+Route::get('/ccode',function(){
+    return view('auth/verify');
+});
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::prefix('test')->group(function () {
