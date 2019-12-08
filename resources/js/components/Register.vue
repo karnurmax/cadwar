@@ -141,17 +141,17 @@ export default {
                     }
                 })
                 .catch(err => {
-                    if (
-                        err.response.status >= 400 &&
-                        err.response.status <= 500
-                    ) {
-                        this.toastMessage("Произошла ошибка", {
-                            title: "Ошибка!",
-                            variant: "danger",
-                            toaster: "b-toaster-top-center",
-                            noAutoHide: true
-                        });
-                    }
+                    console.log(err);
+                    let msgText =
+                        err.response.status >= 400 && err.response.status <= 500
+                            ? "Ошибка валидации. Возможно, такой email уже зарегистрирован"
+                            : "Произошла ошибка";
+                    this.toastMessage(msgText, {
+                        title: "Ошибка!",
+                        variant: "danger",
+                        toaster: "b-toaster-top-center",
+                        noAutoHide: true
+                    });
                 });
         }
     },
