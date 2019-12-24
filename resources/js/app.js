@@ -12,6 +12,20 @@ import BootstrapVue from "bootstrap-vue";
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+    faDatabase,
+    faUserSecret,
+    faCalendar,
+    faPen,
+    faUsers
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(faUserSecret, faCalendar, faDatabase, faUsers, faPen);
+
+Vue.component("font-awesome-icon", FontAwesomeIcon);
+
 const routes = require("./routes.js").default;
 const router = new VueRouter({
     routes
