@@ -1,11 +1,15 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url("https://fonts.googleapis.com/css?family=Nunito");
 
 // Variables
-@import 'variables';
+@import "variables";
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
 
-@import '~bootstrap';
-@import '~bootstrap-vue';
+@import "~bootstrap";
+@import "~bootstrap-vue";
+
+.margin0-10 {
+    margin: 0 10px;
+}

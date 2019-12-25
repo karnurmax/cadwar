@@ -14,15 +14,29 @@ Vue.use(BootstrapVue);
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
+    faWindowClose,
     faDatabase,
+    faEye,
     faUserSecret,
     faCalendar,
     faPen,
-    faUsers
+    faPencilAlt,
+    faUsers,
+    faTrash
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faUserSecret, faCalendar, faDatabase, faUsers, faPen);
+library.add(
+    faWindowClose,
+    faDatabase,
+    faEye,
+    faUserSecret,
+    faCalendar,
+    faPen,
+    faPencilAlt,
+    faUsers,
+    faTrash
+);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

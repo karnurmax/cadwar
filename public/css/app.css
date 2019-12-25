@@ -25194,3 +25194,7 @@ input[type=color].form-control:disabled {
   background-color: #343a40;
 }
 
+.margin0-10 {
+  margin: 0 10px;
+}
+
