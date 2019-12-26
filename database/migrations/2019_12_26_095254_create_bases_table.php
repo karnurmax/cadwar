@@ -16,7 +16,6 @@ class CreateBasesTable extends Migration
         Schema::create('bases', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('address');
             $table->bigInteger('members');
             $table->date('start_date');
             $table->date('end_date');
