@@ -39,10 +39,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::prefix('crud/{tableName}')->group(function () {
     Route::get('id', function () {
-        return [['id=>1', 'name' => 'name']];
+        return ['id=>1', 'name' => 'name'];
     });
     Route::get('', function () {
-        return ['id=>1', 'name' => 'name'];
+        return [['id=>1', 'name' => 'name']];
     });
     Route::post('/', function () {
         return 123;
