@@ -48,7 +48,7 @@ import crudService from '../services/crud';
 export default {
     data() {
         return {
-            list:[{},{},{}],
+            list:[],
             selectedItem:null,
         };
     },
@@ -58,10 +58,10 @@ export default {
     },
     methods:{
         loadData(){
-            this.crudService.getAll('base').then(res=>window.console.log(res));
+            return crudService.getAll('base').then(res=>window.console.log(res));
         },
-        fillData(){
-            
+        fillData(list){
+            this.list = list;
         },
         editItem(item){
             window.console.log(item);
