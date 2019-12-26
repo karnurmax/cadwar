@@ -11679,6 +11679,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_crud__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/crud */ "./resources/js/services/crud.js");
 //
 //
 //
@@ -11719,6 +11720,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -11726,7 +11733,20 @@ __webpack_require__.r(__webpack_exports__);
       selectedItem: null
     };
   },
+  created: function created() {
+    var _this = this;
+
+    this.loadData().then(function (res) {
+      return _this.fillData(res);
+    });
+  },
   methods: {
+    loadData: function loadData() {
+      this.crudService.getAll('base').then(function (res) {
+        return window.console.log(res);
+      });
+    },
+    fillData: function fillData() {},
     editItem: function editItem(item) {
       window.console.log(item);
     },
@@ -78730,10 +78750,33 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row" }, [
-      _vm._m(0),
+      _c(
+        "div",
+        { staticClass: "page-title" },
+        [
+          _c("p"),
+          _c("h2", [_vm._v("Базы данных")]),
+          _vm._v(" "),
+          _c(
+            "b-button",
+            {
+              on: {
+                click: function($event) {
+                  return _vm.editItem(_vm.item)
+                }
+              }
+            },
+            [_c("font-awesome-icon", { attrs: { icon: "pencil-alt" } })],
+            1
+          ),
+          _vm._v(" "),
+          _c("p")
+        ],
+        1
+      ),
       _vm._v(" "),
       _c("table", { staticClass: "table table-bordered table-striped" }, [
-        _vm._m(1),
+        _vm._m(0),
         _vm._v(" "),
         _c(
           "tbody",
@@ -78791,14 +78834,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "page-title" }, [
-      _c("h2", [_c("p", [_vm._v("Базы данных")])])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -96134,14 +96169,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************************!*\
   !*** ./resources/js/components/Databases.vue ***!
   \***********************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Databases_vue_vue_type_template_id_41164706___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Databases.vue?vue&type=template&id=41164706& */ "./resources/js/components/Databases.vue?vue&type=template&id=41164706&");
 /* harmony import */ var _Databases_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Databases.vue?vue&type=script&lang=js& */ "./resources/js/components/Databases.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Databases_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Databases_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -96171,7 +96207,7 @@ component.options.__file = "resources/js/components/Databases.vue"
 /*!************************************************************************!*\
   !*** ./resources/js/components/Databases.vue?vue&type=script&lang=js& ***!
   \************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -97074,6 +97110,39 @@ __webpack_require__.r(__webpack_exports__);
   },
   getCurrentUser: function getCurrentUser() {
     return new _models_user__WEBPACK_IMPORTED_MODULE_0__["default"]("qwe@qwe.qwe", "user1");
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/services/crud.js":
+/*!***************************************!*\
+  !*** ./resources/js/services/crud.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./http */ "./resources/js/services/http.js");
+/* harmony import */ var _apiUrls__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./apiUrls */ "./resources/js/services/apiUrls.js");
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  getAll: function getAll(tableName) {
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].get("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crudGetAll, "/").concat(tableName));
+  },
+  getById: function getById(tableName, id) {
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].get("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crudGetById, "/").concat(tableName, "/").concat(id));
+  },
+  postNewItem: function postNewItem(tableName, item) {
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].post("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crudPostItem, "/").concat(tableName), item);
+  },
+  updateItem: function updateItem(tableName, item) {
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].put("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crudPostItem, "/").concat(tableName), item);
+  },
+  removeItem: function removeItem(tableName, id) {
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].remove("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crudPostItem, "/").concat(tableName, "/").concat(id));
   }
 });
 

@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import crudService from '../services/crud';
 export default {
     data() {
         return {
@@ -51,7 +52,17 @@ export default {
             selectedItem:null,
         };
     },
+    created(){
+        this.loadData()
+            .then(res=>this.fillData(res));
+    },
     methods:{
+        loadData(){
+            this.crudService.getAll('base').then(res=>window.console.log(res));
+        },
+        fillData(){
+            
+        },
         editItem(item){
             window.console.log(item);
         },
