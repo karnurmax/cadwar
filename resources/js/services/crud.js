@@ -2,18 +2,18 @@ import http from "./http";
 import apiUrls from "./apiUrls";
 export default {
     getAll(tableName) {
-        return http.get(`${apiUrls.crudGetAll}/${tableName}`);
+        return http.get(`${apiUrls.crud}/${tableName}`);
     },
     getById(tableName, id) {
-        return http.get(`${apiUrls.crudGetById}/${tableName}/${id}`);
+        return http.get(`${apiUrls.crud}/${tableName}/${id}`);
     },
     postNewItem(tableName, item) {
-        return http.post(`${apiUrls.crudPostItem}/${tableName}`, item);
+        return http.post(`${apiUrls.crud}/${tableName}`, item);
     },
     updateItem(tableName, item) {
-        return http.put(`${apiUrls.crudPostItem}/${tableName}`, item);
+        return http.put(`${apiUrls.crud}/${tableName}`, item);
     },
     removeItem(tableName, id) {
-        return http.remove(`${apiUrls.crudPostItem}/${tableName}/${id}`);
+        return http.remove(`${apiUrls.crud}/${tableName}/${id}`);
     }
 };
