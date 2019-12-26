@@ -54,11 +54,11 @@ export default {
     },
     created(){
         this.loadData()
-            .then(res=>this.fillData(res));
+            .then(res=>this.fillData(res.data));
     },
     methods:{
         loadData(){
-            return crudService.getAll('base').then(res=>window.console.log(res));
+            return crudService.getAll('base');
         },
         fillData(list){
             this.list = list;
