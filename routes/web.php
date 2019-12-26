@@ -37,6 +37,24 @@ Route::get('/artisan/migraterefresh', 'ArtisanController@MigrateRefresh');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::prefix('crud/{tableName}')->group(function () {
+    Route::get('id', function () {
+        return [['id=>1', 'name' => 'name']];
+    });
+    Route::get('', function () {
+        return ['id=>1', 'name' => 'name'];
+    });
+    Route::post('/', function () {
+        return 123;
+    });
+    Route::put('/', function () {
+        return 'put';
+    });
+    Route::delete('/', function () {
+        return 'delete';
+    });
+});
+
 Route::prefix('test')->group(function () {
     Route::get('mail', function () {
         try {
