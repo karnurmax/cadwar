@@ -2,7 +2,12 @@
     <div class="container">
         <div class="row">
             <div class="page-title">
-                <h2><p>Базы данных</p></h2>
+                <p>
+                    <h2>Базы данных</h2>
+                    <b-button @click="editItem(item)">
+                                <font-awesome-icon icon="pencil-alt" />
+                            </b-button>
+                </p>
             </div>
             
             <table class="table table-bordered table-striped">
