@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 
 
-class DatabasesTableSeeder extends Seeder
+class BasesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,7 +13,7 @@ class DatabasesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('databases')->insert(
+        DB::table('bases')->insert(
             [
             'name' => Str::random(10),
             'address' => Str::random(15).' street 11',
