@@ -16,10 +16,10 @@ class CreateEmployeesTable extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('position');
+            $table->string('position')->nullable();
             $table->char('iin', 12)->unique();
-            $table->char('phone', 12);//+77023460080
-            $table->integer('job_experience_months');//??how
+            $table->char('phone', 12);
+            $table->integer('job_experience_months');
             $table->smallInteger('from_year')->nullable();
             $table->smallInteger('to_year')->nullable();
             $table->enum('evaluation', ['низкий', 'справедливо', 'удовлетворительное', 'хорошо', 'отлично']);
