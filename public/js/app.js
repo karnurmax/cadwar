@@ -11729,7 +11729,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      list: [{}, {}, {}],
+      list: [],
       selectedItem: null
     };
   },
@@ -11737,16 +11737,16 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.loadData().then(function (res) {
-      return _this.fillData(res);
+      return _this.fillData(res.data);
     });
   },
   methods: {
     loadData: function loadData() {
-      this.crudService.getAll('base').then(function (res) {
-        return window.console.log(res);
-      });
+      return _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getAll('base');
     },
-    fillData: function fillData() {},
+    fillData: function fillData(list) {
+      this.list = list;
+    },
     editItem: function editItem(item) {
       window.console.log(item);
     },
@@ -96169,15 +96169,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************************!*\
   !*** ./resources/js/components/Databases.vue ***!
   \***********************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Databases_vue_vue_type_template_id_41164706___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Databases.vue?vue&type=template&id=41164706& */ "./resources/js/components/Databases.vue?vue&type=template&id=41164706&");
 /* harmony import */ var _Databases_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Databases.vue?vue&type=script&lang=js& */ "./resources/js/components/Databases.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Databases_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Databases_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -96207,7 +96206,7 @@ component.options.__file = "resources/js/components/Databases.vue"
 /*!************************************************************************!*\
   !*** ./resources/js/components/Databases.vue?vue&type=script&lang=js& ***!
   \************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -97078,7 +97077,8 @@ __webpack_require__.r(__webpack_exports__);
   API_URL: location.origin,
   login: "auth/login",
   register: "auth/register",
-  resetPassword: "auth/reset"
+  resetPassword: "auth/reset",
+  crud: "crud"
 });
 
 /***/ }),
@@ -97130,19 +97130,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   getAll: function getAll(tableName) {
-    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].get("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crudGetAll, "/").concat(tableName));
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].get("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crud, "/").concat(tableName));
   },
   getById: function getById(tableName, id) {
-    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].get("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crudGetById, "/").concat(tableName, "/").concat(id));
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].get("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crud, "/").concat(tableName, "/").concat(id));
   },
   postNewItem: function postNewItem(tableName, item) {
-    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].post("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crudPostItem, "/").concat(tableName), item);
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].post("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crud, "/").concat(tableName), item);
   },
   updateItem: function updateItem(tableName, item) {
-    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].put("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crudPostItem, "/").concat(tableName), item);
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].put("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crud, "/").concat(tableName), item);
   },
   removeItem: function removeItem(tableName, id) {
-    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].remove("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crudPostItem, "/").concat(tableName, "/").concat(id));
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].remove("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crud, "/").concat(tableName, "/").concat(id));
   }
 });
 
