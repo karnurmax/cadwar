@@ -84,6 +84,10 @@ Vue.component(
     require("./components/passport/PersonalAccessTokens.vue").default
 );
 Vue.component("app", require("./components/App.vue").default);
+import Loading from "vue-loading-overlay";
+Vue.use(Loading);
+Vue.component("Loading", Loading);
+
 const app = new Vue({
     router,
     el: "#app"
