@@ -3,10 +3,11 @@
         <div class="row">
             <div class="page-title">
                 <p>
-                    <h2>Базы данных</h2>
-                    <b-button @click="editItem(item)">
-                                <font-awesome-icon icon="pencil-alt" />
-                            </b-button>
+                    <h2>Базы данных
+                        <b-button @click="addItem()" variant="primary">
+                                    <font-awesome-icon icon="plus" /> Добавить
+                        </b-button>
+                    </h2>
                 </p>
             </div>
             
@@ -25,7 +26,7 @@
                         <td>{{ idx + 1 }}</td>
                         <td>{{item.name}}</td>
                         <td style="display:none">7</td>
-                        <td>today</i></td>
+                        <td>{{item.created_at}}</i></td>
                         <td class="action">
                             <b-button @click="editItem(item)">
                                 <font-awesome-icon icon="pencil-alt" />
@@ -58,10 +59,13 @@ export default {
     },
     methods:{
         loadData(){
-            return crudService.getAll('base');
+            return crudService.getAll('bases');
         },
         fillData(list){
             this.list = list;
+        },
+        addItem(){
+            alert('add');
         },
         editItem(item){
             window.console.log(item);

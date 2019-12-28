@@ -14,6 +14,7 @@ Vue.use(BootstrapVue);
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
+    faPlus,
     faWindowClose,
     faDatabase,
     faEye,
@@ -27,6 +28,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(
+    faPlus,
     faWindowClose,
     faDatabase,
     faEye,
