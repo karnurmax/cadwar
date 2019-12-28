@@ -1,5 +1,5 @@
 <?php
-use App\Http\Middleware\CrudWhiteList;
+use \Illuminate\Routing\Router;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,22 +38,15 @@ Route::get('/artisan/migraterefresh', 'ArtisanController@MigrateRefresh');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::middleware(['CrudWhiteList'])->group(function () {
-    Route::get('/', function () {
-        // Uses first & second Middleware
-    });
+    Route::prefix('crud/{tableName}')->group(function (Router $router) {
 
-    Route::get('user/profile', function () {
-        // Uses first & second Middleware
-    });
-});
-Route::prefix('crud/{tableName}')->group(['middleware' => ['CrudWhiteList']],
-    function ($tableName) {
-
-        Route::get('{id}', function () {
+        Route::get('{id}', function ($id) {
             return ['id=>1', 'name' => 'name'];
         });
-        Route::get('', function () {
-            return [['id=>1', 'name' => 'name']];
+        Route::get('', function () use ($router) {
+            $r = $router->getCurrentRoute();
+            $table = $r->parameters["tableName"];
+            return DB::table($table)->get();
         });
         Route::post('/', function () {
             return 123;
@@ -66,6 +59,7 @@ Route::prefix('crud/{tableName}')->group(['middleware' => ['CrudWhiteList']],
             return 'delete';
         });
     });
+});
 
 Route::prefix('test')->group(function () {
     Route::get('mail', function () {

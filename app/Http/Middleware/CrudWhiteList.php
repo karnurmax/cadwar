@@ -15,12 +15,12 @@ class CrudWhiteList
      */
     public function handle($request, Closure $next)
     {
-        
-        // $whiteList = ["bases", "employees", "histories"];
-        // $allowed = in_array($tableName, $whiteList);
-        // if (!$allowed) {
-        //     return response('Объект не найден', 404);
-        // }
+        $whiteList = ["bases", "employees", "histories"];
+        $tableName = $request->route('tableName');
+        $allowed = in_array($tableName, $whiteList);
+        if (!$allowed) {
+            return response('null', 404);
+        }
         return $next($request);
     }
 }
