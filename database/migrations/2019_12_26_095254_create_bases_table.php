@@ -17,8 +17,6 @@ class CreateBasesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->bigInteger('members');
-            $table->date('start_date');
-            $table->date('end_date');
             $table->timestamps();
         });
     }
