@@ -15,15 +15,17 @@ class CreateEmployeesTable extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('name')->nullable();
+            $table->string('surname')->nullable();
+            $table->string('lastname')->nullable();
             $table->string('position')->nullable();
-            $table->char('iin', 12)->unique();
+            $table->char('iin', 12);
             $table->char('phone', 12)->nullable();
             $table->integer('job_experience_months')->default(0);
             $table->smallInteger('from_year')->nullable();
             $table->smallInteger('to_year')->nullable();
             $table->enum('evaluation', ['низкий', 'справедливо', 'удовлетворительное', 'хорошо', 'отлично']);
-            
+
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
 
