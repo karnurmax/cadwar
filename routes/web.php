@@ -60,8 +60,17 @@ Route::middleware(['CrudWhiteList'])->group(function () {
             return response()->json($insertedItem);
         });
 
-        Route::put('/', function () {
-            return 'put';
+        Route::put('/', function (Request $request, $table) {
+            $data = $request->all();
+            $r = Route::current();
+            $id = $data["id"];
+            $table = $r->parameters["tableName"];
+
+            DB::table($table)
+                ->where('id', $id)
+                ->update($data);
+            $updatedItem = DB::table($table)->where('id', $id)->first();
+            return response()->json($updatedItem);
         });
         Route::delete('/', function () {
             return 'delete';

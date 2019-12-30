@@ -89,10 +89,13 @@ export default {
         editItem(item){
             this.selectedItem = item;
             window.console.log(this.selectedItem);
-            this.$forceUpdate();
             this.$bvModal.show('basesEditModal');
         },
         itemUpdated(item){
+            if(!item)
+                return;
+            const old = this.list.find(i=>i.id==item.id);
+            Object.assign(old, item);
             window.console.log(item);
         },
         removeItem(item){
