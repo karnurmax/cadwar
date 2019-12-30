@@ -11784,10 +11784,14 @@ __webpack_require__.r(__webpack_exports__);
     editItem: function editItem(item) {
       this.selectedItem = item;
       window.console.log(this.selectedItem);
-      this.$forceUpdate();
       this.$bvModal.show('basesEditModal');
     },
     itemUpdated: function itemUpdated(item) {
+      if (!item) return;
+      var old = this.list.find(function (i) {
+        return i.id == item.id;
+      });
+      Object.assign(old, item);
       window.console.log(item);
     },
     removeItem: function removeItem(item) {
