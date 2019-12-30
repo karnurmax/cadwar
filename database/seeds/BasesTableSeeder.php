@@ -17,8 +17,6 @@ class BasesTableSeeder extends Seeder
             [
             'name' => Str::random(10),
             'members' => 5,
-            'start_date' => Carbon::parse('2000-01-01'),
-            'end_date' => Carbon::parse('2010-01-01')
             ]
         );
     }
