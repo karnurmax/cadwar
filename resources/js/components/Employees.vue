@@ -1,43 +1,122 @@
 <template>
-    <div class="col-main col-sm-12 col-xs-12">
-        <div class="my-account">
-        <div class="page-title">
-            <h2>Работники</h2>
+    <div class="container">
+        <div class="row">
+            <div class="page-title">
+                <p>
+                    <h2>Базы данных
+                        <b-button @click="addItem()" variant="primary">
+                                    <font-awesome-icon icon="plus" /> Добавить
+                        </b-button>
+                    </h2>
+                </p>
+            </div>
+             <b-table :fields="fields" :items="list" :striped="true" :bordered="true"
+             :sort-by.sync="sortBy"
+             >
+                <!-- A virtual column -->
+                <template v-slot:cell(index)="data">
+                    {{ data.index + 1 }}
+                </template>
+
+                <!-- A custom formatted column -->
+                <template v-slot:cell(name)="data">
+                     <b>{{ data.item.name }}</b>
+                </template>
+
+                <template v-slot:cell(created_at)="data">
+                     <b>{{ data.item.created_at }}</b>
+                </template>
+                <!-- A virtual composite column -->
+                <template v-slot:cell(actions)="data">
+                    <b-button @click="editItem(data.item)">
+                        <font-awesome-icon icon="pencil-alt" />
+                    </b-button>
+                    <b-button variant="danger" @click="removeItem(data.item)">
+                        <font-awesome-icon icon="trash" />
+                    </b-button>
+                </template>
+
+            </b-table>
+          
         </div>
-        <div class="orders-list table-responsive"> 
-            <table class="table table-bordered cart_summary table-striped">
-            <thead>
-                <tr> 
-                <th>employee number</th>
-                <th>Name</th>
-                <th>IIN</th>
-                <th>years in company</th>
-                <th>actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(order,ind) in 5"> 
-                <td>{{ind+1}}</td>
-                <td>Zhasulan</td>
-                <td>9009199000900</td>
-                <td>4 months</td>
-                <td class="action">
-                    <div style="display:flex;">
-                        <router-link :to="{name:'order_form', params:{action_type:'view',id:order.id}}" class="btn btn-info btn-xs" title="view"><i class="fa fa-eye"></i></router-link>
-                        <router-link :to="{name:'order_form', params:{action_type:'edit',id:order.id}}" class="btn btn-success btn-xs" title="edit"><i class="fa fa-pencil"></i></router-link>
-                        <a href="javascript:;" @click="deleteOrder(order.id)" class="btn btn-danger btn-xs" title="todelete"><i class="fa fa-close"></i></a>
-                    </div>
-                </td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
-        </div>
-        <!--app-loader v-if="isLoading"></app-loader-->
+         <Loading :active.sync="isLoading" 
+        :is-full-page="true"></Loading>
+        <AddModal @created="newItemCreated"></AddModal>
+        <EditModal @updated="itemUpdated" :item="getSelectedItem"></EditModal>
+        <RemoveModal @removed="itemRemoved" :item="getSelectedItem"></RemoveModal>
     </div>
 </template>
 
 <script>
+import crudService from '../services/crud';
+import AddModal from './crud/employees/add';
+import EditModal from './crud/employees/edit';
+import RemoveModal from './crud/employees/remove';
+
 export default {
-}
+    components:{
+        AddModal,
+        EditModal,
+        RemoveModal
+    },
+    data() {
+        return {
+            sortBy: 'name',
+            fields:[
+                 { key: 'index', label: '№' },
+                 { key: 'name', label: 'Название',sortable: true },
+                 { key: 'created_at', label: 'Дата создания',sortable: true },
+                 { key: 'actions', label: 'Действия'},
+            ],
+            isLoading:false,
+            list:[],
+            selectedItem:null,
+        };
+    },
+    created(){
+        this.loadData()
+            .then(res=>this.fillData(res.data));
+    },
+    methods:{
+        loadData(){
+            return crudService.getAll('employees');
+        },
+        fillData(list){
+            this.list = list;
+        },
+        addItem(){
+            this.$bvModal.show('employeesAddModal');
+        },
+        newItemCreated(item){
+            this.list.push(item);
+        },
+        editItem(item){
+            this.selectedItem = item;
+            this.$bvModal.show('employeesEditModal');
+        },
+        itemUpdated(item){
+            if(!item)
+                return;
+            const old = this.list.find(i=>i.id==item.id);
+            Object.assign(old, item);
+        },
+        removeItem(item){
+            this.selectedItem = item;
+            this.$bvModal.show('employeesRemoveModal');
+        },
+        itemRemoved(id){
+            if(!id)
+                return;
+            const idx = this.list.findIndex(x=>x.id===id);
+            this.list.splice(idx,1);
+        }
+    },
+    computed: {
+        getSelectedItem(){
+            const obj = {};
+            Object.assign(obj,this.selectedItem);
+            return obj;
+        }        
+    },
+};
 </script>
