@@ -40,15 +40,22 @@
             </table>
             
         </div>
-        <!--app-loader v-if="isLoading"></app-loader-->
+         <Loading :active.sync="isLoading" 
+        :is-full-page="true"></Loading>
+        <AddModal @close="alert(123)"></AddModal>
     </div>
 </template>
 
 <script>
 import crudService from '../services/crud';
+import AddModal from './crud/bases/add';
 export default {
+    components:{
+        AddModal
+    },
     data() {
         return {
+            isLoading:false,
             list:[],
             selectedItem:null,
         };
@@ -65,7 +72,7 @@ export default {
             this.list = list;
         },
         addItem(){
-            alert('add');
+            this.$bvModal.show('basesAddModal')
         },
         editItem(item){
             window.console.log(item);
