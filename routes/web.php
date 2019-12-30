@@ -1,4 +1,5 @@
 <?php
+use \Illuminate\Http\Request;
 use \Illuminate\Routing\Router;
 /*
 |--------------------------------------------------------------------------
@@ -43,13 +44,19 @@ Route::middleware(['CrudWhiteList'])->group(function () {
         Route::get('{id}', function ($id) {
             return ['id=>1', 'name' => 'name'];
         });
-        Route::get('', function () use ($router) {
-            $r = $router->getCurrentRoute();
+        Route::get('', function () {
+            $r = Route::current();
             $table = $r->parameters["tableName"];
             return DB::table($table)->get();
         });
-        Route::post('/', function () {
-            return 123;
+        Route::post('/', function (Request $request, $table) {
+            $data = $request->all();
+            $r = Route::current();
+            $table = $r->parameters["tableName"];
+            $insertedId = DB::table($table)->insertGetId(
+                $data
+            );
+            return (string)$insertedId;
         });
 
         Route::put('/', function () {
