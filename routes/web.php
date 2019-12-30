@@ -72,8 +72,9 @@ Route::middleware(['CrudWhiteList'])->group(function () {
             $updatedItem = DB::table($table)->where('id', $id)->first();
             return response()->json($updatedItem);
         });
-        Route::delete('/', function () {
-            return 'delete';
+        Route::delete('{id}', function (Request $request, $table, $id) {
+            DB::table($table)->where('id', $id)->delete();
+            return response($id, 200);
         });
     });
 });

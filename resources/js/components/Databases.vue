@@ -43,6 +43,7 @@
         :is-full-page="true"></Loading>
         <AddModal @created="newItemCreated"></AddModal>
         <EditModal @updated="itemUpdated" :item="getSelectedItem"></EditModal>
+        <RemoveModal @removed="itemRemoved" :item="getSelectedItem"></RemoveModal>
     </div>
 </template>
 
@@ -50,10 +51,13 @@
 import crudService from '../services/crud';
 import AddModal from './crud/bases/add';
 import EditModal from './crud/bases/edit';
+import RemoveModal from './crud/bases/remove';
+
 export default {
     components:{
         AddModal,
-        EditModal
+        EditModal,
+        RemoveModal
     },
     data() {
         return {
@@ -88,7 +92,6 @@ export default {
         },
         editItem(item){
             this.selectedItem = item;
-            window.console.log(this.selectedItem);
             this.$bvModal.show('basesEditModal');
         },
         itemUpdated(item){
@@ -96,11 +99,17 @@ export default {
                 return;
             const old = this.list.find(i=>i.id==item.id);
             Object.assign(old, item);
-            window.console.log(item);
         },
         removeItem(item){
-            window.console.log(item);
+            this.selectedItem = item;
+            this.$bvModal.show('basesRemoveModal');
         },
+        itemRemoved(id){
+            if(!id)
+                return;
+            const idx = this.list.findIndex(x=>x.id===id);
+            this.list.splice(idx,1);
+        }
     },
     computed: {
         getSelectedItem(){
