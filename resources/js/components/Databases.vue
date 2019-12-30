@@ -10,39 +10,38 @@
                     </h2>
                 </p>
             </div>
-            
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th style="width:60px;"></th>
-                        <th>Наименование</th>
-                        <th style="display:none">Количество пользователей</th>
-                        <th>Дата создания</th>
-                        <th>Действия</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, idx) in list">
-                        <td>{{ idx + 1 }}</td>
-                        <td>{{item.name}}</td>
-                        <td style="display:none">7</td>
-                        <td>{{item.created_at}}</i></td>
-                        <td class="action">
-                            <b-button @click="editItem(item)">
-                                <font-awesome-icon icon="pencil-alt" />
-                            </b-button>
-                            <b-button variant="danger" @click="removeItem(item)">
-                                <font-awesome-icon icon="trash" />
-                            </b-button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            
+             <b-table :fields="fields" :items="list" :striped="true" :bordered="true"
+             :sort-by.sync="sortBy"
+             >
+                <!-- A virtual column -->
+                <template v-slot:cell(index)="data">
+                    {{ data.index + 1 }}
+                </template>
+
+                <!-- A custom formatted column -->
+                <template v-slot:cell(name)="data">
+                     <b>{{ data.item.name }}</b>
+                </template>
+
+                <template v-slot:cell(created_at)="data">
+                     <b>{{ data.item.created_at }}</b>
+                </template>
+                <!-- A virtual composite column -->
+                <template v-slot:cell(actions)="data">
+                    <b-button @click="editItem(data.value)">
+                        <font-awesome-icon icon="pencil-alt" />
+                    </b-button>
+                    <b-button variant="danger" @click="removeItem(data.value)">
+                        <font-awesome-icon icon="trash" />
+                    </b-button>
+                </template>
+
+            </b-table>
+          
         </div>
          <Loading :active.sync="isLoading" 
         :is-full-page="true"></Loading>
-        <AddModal @close="alert(123)"></AddModal>
+        <AddModal @created="newItemCreated"></AddModal>
     </div>
 </template>
 
@@ -55,6 +54,13 @@ export default {
     },
     data() {
         return {
+            sortBy: 'name',
+            fields:[
+                 { key: 'index', label: '№' },
+                 { key: 'name', label: 'Название',sortable: true },
+                 { key: 'created_at', label: 'Дата создания',sortable: true },
+                 { key: 'actions', label: 'Действия'},
+            ],
             isLoading:false,
             list:[],
             selectedItem:null,
@@ -73,6 +79,9 @@ export default {
         },
         addItem(){
             this.$bvModal.show('basesAddModal')
+        },
+        newItemCreated(item){
+            this.list.push(item);
         },
         editItem(item){
             window.console.log(item);

@@ -1,9 +1,5 @@
 <template>
-    <b-modal
-        id="basesAddModal"
-        title="Добавление новой базы"
-        @ok="saveItem"
-    >
+    <b-modal id="basesAddModal" title="Добавление новой базы" @ok="saveItem">
         <b-form @submit="onSubmit">
             <b-form-group
                 id="input-group-1"
@@ -28,7 +24,7 @@
 </template>
 
 <script>
-import crudService from '../../../services/crud';
+import crudService from "../../../services/crud";
 export default {
     props: {
         show: {
@@ -45,7 +41,14 @@ export default {
         onSubmit() {},
         saveItem(e) {
             e.preventDefault();
-            crudService.postNewItem('bases',this.item).then(res=>window.console.log(res));
+            crudService.postNewItem("bases", this.item).then(res => {
+                if (res.status === 200) {
+                    this.$emit("created", res.data);
+                    this.$bvModal.hide("basesAddModal");
+                } else {
+                    window.alert("Ошибка");
+                }
+            });
         }
     }
 };
