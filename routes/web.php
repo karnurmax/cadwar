@@ -56,7 +56,7 @@ Route::middleware(['CrudWhiteList'])->group(function () {
             $insertedId = DB::table($table)->insertGetId(
                 $data
             );
-            return (string)$insertedId;
+            return response((string) $insertedId, 201);
         });
 
         Route::put('/', function () {
