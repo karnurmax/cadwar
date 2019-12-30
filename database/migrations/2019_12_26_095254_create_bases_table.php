@@ -17,7 +17,8 @@ class CreateBasesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->bigInteger('members')->default(0);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 
