@@ -16,7 +16,7 @@ class CreateBasesTable extends Migration
         Schema::create('bases', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->bigInteger('members');
+            $table->bigInteger('members')->default(0);
             $table->timestamps();
         });
     }
