@@ -11728,7 +11728,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -11737,6 +11736,22 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      sortBy: 'name',
+      fields: [{
+        key: 'index',
+        label: '№'
+      }, {
+        key: 'name',
+        label: 'Название',
+        sortable: true
+      }, {
+        key: 'created_at',
+        label: 'Дата создания',
+        sortable: true
+      }, {
+        key: 'actions',
+        label: 'Действия'
+      }],
       isLoading: false,
       list: [],
       selectedItem: null
@@ -11758,6 +11773,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     addItem: function addItem() {
       this.$bvModal.show('basesAddModal');
+    },
+    newItemCreated: function newItemCreated(item) {
+      this.list.push(item);
     },
     editItem: function editItem(item) {
       window.console.log(item);
@@ -12377,10 +12395,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -12397,9 +12411,17 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     onSubmit: function onSubmit() {},
     saveItem: function saveItem(e) {
+      var _this = this;
+
       e.preventDefault();
-      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].postNewItem('bases', this.item).then(function (res) {
-        return window.console.log(res);
+      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].postNewItem("bases", this.item).then(function (res) {
+        if (res.status === 200) {
+          _this.$emit("created", res.data);
+
+          _this.$bvModal.hide("basesAddModal");
+        } else {
+          window.alert("Ошибка");
+        }
       });
     }
   }
@@ -78829,61 +78851,90 @@ var render = function() {
     "div",
     { staticClass: "container" },
     [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "page-title" }, [
-          _c("p"),
-          _c(
-            "h2",
-            [
-              _vm._v("Базы данных\n                    "),
-              _c(
-                "b-button",
-                {
-                  attrs: { variant: "primary" },
-                  on: {
-                    click: function($event) {
-                      return _vm.addItem()
-                    }
-                  }
-                },
-                [
-                  _c("font-awesome-icon", { attrs: { icon: "plus" } }),
-                  _vm._v(" Добавить\n                    ")
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("p")
-        ]),
-        _vm._v(" "),
-        _c("table", { staticClass: "table table-bordered table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.list, function(item, idx) {
-              return _c("tr", [
-                _c("td", [_vm._v(_vm._s(idx + 1))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(item.name))]),
-                _vm._v(" "),
-                _c("td", { staticStyle: { display: "none" } }, [_vm._v("7")]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(item.created_at))]),
-                _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "row" },
+        [
+          _c("div", { staticClass: "page-title" }, [
+            _c("p"),
+            _c(
+              "h2",
+              [
+                _vm._v("Базы данных\n                    "),
                 _c(
-                  "td",
-                  { staticClass: "action" },
+                  "b-button",
+                  {
+                    attrs: { variant: "primary" },
+                    on: {
+                      click: function($event) {
+                        return _vm.addItem()
+                      }
+                    }
+                  },
                   [
+                    _c("font-awesome-icon", { attrs: { icon: "plus" } }),
+                    _vm._v(" Добавить\n                    ")
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("p")
+          ]),
+          _vm._v(" "),
+          _c("b-table", {
+            attrs: {
+              fields: _vm.fields,
+              items: _vm.list,
+              striped: true,
+              bordered: true,
+              "sort-by": _vm.sortBy
+            },
+            on: {
+              "update:sortBy": function($event) {
+                _vm.sortBy = $event
+              },
+              "update:sort-by": function($event) {
+                _vm.sortBy = $event
+              }
+            },
+            scopedSlots: _vm._u([
+              {
+                key: "cell(index)",
+                fn: function(data) {
+                  return [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(data.index + 1) +
+                        "\n            "
+                    )
+                  ]
+                }
+              },
+              {
+                key: "cell(name)",
+                fn: function(data) {
+                  return [_c("b", [_vm._v(_vm._s(data.item.name))])]
+                }
+              },
+              {
+                key: "cell(created_at)",
+                fn: function(data) {
+                  return [_c("b", [_vm._v(_vm._s(data.item.created_at))])]
+                }
+              },
+              {
+                key: "cell(actions)",
+                fn: function(data) {
+                  return [
                     _c(
                       "b-button",
                       {
                         on: {
                           click: function($event) {
-                            return _vm.editItem(item)
+                            return _vm.editItem(data.value)
                           }
                         }
                       },
@@ -78901,22 +78952,21 @@ var render = function() {
                         attrs: { variant: "danger" },
                         on: {
                           click: function($event) {
-                            return _vm.removeItem(item)
+                            return _vm.removeItem(data.value)
                           }
                         }
                       },
                       [_c("font-awesome-icon", { attrs: { icon: "trash" } })],
                       1
                     )
-                  ],
-                  1
-                )
-              ])
-            }),
-            0
-          )
-        ])
-      ]),
+                  ]
+                }
+              }
+            ])
+          })
+        ],
+        1
+      ),
       _vm._v(" "),
       _c("Loading", {
         attrs: { active: _vm.isLoading, "is-full-page": true },
@@ -78927,39 +78977,12 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _c("AddModal", {
-        on: {
-          close: function($event) {
-            return _vm.alert(123)
-          }
-        }
-      })
+      _c("AddModal", { on: { created: _vm.newItemCreated } })
     ],
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", { staticStyle: { width: "60px" } }),
-        _vm._v(" "),
-        _c("th", [_vm._v("Наименование")]),
-        _vm._v(" "),
-        _c("th", { staticStyle: { display: "none" } }, [
-          _vm._v("Количество пользователей")
-        ]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Дата создания")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Действия")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
