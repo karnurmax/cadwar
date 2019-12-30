@@ -28,10 +28,10 @@
                 </template>
                 <!-- A virtual composite column -->
                 <template v-slot:cell(actions)="data">
-                    <b-button @click="editItem(data.value)">
+                    <b-button @click="editItem(data.item)">
                         <font-awesome-icon icon="pencil-alt" />
                     </b-button>
-                    <b-button variant="danger" @click="removeItem(data.value)">
+                    <b-button variant="danger" @click="removeItem(data.item)">
                         <font-awesome-icon icon="trash" />
                     </b-button>
                 </template>
@@ -42,15 +42,18 @@
          <Loading :active.sync="isLoading" 
         :is-full-page="true"></Loading>
         <AddModal @created="newItemCreated"></AddModal>
+        <EditModal @updated="itemUpdated" :item="getSelectedItem"></EditModal>
     </div>
 </template>
 
 <script>
 import crudService from '../services/crud';
 import AddModal from './crud/bases/add';
+import EditModal from './crud/bases/edit';
 export default {
     components:{
-        AddModal
+        AddModal,
+        EditModal
     },
     data() {
         return {
@@ -78,17 +81,30 @@ export default {
             this.list = list;
         },
         addItem(){
-            this.$bvModal.show('basesAddModal')
+            this.$bvModal.show('basesAddModal');
         },
         newItemCreated(item){
             this.list.push(item);
         },
         editItem(item){
+            this.selectedItem = item;
+            window.console.log(this.selectedItem);
+            this.$forceUpdate();
+            this.$bvModal.show('basesEditModal');
+        },
+        itemUpdated(item){
             window.console.log(item);
         },
         removeItem(item){
             window.console.log(item);
         },
-    }
+    },
+    computed: {
+        getSelectedItem(){
+            const obj = {};
+            Object.assign(obj,this.selectedItem);
+            return obj;
+        }        
+    },
 };
 </script>
