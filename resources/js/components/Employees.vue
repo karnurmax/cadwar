@@ -3,7 +3,7 @@
         <div class="row">
             <div class="page-title">
                 <p>
-                    <h2>Базы данных
+                    <h2>Рабочие
                         <b-button @click="addItem()" variant="primary">
                                     <font-awesome-icon icon="plus" /> Добавить
                         </b-button>
@@ -17,14 +17,17 @@
                 <template v-slot:cell(index)="data">
                     {{ data.index + 1 }}
                 </template>
-
+                
                 <!-- A custom formatted column -->
                 <template v-slot:cell(name)="data">
                      <b>{{ data.item.name }}</b>
                 </template>
 
-                <template v-slot:cell(created_at)="data">
-                     <b>{{ data.item.created_at }}</b>
+                <template v-slot:cell(iin)="data">
+                     <b>{{ data.item.iin }}</b>
+                </template>
+                <template v-slot:cell(base)="data">
+                     <b>{{ getBaseName(data.item.base_id) }}</b>
                 </template>
                 <!-- A virtual composite column -->
                 <template v-slot:cell(actions)="data">
@@ -41,7 +44,7 @@
         </div>
          <Loading :active.sync="isLoading" 
         :is-full-page="true"></Loading>
-        <AddModal @created="newItemCreated"></AddModal>
+        <AddModal @created="newItemCreated" :dbList="dbList"></AddModal>
         <EditModal @updated="itemUpdated" :item="getSelectedItem"></EditModal>
         <RemoveModal @removed="itemRemoved" :item="getSelectedItem"></RemoveModal>
     </div>
@@ -65,17 +68,20 @@ export default {
             fields:[
                  { key: 'index', label: '№' },
                  { key: 'name', label: 'Название',sortable: true },
-                 { key: 'created_at', label: 'Дата создания',sortable: true },
+                 { key: 'iin', label: 'ИИН',sortable: true },
+                 {key:'base',label:'База',sortable:true},
                  { key: 'actions', label: 'Действия'},
             ],
             isLoading:false,
             list:[],
             selectedItem:null,
+            dbList:[],
         };
     },
     created(){
         this.loadData()
             .then(res=>this.fillData(res.data));
+            crudService.getAll('bases').then(res=>{this.dbList=res.data});
     },
     methods:{
         loadData(){
@@ -109,6 +115,10 @@ export default {
                 return;
             const idx = this.list.findIndex(x=>x.id===id);
             this.list.splice(idx,1);
+        },
+        getBaseName(id){
+            const db = this.dbList.find(b=>b.id===id)
+            return db ? db.name : '';
         }
     },
     computed: {
@@ -116,7 +126,7 @@ export default {
             const obj = {};
             Object.assign(obj,this.selectedItem);
             return obj;
-        }        
+        }
     },
 };
 </script>
