@@ -11901,8 +11901,8 @@ __webpack_require__.r(__webpack_exports__);
         key: 'index',
         label: '№'
       }, {
-        key: 'name',
-        label: 'Название',
+        key: 'fio',
+        label: 'ФИО',
         sortable: true
       }, {
         key: 'iin',
@@ -79578,9 +79578,19 @@ var render = function() {
                 }
               },
               {
-                key: "cell(name)",
+                key: "cell(fio)",
                 fn: function(data) {
-                  return [_c("b", [_vm._v(_vm._s(data.item.name))])]
+                  return [
+                    _c("b", [
+                      _vm._v(
+                        _vm._s(data.item.surname) +
+                          " " +
+                          _vm._s(data.item.name && data.item.name[0]) +
+                          " " +
+                          _vm._s(data.item.lastname && data.item.lastname[0])
+                      )
+                    ])
+                  ]
                 }
               },
               {
