@@ -11881,6 +11881,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -11902,8 +11905,12 @@ __webpack_require__.r(__webpack_exports__);
         label: 'Название',
         sortable: true
       }, {
-        key: 'created_at',
-        label: 'Дата создания',
+        key: 'iin',
+        label: 'ИИН',
+        sortable: true
+      }, {
+        key: 'base',
+        label: 'База',
         sortable: true
       }, {
         key: 'actions',
@@ -11911,7 +11918,8 @@ __webpack_require__.r(__webpack_exports__);
       }],
       isLoading: false,
       list: [],
-      selectedItem: null
+      selectedItem: null,
+      dbList: []
     };
   },
   created: function created() {
@@ -11919,6 +11927,9 @@ __webpack_require__.r(__webpack_exports__);
 
     this.loadData().then(function (res) {
       return _this.fillData(res.data);
+    });
+    _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getAll('bases').then(function (res) {
+      _this.dbList = res.data;
     });
   },
   methods: {
@@ -11955,6 +11966,12 @@ __webpack_require__.r(__webpack_exports__);
         return x.id === id;
       });
       this.list.splice(idx, 1);
+    },
+    getBaseName: function getBaseName(id) {
+      var db = this.dbList.find(function (b) {
+        return b.id === id;
+      });
+      return db ? db.name : '';
     }
   },
   computed: {
@@ -12705,8 +12722,62 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["dbList"],
   data: function data() {
     return {
       item: {}
@@ -12718,15 +12789,18 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       e.preventDefault();
-      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].postNewItem("bases", this.item).then(function (res) {
+      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].postNewItem("employees", this.item).then(function (res) {
         if (res.status === 200) {
           _this.$emit("created", res.data);
 
-          _this.$bvModal.hide("basesAddModal");
+          _this.$bvModal.hide("employeesAddModal");
         } else {
           window.alert("Ошибка");
         }
       });
+    },
+    onDbChange: function onDbChange(dbItemId) {
+      this.item.base_id = dbItemId;
     }
   }
 });
@@ -79450,7 +79524,7 @@ var render = function() {
             _c(
               "h2",
               [
-                _vm._v("Базы данных\n                    "),
+                _vm._v("Рабочие\n                    "),
                 _c(
                   "b-button",
                   {
@@ -79510,9 +79584,19 @@ var render = function() {
                 }
               },
               {
-                key: "cell(created_at)",
+                key: "cell(iin)",
                 fn: function(data) {
-                  return [_c("b", [_vm._v(_vm._s(data.item.created_at))])]
+                  return [_c("b", [_vm._v(_vm._s(data.item.iin))])]
+                }
+              },
+              {
+                key: "cell(base)",
+                fn: function(data) {
+                  return [
+                    _c("b", [
+                      _vm._v(_vm._s(_vm.getBaseName(data.item.base_id)))
+                    ])
+                  ]
                 }
               },
               {
@@ -79567,7 +79651,10 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _c("AddModal", { on: { created: _vm.newItemCreated } }),
+      _c("AddModal", {
+        attrs: { dbList: _vm.dbList },
+        on: { created: _vm.newItemCreated }
+      }),
       _vm._v(" "),
       _c("EditModal", {
         attrs: { item: _vm.getSelectedItem },
@@ -80630,7 +80717,7 @@ var render = function() {
   return _c(
     "b-modal",
     {
-      attrs: { id: "basesAddModal", title: "Добавление новой базы" },
+      attrs: { id: "employeesAddModal", title: "Добавление новой базы" },
       on: { ok: _vm.saveItem }
     },
     [
@@ -80664,17 +80751,41 @@ var render = function() {
             {
               attrs: {
                 id: "input-group-1",
-                label: "Название :",
+                label: "База данных:",
                 "label-for": "input-1"
+              }
+            },
+            [
+              _c(
+                "b-form-select",
+                { attrs: { id: "input-1" }, on: { change: _vm.onDbChange } },
+                _vm._l(_vm.dbList, function(db) {
+                  return _c("option", { domProps: { value: db.id } }, [
+                    _vm._v(_vm._s(db.name))
+                  ])
+                }),
+                0
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-2",
+                label: "Имя :",
+                "label-for": "input-2"
               }
             },
             [
               _c("b-form-input", {
                 attrs: {
-                  id: "input-1",
+                  id: "input-2",
                   type: "text",
                   required: "",
-                  placeholder: "Введите название"
+                  placeholder: "Имя"
                 },
                 model: {
                   value: _vm.item.name,
@@ -80682,6 +80793,93 @@ var render = function() {
                     _vm.$set(_vm.item, "name", $$v)
                   },
                   expression: "item.name"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-3",
+                label: "Фамилия :",
+                "label-for": "input-3"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  id: "input-3",
+                  type: "text",
+                  required: "",
+                  placeholder: "Фамилия"
+                },
+                model: {
+                  value: _vm.item.surname,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "surname", $$v)
+                  },
+                  expression: "item.surname"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-4",
+                label: "Отчество :",
+                "label-for": "input-4"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  id: "input-4",
+                  type: "text",
+                  required: "",
+                  placeholder: "Отчество"
+                },
+                model: {
+                  value: _vm.item.lastname,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "lastname", $$v)
+                  },
+                  expression: "item.lastname"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-5",
+                label: "ИИН :",
+                "label-for": "input-5"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  id: "input-5",
+                  type: "text",
+                  required: "",
+                  placeholder: "ИИН"
+                },
+                model: {
+                  value: _vm.item.iin,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "iin", $$v)
+                  },
+                  expression: "item.iin"
                 }
               })
             ],
