@@ -19,8 +19,8 @@
                 </template>
                 
                 <!-- A custom formatted column -->
-                <template v-slot:cell(name)="data">
-                     <b>{{ data.item.name }}</b>
+                <template v-slot:cell(fio)="data">
+                     <b>{{ data.item.surname }} {{(data.item.name && data.item.name[0])}} {{(data.item.lastname && data.item.lastname[0])}}</b>
                 </template>
 
                 <template v-slot:cell(iin)="data">
@@ -67,7 +67,7 @@ export default {
             sortBy: 'name',
             fields:[
                  { key: 'index', label: '№' },
-                 { key: 'name', label: 'Название',sortable: true },
+                 { key: 'fio', label: 'ФИО',sortable: true },
                  { key: 'iin', label: 'ИИН',sortable: true },
                  {key:'base',label:'База',sortable:true},
                  { key: 'actions', label: 'Действия'},
