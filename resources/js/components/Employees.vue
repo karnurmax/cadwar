@@ -45,7 +45,7 @@
          <Loading :active.sync="isLoading" 
         :is-full-page="true"></Loading>
         <AddModal @created="newItemCreated" :dbList="dbList"></AddModal>
-        <EditModal @updated="itemUpdated" :item="getSelectedItem"></EditModal>
+        <EditModal @updated="itemUpdated" :item="getSelectedItem" :dbList="dbList"></EditModal>
         <RemoveModal @removed="itemRemoved" :item="getSelectedItem"></RemoveModal>
     </div>
 </template>
