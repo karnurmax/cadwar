@@ -12842,24 +12842,78 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['item'],
+  props: ["dbList", "item"],
   methods: {
     onSubmit: function onSubmit() {},
     saveItem: function saveItem(e) {
       var _this = this;
 
       e.preventDefault();
-      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].updateItem("bases", this.item).then(function (res) {
+      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].updateItem("employees", this.item).then(function (res) {
         if (res.status === 200) {
           _this.$emit("updated", res.data);
 
-          _this.$bvModal.hide("basesEditModal");
+          _this.$bvModal.hide("employeesEditModal");
         } else {
           window.alert("Ошибка");
         }
       });
+    },
+    onDbChange: function onDbChange(dbItemId) {
+      this.item.base_id = dbItemId;
     }
   }
 });
@@ -79667,7 +79721,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("EditModal", {
-        attrs: { item: _vm.getSelectedItem },
+        attrs: { item: _vm.getSelectedItem, dbList: _vm.dbList },
         on: { updated: _vm.itemUpdated }
       }),
       _vm._v(" "),
@@ -80927,7 +80981,7 @@ var render = function() {
   return _c(
     "b-modal",
     {
-      attrs: { id: "basesEditModal", title: "Редактрование базы" },
+      attrs: { id: "employeesEditModal", title: "Добавление новой базы" },
       on: { ok: _vm.saveItem }
     },
     [
@@ -80961,17 +81015,51 @@ var render = function() {
             {
               attrs: {
                 id: "input-group-1",
-                label: "Название :",
+                label: "База данных:",
                 "label-for": "input-1"
+              }
+            },
+            [
+              _c(
+                "b-form-select",
+                {
+                  attrs: { id: "input-1" },
+                  on: { change: _vm.onDbChange },
+                  model: {
+                    value: _vm.item.base_id,
+                    callback: function($$v) {
+                      _vm.$set(_vm.item, "base_id", $$v)
+                    },
+                    expression: "item.base_id"
+                  }
+                },
+                _vm._l(_vm.dbList, function(db) {
+                  return _c("option", { domProps: { value: db.id } }, [
+                    _vm._v(_vm._s(db.name))
+                  ])
+                }),
+                0
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-2",
+                label: "Имя :",
+                "label-for": "input-2"
               }
             },
             [
               _c("b-form-input", {
                 attrs: {
-                  id: "input-1",
+                  id: "input-2",
                   type: "text",
                   required: "",
-                  placeholder: "Введите название"
+                  placeholder: "Имя"
                 },
                 model: {
                   value: _vm.item.name,
@@ -80979,6 +81067,93 @@ var render = function() {
                     _vm.$set(_vm.item, "name", $$v)
                   },
                   expression: "item.name"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-3",
+                label: "Фамилия :",
+                "label-for": "input-3"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  id: "input-3",
+                  type: "text",
+                  required: "",
+                  placeholder: "Фамилия"
+                },
+                model: {
+                  value: _vm.item.surname,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "surname", $$v)
+                  },
+                  expression: "item.surname"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-4",
+                label: "Отчество :",
+                "label-for": "input-4"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  id: "input-4",
+                  type: "text",
+                  required: "",
+                  placeholder: "Отчество"
+                },
+                model: {
+                  value: _vm.item.lastname,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "lastname", $$v)
+                  },
+                  expression: "item.lastname"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-5",
+                label: "ИИН :",
+                "label-for": "input-5"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  id: "input-5",
+                  type: "text",
+                  required: "",
+                  placeholder: "ИИН"
+                },
+                model: {
+                  value: _vm.item.iin,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "iin", $$v)
+                  },
+                  expression: "item.iin"
                 }
               })
             ],
