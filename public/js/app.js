@@ -12955,21 +12955,72 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["item"],
+  props: ["dbList", "item"],
   methods: {
     onSubmit: function onSubmit() {},
     saveItem: function saveItem(e) {
       var _this = this;
 
       e.preventDefault();
-      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].removeItem("bases", this.item.id).then(function (res) {
+      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].removeItem("employees", this.item).then(function (res) {
         if (res.status === 200) {
           _this.$emit("removed", res.data); //id
 
 
-          _this.$bvModal.hide("basesRemoveModal");
+          _this.$bvModal.hide("employeesRemoveModal");
         } else {
           window.alert("Ошибка");
         }
@@ -79726,7 +79777,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("RemoveModal", {
-        attrs: { item: _vm.getSelectedItem },
+        attrs: { item: _vm.getSelectedItem, dbList: _vm.dbList },
         on: { removed: _vm.itemRemoved }
       })
     ],
@@ -81191,7 +81242,7 @@ var render = function() {
   return _c(
     "b-modal",
     {
-      attrs: { id: "basesRemoveModal", title: "Удаление базы" },
+      attrs: { id: "employeesRemoveModal", title: "Удаление работника" },
       on: { ok: _vm.saveItem }
     },
     [
@@ -81210,8 +81261,8 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "b-button",
-                    { attrs: { type: "submit", variant: "danger" } },
-                    [_vm._v("Удалить")]
+                    { attrs: { type: "submit", variant: "primary" } },
+                    [_vm._v("Сохранить")]
                   )
                 ]
               },
@@ -81225,15 +81276,48 @@ var render = function() {
             {
               attrs: {
                 id: "input-group-1",
-                label: "Название :",
+                label: "База данных:",
                 "label-for": "input-1"
+              }
+            },
+            [
+              _c(
+                "b-form-select",
+                {
+                  attrs: { disabled: "", id: "input-1" },
+                  model: {
+                    value: _vm.item.base_id,
+                    callback: function($$v) {
+                      _vm.$set(_vm.item, "base_id", $$v)
+                    },
+                    expression: "item.base_id"
+                  }
+                },
+                _vm._l(_vm.dbList, function(db) {
+                  return _c("option", { domProps: { value: db.id } }, [
+                    _vm._v(_vm._s(db.name))
+                  ])
+                }),
+                0
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-2",
+                label: "Имя :",
+                "label-for": "input-2"
               }
             },
             [
               _c("b-form-input", {
                 attrs: {
                   disabled: "",
-                  id: "input-1",
+                  id: "input-2",
                   type: "text",
                   required: ""
                 },
@@ -81243,6 +81327,93 @@ var render = function() {
                     _vm.$set(_vm.item, "name", $$v)
                   },
                   expression: "item.name"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-3",
+                label: "Фамилия :",
+                "label-for": "input-3"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  disabled: "",
+                  id: "input-3",
+                  type: "text",
+                  required: ""
+                },
+                model: {
+                  value: _vm.item.surname,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "surname", $$v)
+                  },
+                  expression: "item.surname"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-4",
+                label: "Отчество :",
+                "label-for": "input-4"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  disabled: "",
+                  id: "input-4",
+                  type: "text",
+                  required: ""
+                },
+                model: {
+                  value: _vm.item.lastname,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "lastname", $$v)
+                  },
+                  expression: "item.lastname"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-5",
+                label: "ИИН :",
+                "label-for": "input-5"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  disabled: "",
+                  id: "input-5",
+                  type: "text",
+                  required: ""
+                },
+                model: {
+                  value: _vm.item.iin,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "iin", $$v)
+                  },
+                  expression: "item.iin"
                 }
               })
             ],
