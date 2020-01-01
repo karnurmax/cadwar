@@ -46,7 +46,7 @@
         :is-full-page="true"></Loading>
         <AddModal @created="newItemCreated" :dbList="dbList"></AddModal>
         <EditModal @updated="itemUpdated" :item="getSelectedItem" :dbList="dbList"></EditModal>
-        <RemoveModal @removed="itemRemoved" :item="getSelectedItem"></RemoveModal>
+        <RemoveModal @removed="itemRemoved" :item="getSelectedItem" :dbList="dbList"></RemoveModal>
     </div>
 </template>
 
