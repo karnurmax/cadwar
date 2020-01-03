@@ -12912,6 +12912,33 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_crud__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/crud */ "./resources/js/services/crud.js");
+/* harmony import */ var _services_employee__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../services/employee */ "./resources/js/services/employee.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -12991,11 +13018,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["dbList"],
   data: function data() {
     return {
-      item: {}
+      item: {},
+      files: []
     };
   },
   methods: {
@@ -13004,11 +13033,15 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       e.preventDefault();
-      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].postNewItem("employees", this.item).then(function (res) {
+      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].postNewItem("employees", this.item, this.files).then(function (res) {
         if (res.status === 200) {
-          _this.$emit("created", res.data);
+          _this.uploadFiles(res.data.id).then(function (uploaded) {
+            if (uploaded) {
+              _this.$emit("created", res.data);
 
-          _this.$bvModal.hide("employeesAddModal");
+              _this.$bvModal.hide("employeesAddModal");
+            } else window.alert("Ошибка");
+          });
         } else {
           window.alert("Ошибка");
         }
@@ -13016,6 +13049,32 @@ __webpack_require__.r(__webpack_exports__);
     },
     onDbChange: function onDbChange(dbItemId) {
       this.item.base_id = dbItemId;
+    },
+    onFileChange: function onFileChange(e) {
+      var _this2 = this;
+
+      if (!e.target.value) return;
+      window.files = e.target.files;
+
+      var _loop = function _loop(i) {
+        var f = files[i];
+        if (!_this2.files.find(function (ef) {
+          return ef.name === f.name && ef.lastModified === f.lastModified && ef.size === f.size;
+        })) _this2.files.push(f);
+      };
+
+      for (var i = 0; i < files.length; i++) {
+        _loop(i);
+      }
+    },
+    removeSelectedFile: function removeSelectedFile(name) {
+      var idx = this.files.indexOf(this.files.find(function (f) {
+        return f.name === name;
+      }));
+      this.files.splice(idx, 1);
+    },
+    uploadFiles: function uploadFiles(userId) {
+      return _services_employee__WEBPACK_IMPORTED_MODULE_1__["default"].uploadFile(userId, this.files);
     }
   }
 });
@@ -13121,9 +13180,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["dbList", "item"],
+  data: function data() {
+    return {
+      files: []
+    };
+  },
   methods: {
     onSubmit: function onSubmit() {},
     saveItem: function saveItem(e) {
@@ -13269,9 +13343,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_crud__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/crud */ "./resources/js/services/crud.js");
-//
-//
-//
 //
 //
 //
@@ -81701,9 +81772,11 @@ var render = function() {
                 "b-form-select",
                 { attrs: { id: "input-1" }, on: { change: _vm.onDbChange } },
                 _vm._l(_vm.dbList, function(db) {
-                  return _c("option", { domProps: { value: db.id } }, [
-                    _vm._v(_vm._s(db.name))
-                  ])
+                  return _c(
+                    "option",
+                    { key: db.id, domProps: { value: db.id } },
+                    [_vm._v(_vm._s(db.name))]
+                  )
                 }),
                 0
               )
@@ -81823,6 +81896,80 @@ var render = function() {
                   expression: "item.iin"
                 }
               })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-6",
+                label: "Прикрепленные файлы :",
+                "label-for": "input-6"
+              }
+            },
+            [
+              _c("input", {
+                ref: "file",
+                staticStyle: { display: "none" },
+                attrs: { type: "file", multiple: "" },
+                on: { change: _vm.onFileChange }
+              }),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                {
+                  on: {
+                    click: function($event) {
+                      return _vm.$refs.file.click()
+                    }
+                  }
+                },
+                [
+                  _c("font-awesome-icon", { attrs: { icon: "plus" } }),
+                  _vm._v(" Добавить файлы\n            ")
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-list-group",
+                _vm._l(_vm.files, function(f) {
+                  return _c(
+                    "b-list-group-item",
+                    {
+                      key: f.lastModified,
+                      staticClass:
+                        "d-flex justify-content-between align-items-center"
+                    },
+                    [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(f.name) +
+                          "\n                    "
+                      ),
+                      _c(
+                        "b-link",
+                        {
+                          staticStyle: { color: "red" },
+                          on: {
+                            click: function($event) {
+                              return _vm.removeSelectedFile(f.name)
+                            }
+                          }
+                        },
+                        [_c("font-awesome-icon", { attrs: { icon: "times" } })],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                }),
+                1
+              )
             ],
             1
           )
@@ -82344,12 +82491,6 @@ var render = function() {
       }
     },
     [
-      [
-        _c("b-form-file", {
-          attrs: { multiple: "", "file-name-formatter": _vm.formatNames }
-        })
-      ],
-      _vm._v(" "),
       _c(
         "b-list-group",
         [
@@ -82377,7 +82518,7 @@ var render = function() {
         1
       )
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
@@ -101074,7 +101215,8 @@ __webpack_require__.r(__webpack_exports__);
   login: "auth/login",
   register: "auth/register",
   resetPassword: "auth/reset",
-  crud: "crud"
+  crud: "crud",
+  employeeFilesUpload: "employees/{id}/files/upload"
 });
 
 /***/ }),
@@ -101144,6 +101286,33 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/services/employee.js":
+/*!*******************************************!*\
+  !*** ./resources/js/services/employee.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./http */ "./resources/js/services/http.js");
+/* harmony import */ var _apiUrls__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./apiUrls */ "./resources/js/services/apiUrls.js");
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  uploadFile: function uploadFile(userId, files) {
+    var formData = new FormData();
+    formData.append("files[]", files);
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].post(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].employeeFilesUpload.replace("{id}", userId), formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    });
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/services/http.js":
 /*!***************************************!*\
   !*** ./resources/js/services/http.js ***!
@@ -101176,6 +101345,15 @@ axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common = {
   },
   remove: function remove(url) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](url);
+  },
+  uploadFile: function uploadFile(url, files) {
+    var formData = new FormData();
+    formData.append("files[]", files);
+    return this.axios.post(url, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    });
   }
 });
 
