@@ -21,9 +21,10 @@ export default {
     },
     uploadFile(url, files) {
         let formData = new FormData();
-        formData.append("files[]", files);
+        for (let i = 0; i < files.length; i++)
+            formData.append("files[" + i + "]", files[i]);
 
-        return this.axios.post(url, formData, {
+        return axios.post(url, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
