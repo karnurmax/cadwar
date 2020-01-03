@@ -18,5 +18,15 @@ export default {
     },
     remove(url) {
         return axios.delete(url);
+    },
+    uploadFile(url, files) {
+        let formData = new FormData();
+        formData.append("files[]", files);
+
+        return this.axios.post(url, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        });
     }
 };
