@@ -79,6 +79,10 @@ Route::middleware(['CrudWhiteList'])->group(function () {
     });
 });
 
+Route::prefix('employees')->group(function () {
+    Route::post('{id}/files/upload', 'EmployeesController@upload');
+});
+
 Route::prefix('test')->group(function () {
     Route::get('mail', function () {
         try {
