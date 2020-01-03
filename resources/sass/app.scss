@@ -1,3 +1,7 @@
+html {
+    overflow: -moz-scrollbars-vertical; 
+    overflow-y: scroll;
+}
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Nunito");
 
@@ -15,3 +19,4 @@
 }
 
 @import "vue-loading-overlay/dist/vue-loading";
+@import "vue-multiselect/dist/vue-multiselect.min";
