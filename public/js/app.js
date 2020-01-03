@@ -12254,8 +12254,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -12309,29 +12307,33 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    this.loadData().then(function (res) {
-      return _this.fillData(res.data);
-    });
     _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getAll("bases").then(function (res) {
       _this.dbList = res.data;
+      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getAll("employees").then(function (res) {
+        _this.employeesList = res.data;
+
+        _this.loadData().then(function (res) {
+          return _this.fillData(res.data);
+        });
+      });
     });
   },
   methods: {
     loadData: function loadData() {
-      return _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getAll("employees");
+      return _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getAll("histories");
     },
     fillData: function fillData(list) {
       this.list = list;
     },
     addItem: function addItem() {
-      this.$bvModal.show("employeesAddModal");
+      this.$bvModal.show("historiesAddModal");
     },
     newItemCreated: function newItemCreated(item) {
       this.list.push(item);
     },
     editItem: function editItem(item) {
       this.selectedItem = item;
-      this.$bvModal.show("employeesEditModal");
+      this.$bvModal.show("historiesEditModal");
     },
     itemUpdated: function itemUpdated(item) {
       if (!item) return;
@@ -12342,7 +12344,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     removeItem: function removeItem(item) {
       this.selectedItem = item;
-      this.$bvModal.show("employeesRemoveModal");
+      this.$bvModal.show("historiesRemoveModal");
     },
     itemRemoved: function itemRemoved(id) {
       if (!id) return;
@@ -12357,13 +12359,15 @@ __webpack_require__.r(__webpack_exports__);
       });
       return db ? db.name : "";
     },
-    nameWithLang: function nameWithLang(_ref) {
-      var name = _ref.name,
-          language = _ref.language;
-      return "".concat(name, " \u2014 [").concat(language, "]");
+    getName: function getName(_ref) {
+      var name = _ref.name;
+      return name;
     },
-    fioOfEmployee: function fioOfEmployee() {
-      return 'asd';
+    fioOfEmployee: function fioOfEmployee(_ref2) {
+      var name = _ref2.name,
+          surname = _ref2.surname,
+          lastname = _ref2.lastname;
+      return "".concat(surname, " ").concat(name, " ").concat(lastname);
     },
     resetFilters: function resetFilters() {
       this.selectedDb = null;
@@ -13308,17 +13312,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["dbList"],
+  props: ["dbList", "empList"],
   data: function data() {
     return {
-      item: {}
+      item: {},
+      selectedDb: null,
+      selectedEmp: null
     };
   },
   methods: {
@@ -13327,18 +13328,15 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       e.preventDefault();
-      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].postNewItem("employees", this.item).then(function (res) {
+      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].postNewItem("histories", this.item).then(function (res) {
         if (res.status === 200) {
           _this.$emit("created", res.data);
 
-          _this.$bvModal.hide("employeesAddModal");
+          _this.$bvModal.hide("historiesAddModal");
         } else {
           window.alert("Ошибка");
         }
       });
-    },
-    onDbChange: function onDbChange(dbItemId) {
-      this.item.base_id = dbItemId;
     }
   }
 });
@@ -80693,7 +80691,7 @@ var render = function() {
                           _c("multiselect", {
                             attrs: {
                               options: _vm.dbList,
-                              "custom-label": _vm.nameWithLang,
+                              "custom-label": _vm.getName,
                               placeholder: "Выберите базу",
                               label: "name",
                               "track-by": "name"
@@ -80739,8 +80737,6 @@ var render = function() {
             ],
             1
           ),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-12" }),
           _vm._v(" "),
           _c("b-table", {
             attrs: {
@@ -80856,17 +80852,25 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("AddModal", {
-        attrs: { dbList: _vm.dbList },
+        attrs: { dbList: _vm.dbList, empList: _vm.employeesList },
         on: { created: _vm.newItemCreated }
       }),
       _vm._v(" "),
       _c("EditModal", {
-        attrs: { item: _vm.getSelectedItem, dbList: _vm.dbList },
+        attrs: {
+          item: _vm.getSelectedItem,
+          dbList: _vm.dbList,
+          empList: _vm.employeesList
+        },
         on: { updated: _vm.itemUpdated }
       }),
       _vm._v(" "),
       _c("RemoveModal", {
-        attrs: { item: _vm.getSelectedItem, dbList: _vm.dbList },
+        attrs: {
+          item: _vm.getSelectedItem,
+          dbList: _vm.dbList,
+          empList: _vm.employeesList
+        },
         on: { removed: _vm.itemRemoved }
       })
     ],
@@ -82151,7 +82155,7 @@ var render = function() {
   return _c(
     "b-modal",
     {
-      attrs: { id: "employeesAddModal", title: "Добавление новой базы" },
+      attrs: { id: "historiesAddModal", title: "Добавление новой истории" },
       on: { ok: _vm.saveItem }
     },
     [
@@ -82192,7 +82196,16 @@ var render = function() {
             [
               _c(
                 "b-form-select",
-                { attrs: { id: "input-1" }, on: { change: _vm.onDbChange } },
+                {
+                  attrs: { id: "input-1" },
+                  model: {
+                    value: _vm.item.base_id,
+                    callback: function($$v) {
+                      _vm.$set(_vm.item, "base_id", $$v)
+                    },
+                    expression: "item.base_id"
+                  }
+                },
                 _vm._l(_vm.dbList, function(db) {
                   return _c("option", { domProps: { value: db.id } }, [
                     _vm._v(_vm._s(db.name))
@@ -82209,26 +82222,32 @@ var render = function() {
             {
               attrs: {
                 id: "input-group-2",
-                label: "Имя :",
+                label: "ФИО работника:",
                 "label-for": "input-2"
               }
             },
             [
-              _c("b-form-input", {
-                attrs: {
-                  id: "input-2",
-                  type: "text",
-                  required: "",
-                  placeholder: "Имя"
+              _c(
+                "b-form-select",
+                {
+                  attrs: { id: "input-2" },
+                  model: {
+                    value: _vm.item.employer_id,
+                    callback: function($$v) {
+                      _vm.$set(_vm.item, "employer_id", $$v)
+                    },
+                    expression: "item.employer_id"
+                  }
                 },
-                model: {
-                  value: _vm.item.name,
-                  callback: function($$v) {
-                    _vm.$set(_vm.item, "name", $$v)
-                  },
-                  expression: "item.name"
-                }
-              })
+                _vm._l(_vm.empList, function(emp) {
+                  return _c("option", { domProps: { value: emp.id } }, [
+                    _vm._v(
+                      _vm._s(emp.surname + " " + emp.name + " " + emp.lastname)
+                    )
+                  ])
+                }),
+                0
+              )
             ],
             1
           ),
@@ -82238,24 +82257,19 @@ var render = function() {
             {
               attrs: {
                 id: "input-group-3",
-                label: "Фамилия :",
+                label: "Где работал :",
                 "label-for": "input-3"
               }
             },
             [
               _c("b-form-input", {
-                attrs: {
-                  id: "input-3",
-                  type: "text",
-                  required: "",
-                  placeholder: "Фамилия"
-                },
+                attrs: { id: "input-3", type: "text", required: "" },
                 model: {
-                  value: _vm.item.surname,
+                  value: _vm.item.workplace,
                   callback: function($$v) {
-                    _vm.$set(_vm.item, "surname", $$v)
+                    _vm.$set(_vm.item, "workplace", $$v)
                   },
-                  expression: "item.surname"
+                  expression: "item.workplace"
                 }
               })
             ],
@@ -82267,24 +82281,19 @@ var render = function() {
             {
               attrs: {
                 id: "input-group-4",
-                label: "Отчество :",
+                label: "От :",
                 "label-for": "input-4"
               }
             },
             [
               _c("b-form-input", {
-                attrs: {
-                  id: "input-4",
-                  type: "text",
-                  required: "",
-                  placeholder: "Отчество"
-                },
+                attrs: { id: "input-4", type: "date" },
                 model: {
-                  value: _vm.item.lastname,
+                  value: _vm.item.from,
                   callback: function($$v) {
-                    _vm.$set(_vm.item, "lastname", $$v)
+                    _vm.$set(_vm.item, "from", $$v)
                   },
-                  expression: "item.lastname"
+                  expression: "item.from"
                 }
               })
             ],
@@ -82296,24 +82305,43 @@ var render = function() {
             {
               attrs: {
                 id: "input-group-5",
-                label: "ИИН :",
+                label: "До :",
                 "label-for": "input-5"
               }
             },
             [
               _c("b-form-input", {
-                attrs: {
-                  id: "input-5",
-                  type: "text",
-                  required: "",
-                  placeholder: "ИИН"
-                },
+                attrs: { id: "input-5", type: "date" },
                 model: {
-                  value: _vm.item.iin,
+                  value: _vm.item.to,
                   callback: function($$v) {
-                    _vm.$set(_vm.item, "iin", $$v)
+                    _vm.$set(_vm.item, "to", $$v)
                   },
-                  expression: "item.iin"
+                  expression: "item.to"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-6",
+                label: "Инфо :",
+                "label-for": "input-6"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: { id: "input-6", type: "text" },
+                model: {
+                  value: _vm.item.description,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "description", $$v)
+                  },
+                  expression: "item.description"
                 }
               })
             ],
