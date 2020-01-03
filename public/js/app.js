@@ -82623,11 +82623,11 @@ var render = function() {
                 {
                   attrs: { id: "input-2" },
                   model: {
-                    value: _vm.item.employer_id,
+                    value: _vm.item.employee_id,
                     callback: function($$v) {
-                      _vm.$set(_vm.item, "employer_id", $$v)
+                      _vm.$set(_vm.item, "employee_id", $$v)
                     },
-                    expression: "item.employer_id"
+                    expression: "item.employee_id"
                   }
                 },
                 _vm._l(_vm.empList, function(emp) {
@@ -101301,13 +101301,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   uploadFile: function uploadFile(userId, files) {
-    var formData = new FormData();
-    formData.append("files[]", files);
-    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].post(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].employeeFilesUpload.replace("{id}", userId), formData, {
-      headers: {
-        "Content-Type": "multipart/form-data"
-      }
-    });
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].uploadFile(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].employeeFilesUpload.replace("{id}", userId), files);
   }
 });
 
@@ -101348,8 +101342,12 @@ axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common = {
   },
   uploadFile: function uploadFile(url, files) {
     var formData = new FormData();
-    formData.append("files[]", files);
-    return this.axios.post(url, formData, {
+
+    for (var i = 0; i < files.length; i++) {
+      formData.append("files[" + i + "]", files[i]);
+    }
+
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, formData, {
       headers: {
         "Content-Type": "multipart/form-data"
       }
