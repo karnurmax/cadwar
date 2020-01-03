@@ -3,5 +3,6 @@ export default {
     login: "auth/login",
     register: "auth/register",
     resetPassword: "auth/reset",
-    crud: "crud"
+    crud: "crud",
+    employeeFilesUpload: "employees/{id}/files/upload"
 };
