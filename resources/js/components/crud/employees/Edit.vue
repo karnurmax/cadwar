@@ -65,11 +65,21 @@
                     placeholder="ИИН"
                 ></b-form-input>
             </b-form-group>
-         
-            <b-form-group id="input-group-6" label="Файлы :" label-for="input-6">
-                <b-form-file multiple v-model="files" placeholder="Choose a file or drop it here..."></b-form-file>
+
+            <b-form-group
+                id="input-group-6"
+                label="Файлы :"
+                label-for="input-6"
+            >
+                <b-form-file
+                    multiple
+                    v-model="files"
+                    placeholder="Choose a file or drop it here..."
+                ></b-form-file>
                 <b-list-group>
-                    <b-list-group-item class="d-flex justify-content-between align-items-center">
+                    <b-list-group-item
+                        class="d-flex justify-content-between align-items-center"
+                    >
                         Resume
                         <div>
                             <b-link>
@@ -91,6 +101,11 @@
 import crudService from "../../../services/crud";
 export default {
     props: ["dbList", "item"],
+    data() {
+        return {
+            files: []
+        };
+    },
     methods: {
         onSubmit() {},
         saveItem(e) {
