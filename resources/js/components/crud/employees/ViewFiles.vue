@@ -3,9 +3,6 @@
         id="employeeFilesModal"
         title="Просмотр файлов работника: Toktamys A"
     >
-            <template>
-                <b-form-file multiple :file-name-formatter="formatNames"></b-form-file>
-            </template>
             <b-list-group>
                 <b-list-group-item class="d-flex justify-content-between align-items-center">
                     Resume
