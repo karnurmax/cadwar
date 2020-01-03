@@ -29,6 +29,12 @@
                 <template v-slot:cell(base)="data">
                      <b>{{ getBaseName(data.item.base_id) }}</b>
                 </template>
+                 <template v-slot:cell(files)="data">
+                    <b-link style="color: #212529" @click="viewFiles(data.item)">
+                        <b>Файлы: {{5}} </b>
+                        <font-awesome-icon icon="search"/>
+                    </b-link>
+                </template>
                 <!-- A virtual composite column -->
                 <template v-slot:cell(actions)="data">
                     <b-button @click="editItem(data.item)">
@@ -47,6 +53,8 @@
         <AddModal @created="newItemCreated" :dbList="dbList"></AddModal>
         <EditModal @updated="itemUpdated" :item="getSelectedItem" :dbList="dbList"></EditModal>
         <RemoveModal @removed="itemRemoved" :item="getSelectedItem" :dbList="dbList"></RemoveModal>
+        <ViewFilesModal @created="newItemCreated" :item="getSelectedItem"></ViewFilesModal>
+
     </div>
 </template>
 
@@ -55,12 +63,15 @@ import crudService from '../services/crud';
 import AddModal from './crud/employees/add';
 import EditModal from './crud/employees/edit';
 import RemoveModal from './crud/employees/remove';
+import ViewFilesModal from './crud/employees/viewfiles';
+
 
 export default {
     components:{
         AddModal,
         EditModal,
-        RemoveModal
+        RemoveModal,
+        ViewFilesModal
     },
     data() {
         return {
@@ -70,6 +81,7 @@ export default {
                  { key: 'fio', label: 'ФИО',sortable: true },
                  { key: 'iin', label: 'ИИН',sortable: true },
                  {key:'base',label:'База',sortable:true},
+                 {key:'files',label:'Файлы'},
                  { key: 'actions', label: 'Действия'},
             ],
             isLoading:false,
@@ -119,7 +131,11 @@ export default {
         getBaseName(id){
             const db = this.dbList.find(b=>b.id===id)
             return db ? db.name : '';
+        },
+        viewFiles(item){
+            this.$bvModal.show('employeeFilesModal');
         }
+
     },
     computed: {
         getSelectedItem(){

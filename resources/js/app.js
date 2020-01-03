@@ -23,7 +23,11 @@ import {
     faPen,
     faPencilAlt,
     faUsers,
-    faTrash
+    faTrash,
+    faFileAlt,
+    faSearch,
+    faDownload,
+    faTimes
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -37,7 +41,12 @@ library.add(
     faPen,
     faPencilAlt,
     faUsers,
-    faTrash
+    faTrash,
+    faFileAlt,
+    faSearch,
+    faDownload,
+    faTimes
+    
 );
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
