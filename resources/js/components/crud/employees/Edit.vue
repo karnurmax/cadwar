@@ -65,7 +65,20 @@
                     placeholder="ИИН"
                 ></b-form-input>
             </b-form-group>
-
+         
+            <b-form-group id="input-group-6" label="Файлы :" label-for="input-6">
+                <b-form-file multiple v-model="files" placeholder="Choose a file or drop it here..."></b-form-file>
+                <b-list-group>
+                    <b-list-group-item class="d-flex justify-content-between align-items-center">
+                        Resume
+                        <div>
+                            <b-link>
+                                <font-awesome-icon icon="times" />
+                            </b-link>
+                        </div>
+                    </b-list-group-item>
+                </b-list-group>
+            </b-form-group>
             <template v-slot:modal-footer>
                 <b-button type="button">Отмена</b-button>
                 <b-button type="submit" variant="primary">Сохранить</b-button>
