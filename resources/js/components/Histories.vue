@@ -25,7 +25,7 @@
                                 <multiselect 
                                     v-model="selectedDb" 
                                     :options="dbList" 
-                                    :custom-label="nameWithLang" 
+                                    :custom-label="getName" 
                                     placeholder="Выберите базу" 
                                     label="name" 
                                     track-by="name">
@@ -44,10 +44,6 @@
                         </tr>
                     </table>
                 </b-collapse>
-            </div>
-            <div class="col-12">
-                
-                
             </div>
             
             <b-table
@@ -89,16 +85,18 @@
             </b-table>
         </div>
         <Loading :active.sync="isLoading" :is-full-page="true"></Loading>
-        <AddModal @created="newItemCreated" :dbList="dbList"></AddModal>
+        <AddModal @created="newItemCreated" :dbList="dbList" :empList="employeesList"></AddModal>
         <EditModal
             @updated="itemUpdated"
             :item="getSelectedItem"
             :dbList="dbList"
+            :empList="employeesList"
         ></EditModal>
         <RemoveModal
             @removed="itemRemoved"
             :item="getSelectedItem"
             :dbList="dbList"
+            :empList="employeesList"
         ></RemoveModal>
     </div>
 </template>
@@ -142,27 +140,31 @@ export default {
         };
     },
     created() {
-        this.loadData().then(res => this.fillData(res.data));
+        
         crudService.getAll("bases").then(res => {
             this.dbList = res.data;
-        });
+            crudService.getAll("employees").then(res => {
+                this.employeesList = res.data;
+                this.loadData().then(res => this.fillData(res.data));
+            });
+        })
     },
     methods: {
         loadData() {
-            return crudService.getAll("employees");
+            return crudService.getAll("histories");
         },
         fillData(list) {
             this.list = list;
         },
         addItem() {
-            this.$bvModal.show("employeesAddModal");
+            this.$bvModal.show("historiesAddModal");
         },
         newItemCreated(item) {
             this.list.push(item);
         },
         editItem(item) {
             this.selectedItem = item;
-            this.$bvModal.show("employeesEditModal");
+            this.$bvModal.show("historiesEditModal");
         },
         itemUpdated(item) {
             if (!item) return;
@@ -171,7 +173,7 @@ export default {
         },
         removeItem(item) {
             this.selectedItem = item;
-            this.$bvModal.show("employeesRemoveModal");
+            this.$bvModal.show("historiesRemoveModal");
         },
         itemRemoved(id) {
             if (!id) return;
@@ -182,11 +184,11 @@ export default {
             const db = this.dbList.find(b => b.id === id);
             return db ? db.name : "";
         },
-        nameWithLang ({ name, language }) {
-            return `${name} — [${language}]`
+        getName ({ name }) {
+            return name;
         },
-        fioOfEmployee(){
-            return 'asd';
+        fioOfEmployee({name,surname,lastname}){
+            return `${surname} ${name} ${lastname}`;
         },
         resetFilters(){
             this.selectedDb=null;

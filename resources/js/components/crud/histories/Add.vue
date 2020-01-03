@@ -1,7 +1,7 @@
 <template>
     <b-modal
-        id="employeesAddModal"
-        title="Добавление новой базы"
+        id="historiesAddModal"
+        title="Добавление новой истории"
         @ok="saveItem"
     >
         <b-form @submit="onSubmit">
@@ -10,61 +10,56 @@
                 label="База данных:"
                 label-for="input-1"
             >
-                <b-form-select @change="onDbChange" id="input-1">
-                    <option v-for="db in dbList" :value="db.id">{{ db.name }}</option>
+                <b-form-select v-model="item.base_id" id="input-1">
+                    <option v-for="db in dbList" :value="db.id">{{
+                        db.name
+                    }}</option>
+                </b-form-select>
+            </b-form-group>
+            <b-form-group
+                id="input-group-2"
+                label="ФИО работника:"
+                label-for="input-2"
+            >
+                <b-form-select v-model="item.employer_id" id="input-2">
+                    <option v-for="emp in empList" :value="emp.id">{{
+                        `${emp.surname} ${emp.name} ${emp.lastname}`
+                    }}</option>
                 </b-form-select>
             </b-form-group>
 
             <b-form-group
-                id="input-group-2"
-                label="Имя :"
-                label-for="input-2"
-            >
-                <b-form-input
-                    id="input-2"
-                    v-model="item.name"
-                    type="text"
-                    required
-                    placeholder="Имя"
-                ></b-form-input>
-            </b-form-group>
-            <b-form-group
                 id="input-group-3"
-                label="Фамилия :"
+                label="Где работал :"
                 label-for="input-3"
             >
                 <b-form-input
                     id="input-3"
-                    v-model="item.surname"
+                    v-model="item.workplace"
                     type="text"
                     required
-                    placeholder="Фамилия"
                 ></b-form-input>
             </b-form-group>
-            <b-form-group
-                id="input-group-4"
-                label="Отчество :"
-                label-for="input-4"
-            >
+            <b-form-group id="input-group-4" label="От :" label-for="input-4">
                 <b-form-input
                     id="input-4"
-                    v-model="item.lastname"
-                    type="text"
-                    required
-                    placeholder="Отчество"
+                    v-model="item.from"
+                    type="date"
                 ></b-form-input>
             </b-form-group>
-            <b-form-group
-                id="input-group-5"
-                label="ИИН :"
-                label-for="input-5"
-            >
+            <b-form-group id="input-group-5" label="До :" label-for="input-5">
                 <b-form-input
                     id="input-5"
-                    v-model="item.iin"
+                    v-model="item.to"
+                    type="date"
+                ></b-form-input>
+            </b-form-group>
+
+            <b-form-group id="input-group-6" label="Инфо :" label-for="input-6">
+                <b-form-input
+                    id="input-6"
+                    v-model="item.description"
                     type="text"
-                    required
-                    placeholder="ИИН"
                 ></b-form-input>
             </b-form-group>
 
@@ -79,27 +74,26 @@
 <script>
 import crudService from "../../../services/crud";
 export default {
-    props: ["dbList"],
+    props: ["dbList", "empList"],
     data() {
         return {
-            item: {}
+            item: {},
+            selectedDb: null,
+            selectedEmp: null
         };
     },
     methods: {
         onSubmit() {},
         saveItem(e) {
             e.preventDefault();
-            crudService.postNewItem("employees", this.item).then(res => {
+            crudService.postNewItem("histories", this.item).then(res => {
                 if (res.status === 200) {
                     this.$emit("created", res.data);
-                    this.$bvModal.hide("employeesAddModal");
+                    this.$bvModal.hide("historiesAddModal");
                 } else {
                     window.alert("Ошибка");
                 }
             });
-        },
-        onDbChange(dbItemId) {
-            this.item.base_id = dbItemId;
         }
     }
 };
