@@ -28,8 +28,8 @@ class CreateHistoriesTable extends Migration
             $table->unsignedBigInteger('base_id');
             $table->foreign('base_id')->references('id')->on('bases')->onDelete('cascade');
             
-            $table->unsignedBigInteger('employer_id');
-            $table->foreign('employer_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->unsignedBigInteger('employee_id');
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
     }
 
