@@ -1,7 +1,7 @@
 <template>
     <b-modal
         id="employeesAddModal"
-        title="Добавление новой базы"
+        title="Добавление нового работника"
         @ok="saveItem"
     >
         <b-form @submit="onSubmit">

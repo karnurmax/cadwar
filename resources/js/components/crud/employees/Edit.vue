@@ -1,7 +1,7 @@
 <template>
     <b-modal
         id="employeesEditModal"
-        title="Добавление новой базы"
+        :title="'Редактировать данные ' + fioOfEmployee()"
         @ok="saveItem"
     >
         <b-form @submit="onSubmit">
@@ -66,26 +66,35 @@
                 ></b-form-input>
             </b-form-group>
 
+            <br/>
             <b-form-group
                 id="input-group-6"
-                label="Файлы :"
+                label="Прикрепленные файлы :"
                 label-for="input-6"
             >
-                <b-form-file
+                <input
+                    @change="onFileChange"
+                    type="file"
+                    ref="file"
+                    style="display: none"
                     multiple
-                    v-model="files"
-                    placeholder="Choose a file or drop it here..."
-                ></b-form-file>
+                />
+                <b-button @click="$refs.file.click()">
+                    <font-awesome-icon icon="plus" /> Добавить файлы
+                </b-button>
                 <b-list-group>
                     <b-list-group-item
+                        v-for="f in files"
+                        :key="f.lastModified"
                         class="d-flex justify-content-between align-items-center"
                     >
-                        Resume
-                        <div>
-                            <b-link>
-                                <font-awesome-icon icon="times" />
-                            </b-link>
-                        </div>
+                        {{ f.name }}
+                        <b-link
+                            style="color:red;"
+                            @click="removeSelectedFile(f.name)"
+                        >
+                            <font-awesome-icon icon="times" />
+                        </b-link>
                     </b-list-group-item>
                 </b-list-group>
             </b-form-group>
@@ -121,6 +130,37 @@ export default {
         },
         onDbChange(dbItemId) {
             this.item.base_id = dbItemId;
+        },
+        onFileChange(e) {
+            if (!e.target.value) return;
+            window.files = e.target.files;
+            for (let i = 0; i < files.length; i++) {
+                let f = files[i];
+                if (
+                    !this.files.find(
+                        ef =>
+                            ef.name === f.name &&
+                            ef.lastModified === f.lastModified &&
+                            ef.size === f.size
+                    )
+                )
+                    this.files.push(f);
+            }
+        },
+        removeSelectedFile(name) {
+            const idx = this.files.indexOf(
+                this.files.find(f => f.name === name)
+            );
+            this.files.splice(idx, 1);
+        },
+        uploadFiles(userId) {
+            return empService.uploadFile(userId, this.files);
+        },
+        fioOfEmployee() {
+            return !this.item
+                ? ""
+                : `${this.item.surname || ""} ${this.item.name ||
+                      ""} ${this.item.lastname || ""}`;
         }
     }
 };

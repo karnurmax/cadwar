@@ -27,7 +27,8 @@ class EmployeesController extends Controller
             $empFile = new EmployeeFile;
             $empFile->employee_id = $id;
             $empFile->guid = $guid;
-            $empFile->filename = $newPath;
+            $empFile->filename = $fnames[$i];
+            $empFile->filepath = $newPath;
             $empFile->save();
         }
         return "OK";
