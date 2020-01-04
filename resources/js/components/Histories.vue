@@ -10,7 +10,7 @@
                     </h3>
                 </p>
             </div>
-            <div class="col-12">
+            <div class="col-12" style="display:none;">
                 <b-button
                     :class="filtersVisible ? null : 'collapsed'"
                     :aria-expanded="filtersVisible ? 'true' : 'false'"
