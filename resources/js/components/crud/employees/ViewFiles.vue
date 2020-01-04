@@ -1,45 +1,34 @@
 <template>
     <b-modal
-        id="employeeFilesModal"
-        title="Просмотр файлов работника: Toktamys A"
+        id="employeeFilesShowModal"
+        :title="'Просмотр файлов работника: ' + fioOfEmployee()"
     >
-            <b-list-group>
-                <b-list-group-item class="d-flex justify-content-between align-items-center">
-                    Resume
-                    <div>
-                        <b-link>
-                            <font-awesome-icon icon="download" />
-                        </b-link>
-                    </div>
-                </b-list-group-item>
-            </b-list-group>
+        <b-list-group>
+            <b-list-group-item
+                v-if="employee != null"
+                v-for="(f, index) in employee.files"
+                v-bind:key="index"
+                class="d-flex justify-content-between align-items-center"
+            >
+                {{ f.filename }}
+                <b-link>
+                    <font-awesome-icon icon="download" />
+                </b-link>
+            </b-list-group-item>
+        </b-list-group>
     </b-modal>
 </template>
 
 <script>
 import crudService from "../../../services/crud";
 export default {
-    props: ["dbList"],
-    data() {
-        return {
-            item: {}
-        };
-    },
+    props: ["employee"],
     methods: {
-        onSubmit() {},
-        saveItem(e) {
-            e.preventDefault();
-            crudService.postNewItem("employees", this.item).then(res => {
-                if (res.status === 200) {
-                    this.$emit("created", res.data);
-                    this.$bvModal.hide("employeeFilesModal");
-                } else {
-                    window.alert("Ошибка");
-                }
-            });
-        },
-        onDbChange(dbItemId) {
-            this.item.base_id = dbItemId;
+        fioOfEmployee() {
+            return !this.employee
+                ? ""
+                : `${this.employee.surname || ""} ${this.employee.name ||
+                      ""} ${this.employee.lastname || ""}`;
         }
     }
 };
