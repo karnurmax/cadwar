@@ -30,10 +30,10 @@
                      <b>{{ getBaseName(data.item.base_id) }}</b>
                 </template>
                  <template v-slot:cell(files)="data">
-                    <b-link style="color: #212529" @click="viewFiles(data.item)">
-                        <b>Файлы: {{5}} </b>
-                        <font-awesome-icon icon="search"/>
+                    <b-link @click="viewFiles(data.item)" v-if="data.item.files && data.item.files.length">
+                        <b>Файлы: {{data.item.files.length}} </b>
                     </b-link>
+                    <b v-else>Файлов нет</b>
                 </template>
                 <!-- A virtual composite column -->
                 <template v-slot:cell(actions)="data">
@@ -53,7 +53,7 @@
         <AddModal @created="newItemCreated" :dbList="dbList"></AddModal>
         <EditModal @updated="itemUpdated" :item="getSelectedItem" :dbList="dbList"></EditModal>
         <RemoveModal @removed="itemRemoved" :item="getSelectedItem" :dbList="dbList"></RemoveModal>
-        <ViewFilesModal @created="newItemCreated" :item="getSelectedItem"></ViewFilesModal>
+        <ViewFilesModal @created="newItemCreated" :employee="selectedItem"></ViewFilesModal>
 
     </div>
 </template>
@@ -88,18 +88,26 @@ export default {
             list:[],
             selectedItem:null,
             dbList:[],
+            emp_files:[]
         };
     },
     created(){
-        this.loadData()
-            .then(res=>this.fillData(res.data));
-            crudService.getAll('bases').then(res=>{this.dbList=res.data});
+        window.test=this;
+        crudService.getAll('bases').then(res=>{
+            this.dbList=res.data;
+            crudService.getAll('employee_files').then(res=>{
+                this.emp_files = res.data;
+                this.loadData()
+                    .then(res=>this.fillData(res.data));
+            });
+        }); 
     },
     methods:{
         loadData(){
             return crudService.getAll('employees');
         },
         fillData(list){
+            list.map(i=>i.files = this.getEmpFiles(i.id));
             this.list = list;
         },
         addItem(){
@@ -133,9 +141,11 @@ export default {
             return db ? db.name : '';
         },
         viewFiles(item){
-            this.$bvModal.show('employeeFilesModal');
+            this.$bvModal.show('employeeFilesShowModal');
+        },
+        getEmpFiles(emp_id){
+            return this.emp_files.filter(ef=>ef.employee_id===emp_id);
         }
-
     },
     computed: {
         getSelectedItem(){
