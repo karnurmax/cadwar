@@ -3,9 +3,8 @@
         id="employeeFilesShowModal"
         :title="'Просмотр файлов работника: ' + fioOfEmployee()"
     >
-        <b-list-group>
+        <b-list-group v-if="employee != null">
             <b-list-group-item
-                v-if="employee != null"
                 v-for="(f, index) in employee.files"
                 v-bind:key="index"
                 class="d-flex justify-content-between align-items-center"
