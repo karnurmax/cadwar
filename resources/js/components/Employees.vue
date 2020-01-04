@@ -92,7 +92,6 @@ export default {
         };
     },
     created(){
-        window.test=this;
         crudService.getAll('bases').then(res=>{
             this.dbList=res.data;
             crudService.getAll('employee_files').then(res=>{
