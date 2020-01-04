@@ -15,7 +15,7 @@ class CrudWhiteList
      */
     public function handle($request, Closure $next)
     {
-        $whiteList = ["bases", "employees", "histories"];
+        $whiteList = ["bases", "employees", "histories", "employee_files"];
         $tableName = $request->route('tableName');
         $allowed = in_array($tableName, $whiteList);
         if (!$allowed) {
