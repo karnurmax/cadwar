@@ -11940,7 +11940,6 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    window.test = this;
     _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getAll('bases').then(function (res) {
       _this.dbList = res.data;
       _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getAll('employee_files').then(function (res) {
@@ -12279,15 +12278,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -12311,19 +12301,11 @@ __webpack_require__.r(__webpack_exports__);
         label: "ФИО",
         sortable: true
       }, {
-        key: "iin",
-        label: "ИИН",
-        sortable: true
-      }, {
-        key: "base",
-        label: "База",
-        sortable: true
-      }, {
-        key: "actions",
+        key: "workplace",
         label: "Объект"
       }, {
-        key: "actions",
-        label: "Действия"
+        key: "dates",
+        label: "Даты"
       }, {
         key: "actions",
         label: "Действия"
@@ -12407,7 +12389,19 @@ __webpack_require__.r(__webpack_exports__);
       this.selectedDb = null;
       this.selectedEmployee = null;
     },
-    applyFilters: function applyFilters() {}
+    applyFilters: function applyFilters() {},
+    getEmployeeOfHistory: function getEmployeeOfHistory(history_item) {
+      return this.employeesList.find(function (e) {
+        return e.id === history_item.employee_id;
+      });
+    },
+    getDates: function getDates(item) {
+      var from = item.from && new Date(item.from);
+      from = !isNaN(from.getTime()) ? 'C ' + from.toLocaleDateString() : '';
+      var to = item.to && new Date(item.to);
+      to = !isNaN(to.getTime()) ? ' по' + to.toLocaleDateString() : '';
+      return from + to;
+    }
   },
   computed: {
     getSelectedItem: function getSelectedItem() {
@@ -13207,6 +13201,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["dbList", "item"],
@@ -13233,6 +13236,35 @@ __webpack_require__.r(__webpack_exports__);
     },
     onDbChange: function onDbChange(dbItemId) {
       this.item.base_id = dbItemId;
+    },
+    onFileChange: function onFileChange(e) {
+      var _this2 = this;
+
+      if (!e.target.value) return;
+      window.files = e.target.files;
+
+      var _loop = function _loop(i) {
+        var f = files[i];
+        if (!_this2.files.find(function (ef) {
+          return ef.name === f.name && ef.lastModified === f.lastModified && ef.size === f.size;
+        })) _this2.files.push(f);
+      };
+
+      for (var i = 0; i < files.length; i++) {
+        _loop(i);
+      }
+    },
+    removeSelectedFile: function removeSelectedFile(name) {
+      var idx = this.files.indexOf(this.files.find(function (f) {
+        return f.name === name;
+      }));
+      this.files.splice(idx, 1);
+    },
+    uploadFiles: function uploadFiles(userId) {
+      return empService.uploadFile(userId, this.files);
+    },
+    fioOfEmployee: function fioOfEmployee() {
+      return !this.item ? "" : "".concat(this.item.surname || "", " ").concat(this.item.name || "", " ").concat(this.item.lastname || "");
     }
   }
 });
@@ -13360,7 +13392,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_crud__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/crud */ "./resources/js/services/crud.js");
-//
 //
 //
 //
@@ -80507,12 +80538,10 @@ var render = function() {
         on: { removed: _vm.itemRemoved }
       }),
       _vm._v(" "),
-      _vm.selectedItem != null
-        ? _c("ViewFilesModal", {
-            attrs: { employee: _vm.selectedItem },
-            on: { created: _vm.newItemCreated }
-          })
-        : _vm._e()
+      _c("ViewFilesModal", {
+        attrs: { employee: _vm.selectedItem },
+        on: { created: _vm.newItemCreated }
+      })
     ],
     1
   )
@@ -80970,30 +80999,24 @@ var render = function() {
                   return [
                     _c("b", [
                       _vm._v(
-                        _vm._s(data.item.surname) +
-                          "\n                    " +
-                          _vm._s(data.item.name && data.item.name[0]) +
-                          "\n                    " +
-                          _vm._s(data.item.lastname && data.item.lastname[0])
+                        _vm._s(
+                          _vm.fioOfEmployee(_vm.getEmployeeOfHistory(data.item))
+                        )
                       )
                     ])
                   ]
                 }
               },
               {
-                key: "cell(iin)",
+                key: "cell(workplace)",
                 fn: function(data) {
-                  return [_c("b", [_vm._v(_vm._s(data.item.iin))])]
+                  return [_c("b", [_vm._v(_vm._s(data.item.workplace))])]
                 }
               },
               {
-                key: "cell(base)",
+                key: "cell(dates)",
                 fn: function(data) {
-                  return [
-                    _c("b", [
-                      _vm._v(_vm._s(_vm.getBaseName(data.item.base_id)))
-                    ])
-                  ]
+                  return [_c("b", [_vm._v(_vm._s(_vm.getDates(data.item)))])]
                 }
               },
               {
@@ -81733,7 +81756,7 @@ var render = function() {
   return _c(
     "b-modal",
     {
-      attrs: { id: "employeesAddModal", title: "Добавление новой базы" },
+      attrs: { id: "employeesAddModal", title: "Добавление нового работника" },
       on: { ok: _vm.saveItem }
     },
     [
@@ -82009,7 +82032,10 @@ var render = function() {
   return _c(
     "b-modal",
     {
-      attrs: { id: "employeesEditModal", title: "Добавление новой базы" },
+      attrs: {
+        id: "employeesEditModal",
+        title: "Редактировать данные " + _vm.fioOfEmployee()
+      },
       on: { ok: _vm.saveItem }
     },
     [
@@ -82188,61 +82214,74 @@ var render = function() {
             1
           ),
           _vm._v(" "),
+          _c("br"),
+          _vm._v(" "),
           _c(
             "b-form-group",
             {
               attrs: {
                 id: "input-group-6",
-                label: "Файлы :",
+                label: "Прикрепленные файлы :",
                 "label-for": "input-6"
               }
             },
             [
-              _c("b-form-file", {
-                attrs: {
-                  multiple: "",
-                  placeholder: "Choose a file or drop it here..."
-                },
-                model: {
-                  value: _vm.files,
-                  callback: function($$v) {
-                    _vm.files = $$v
-                  },
-                  expression: "files"
-                }
+              _c("input", {
+                ref: "file",
+                staticStyle: { display: "none" },
+                attrs: { type: "file", multiple: "" },
+                on: { change: _vm.onFileChange }
               }),
               _vm._v(" "),
               _c(
-                "b-list-group",
+                "b-button",
+                {
+                  on: {
+                    click: function($event) {
+                      return _vm.$refs.file.click()
+                    }
+                  }
+                },
                 [
-                  _c(
+                  _c("font-awesome-icon", { attrs: { icon: "plus" } }),
+                  _vm._v(" Добавить файлы\n            ")
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-list-group",
+                _vm._l(_vm.files, function(f) {
+                  return _c(
                     "b-list-group-item",
                     {
+                      key: f.lastModified,
                       staticClass:
                         "d-flex justify-content-between align-items-center"
                     },
                     [
                       _vm._v(
-                        "\n                    Resume\n                    "
+                        "\n                    " +
+                          _vm._s(f.name) +
+                          "\n                    "
                       ),
                       _c(
-                        "div",
-                        [
-                          _c(
-                            "b-link",
-                            [
-                              _c("font-awesome-icon", {
-                                attrs: { icon: "times" }
-                              })
-                            ],
-                            1
-                          )
-                        ],
+                        "b-link",
+                        {
+                          staticStyle: { color: "red" },
+                          on: {
+                            click: function($event) {
+                              return _vm.removeSelectedFile(f.name)
+                            }
+                          }
+                        },
+                        [_c("font-awesome-icon", { attrs: { icon: "times" } })],
                         1
                       )
-                    ]
+                    ],
+                    1
                   )
-                ],
+                }),
                 1
               )
             ],
@@ -82495,11 +82534,11 @@ var render = function() {
       }
     },
     [
-      _c(
-        "b-list-group",
-        _vm._l(_vm.employee.files, function(f, index) {
-          return _vm.employee != null
-            ? _c(
+      _vm.employee != null
+        ? _c(
+            "b-list-group",
+            _vm._l(_vm.employee.files, function(f, index) {
+              return _c(
                 "b-list-group-item",
                 {
                   key: index,
@@ -82518,10 +82557,10 @@ var render = function() {
                 ],
                 1
               )
-            : _vm._e()
-        }),
-        1
-      )
+            }),
+            1
+          )
+        : _vm._e()
     ],
     1
   )
