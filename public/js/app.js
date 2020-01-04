@@ -11933,17 +11933,23 @@ __webpack_require__.r(__webpack_exports__);
       isLoading: false,
       list: [],
       selectedItem: null,
-      dbList: []
+      dbList: [],
+      emp_files: []
     };
   },
   created: function created() {
     var _this = this;
 
-    this.loadData().then(function (res) {
-      return _this.fillData(res.data);
-    });
+    window.test = this;
     _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getAll('bases').then(function (res) {
       _this.dbList = res.data;
+      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getAll('employee_files').then(function (res) {
+        _this.emp_files = res.data;
+
+        _this.loadData().then(function (res) {
+          return _this.fillData(res.data);
+        });
+      });
     });
   },
   methods: {
@@ -11951,6 +11957,11 @@ __webpack_require__.r(__webpack_exports__);
       return _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getAll('employees');
     },
     fillData: function fillData(list) {
+      var _this2 = this;
+
+      list.map(function (i) {
+        return i.files = _this2.getEmpFiles(i.id);
+      });
       this.list = list;
     },
     addItem: function addItem() {
@@ -11988,7 +11999,13 @@ __webpack_require__.r(__webpack_exports__);
       return db ? db.name : '';
     },
     viewFiles: function viewFiles(item) {
-      this.$bvModal.show('employeeFilesModal');
+      this.selectedItem = item;
+      this.$bvModal.show('employeeFilesShowModal');
+    },
+    getEmpFiles: function getEmpFiles(emp_id) {
+      return this.emp_files.filter(function (ef) {
+        return ef.employee_id === emp_id;
+      });
     }
   },
   computed: {
@@ -13361,32 +13378,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["dbList"],
-  data: function data() {
-    return {
-      item: {}
-    };
-  },
+  props: ["employee"],
   methods: {
-    onSubmit: function onSubmit() {},
-    saveItem: function saveItem(e) {
-      var _this = this;
-
-      e.preventDefault();
-      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].postNewItem("employees", this.item).then(function (res) {
-        if (res.status === 200) {
-          _this.$emit("created", res.data);
-
-          _this.$bvModal.hide("employeeFilesModal");
-        } else {
-          window.alert("Ошибка");
-        }
-      });
-    },
-    onDbChange: function onDbChange(dbItemId) {
-      this.item.base_id = dbItemId;
+    fioOfEmployee: function fioOfEmployee() {
+      return !this.employee ? "" : "".concat(this.employee.surname || "", " ").concat(this.employee.name || "", " ").concat(this.employee.lastname || "");
     }
   }
 });
@@ -80418,23 +80418,25 @@ var render = function() {
                 key: "cell(files)",
                 fn: function(data) {
                   return [
-                    _c(
-                      "b-link",
-                      {
-                        staticStyle: { color: "#212529" },
-                        on: {
-                          click: function($event) {
-                            return _vm.viewFiles(data.item)
-                          }
-                        }
-                      },
-                      [
-                        _c("b", [_vm._v("Файлы: " + _vm._s(5) + " ")]),
-                        _vm._v(" "),
-                        _c("font-awesome-icon", { attrs: { icon: "search" } })
-                      ],
-                      1
-                    )
+                    data.item.files && data.item.files.length
+                      ? _c(
+                          "b-link",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.viewFiles(data.item)
+                              }
+                            }
+                          },
+                          [
+                            _c("b", [
+                              _vm._v(
+                                "Файлы: " + _vm._s(data.item.files.length) + " "
+                              )
+                            ])
+                          ]
+                        )
+                      : _c("b", [_vm._v("Файлов нет")])
                   ]
                 }
               },
@@ -80505,10 +80507,12 @@ var render = function() {
         on: { removed: _vm.itemRemoved }
       }),
       _vm._v(" "),
-      _c("ViewFilesModal", {
-        attrs: { item: _vm.getSelectedItem },
-        on: { created: _vm.newItemCreated }
-      })
+      _vm.selectedItem != null
+        ? _c("ViewFilesModal", {
+            attrs: { employee: _vm.selectedItem },
+            on: { created: _vm.newItemCreated }
+          })
+        : _vm._e()
     ],
     1
   )
@@ -82486,24 +82490,26 @@ var render = function() {
     "b-modal",
     {
       attrs: {
-        id: "employeeFilesModal",
-        title: "Просмотр файлов работника: Toktamys A"
+        id: "employeeFilesShowModal",
+        title: "Просмотр файлов работника: " + _vm.fioOfEmployee()
       }
     },
     [
       _c(
         "b-list-group",
-        [
-          _c(
-            "b-list-group-item",
-            {
-              staticClass: "d-flex justify-content-between align-items-center"
-            },
-            [
-              _vm._v("\n                Resume\n                "),
-              _c(
-                "div",
+        _vm._l(_vm.employee.files, function(f, index) {
+          return _vm.employee != null
+            ? _c(
+                "b-list-group-item",
+                {
+                  key: index,
+                  staticClass:
+                    "d-flex justify-content-between align-items-center"
+                },
                 [
+                  _vm._v(
+                    "\n            " + _vm._s(f.filename) + "\n            "
+                  ),
                   _c(
                     "b-link",
                     [_c("font-awesome-icon", { attrs: { icon: "download" } })],
@@ -82512,9 +82518,8 @@ var render = function() {
                 ],
                 1
               )
-            ]
-          )
-        ],
+            : _vm._e()
+        }),
         1
       )
     ],
