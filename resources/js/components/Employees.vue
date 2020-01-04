@@ -141,6 +141,7 @@ export default {
             return db ? db.name : '';
         },
         viewFiles(item){
+            this.selectedItem = item;
             this.$bvModal.show('employeeFilesShowModal');
         },
         getEmpFiles(emp_id){
