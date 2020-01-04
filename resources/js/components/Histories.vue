@@ -53,27 +53,18 @@
                 :bordered="true"
                 :sort-by.sync="sortBy"
             >
-                <!-- A virtual column -->
                 <template v-slot:cell(index)="data">
                     {{ data.index + 1 }}
-                </template>
-
-                <!-- A custom formatted column -->
+                </template>   
                 <template v-slot:cell(fio)="data">
-                    <b
-                        >{{ data.item.surname }}
-                        {{ data.item.name && data.item.name[0] }}
-                        {{ data.item.lastname && data.item.lastname[0] }}</b
-                    >
+                    <b>{{ fioOfEmployee(getEmployeeOfHistory(data.item)) }}</b>
                 </template>
-
-                <template v-slot:cell(iin)="data">
-                    <b>{{ data.item.iin }}</b>
+                <template v-slot:cell(workplace)="data">
+                    <b>{{ data.item.workplace }}</b>
                 </template>
-                <template v-slot:cell(base)="data">
-                    <b>{{ getBaseName(data.item.base_id) }}</b>
+                <template v-slot:cell(dates)="data">
+                    <b>{{ getDates(data.item) }}</b>
                 </template>
-                <!-- A virtual composite column -->
                 <template v-slot:cell(actions)="data">
                     <b-button @click="editItem(data.item)">
                         <font-awesome-icon icon="pencil-alt" />
@@ -122,10 +113,8 @@ export default {
             fields: [
                 { key: "index", label: "№" },
                 { key: "fio", label: "ФИО", sortable: true },
-                { key: "iin", label: "ИИН", sortable: true },
-                { key: "base", label: "База", sortable: true },
-                { key: "actions", label: "Объект" },
-                { key: "actions", label: "Действия" },
+                { key: "workplace", label: "Объект" },
+                { key: "dates", label: "Даты" },
                 { key: "actions", label: "Действия" }
             ],
             isLoading: false,
@@ -194,7 +183,17 @@ export default {
             this.selectedDb=null;
             this.selectedEmployee=null;
         },
-        applyFilters(){}
+        applyFilters(){},
+        getEmployeeOfHistory(history_item){
+            return this.employeesList.find(e=>e.id===history_item.employee_id);
+        },
+        getDates(item){
+            let from = item.from && new Date(item.from);
+            from = !isNaN( from.getTime()) ? 'C '+ from.toLocaleDateString() : '';
+            let to = item.to && new Date(item.to);
+            to = !isNaN(to.getTime()) ? ' по' + to.toLocaleDateString() : '';
+            return from + to;
+        }
     },
     computed: {
         getSelectedItem() {
