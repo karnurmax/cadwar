@@ -121,9 +121,12 @@ export default {
                 .postNewItem("employees", this.item, this.files)
                 .then(res => {
                     if (res.status === 200) {
+                        const createdUser = res.data;
+                        
                         this.uploadFiles(res.data.id).then(uploaded => {
                             if (uploaded) {
-                                this.$emit("created", res.data);
+                                createdUser.files = this.files;
+                                this.$emit("created", createdUser);
                                 this.$bvModal.hide("employeesAddModal");
                             } else window.alert("Ошибка");
                         });
