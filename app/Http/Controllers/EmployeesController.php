@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use \App\Employee;
 use \App\EmployeeFile;
 
 class EmployeesController extends Controller
@@ -32,6 +33,10 @@ class EmployeesController extends Controller
             $empFile->save();
         }
         return "OK";
+    }
+    public function getWithFiles()
+    {
+        return Employee::with('files')->get();
     }
 
 }

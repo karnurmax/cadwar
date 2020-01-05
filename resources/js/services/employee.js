@@ -6,5 +6,8 @@ export default {
             apiUrls.employeeFilesUpload.replace("{id}", userId),
             files
         );
+    },
+    getAllWithFiles(){
+        return http.get(apiUrls.getEmployeesWithFiles);
     }
 };

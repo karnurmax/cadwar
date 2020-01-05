@@ -53,13 +53,14 @@
         <AddModal @created="newItemCreated" :dbList="dbList"></AddModal>
         <EditModal @updated="itemUpdated" :item="getSelectedItem" :dbList="dbList"></EditModal>
         <RemoveModal @removed="itemRemoved" :item="getSelectedItem" :dbList="dbList"></RemoveModal>
-        <ViewFilesModal @created="newItemCreated" :employee="selectedItem"></ViewFilesModal>
+        <ViewFilesModal :employee="selectedItem"></ViewFilesModal>
 
     </div>
 </template>
 
 <script>
 import crudService from '../services/crud';
+import empService from '../services/employee';
 import AddModal from './crud/employees/add';
 import EditModal from './crud/employees/edit';
 import RemoveModal from './crud/employees/remove';
@@ -94,19 +95,15 @@ export default {
     created(){
         crudService.getAll('bases').then(res=>{
             this.dbList=res.data;
-            crudService.getAll('employee_files').then(res=>{
-                this.emp_files = res.data;
-                this.loadData()
-                    .then(res=>this.fillData(res.data));
-            });
+            this.loadData()
+                .then(res=>this.fillData(res.data));
         }); 
     },
     methods:{
         loadData(){
-            return crudService.getAll('employees');
+            return empService.getAllWithFiles();
         },
         fillData(list){
-            list.map(i=>i.files = this.getEmpFiles(i.id));
             this.list = list;
         },
         addItem(){

@@ -80,6 +80,7 @@ Route::middleware(['CrudWhiteList'])->group(function () {
 });
 
 Route::prefix('employees')->group(function () {
+    Route::get('get/with-files', 'EmployeesController@getWithFiles');
     Route::post('{id}/files/upload', 'EmployeesController@upload');
 });
 
@@ -94,4 +95,5 @@ Route::prefix('test')->group(function () {
         }
         return "OK";
     });
+    Route::get('emp', 'EmployeesController@getWithFiles');
 });
