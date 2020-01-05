@@ -122,7 +122,7 @@ export default {
                 .then(res => {
                     if (res.status === 200) {
                         const createdUser = res.data;
-                        
+
                         this.uploadFiles(res.data.id).then(uploaded => {
                             if (uploaded) {
                                 createdUser.files = this.files;
