@@ -5,6 +5,11 @@ html {
   overflow-y: scroll;
 }
 
+#nav-collapse a.nav-link a {
+  font-size: 15px;
+  color: white;
+}
+
 /*!
  * Bootstrap v4.4.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors
