@@ -2,6 +2,10 @@ html {
     overflow: -moz-scrollbars-vertical; 
     overflow-y: scroll;
 }
+#nav-collapse a.nav-link  a{
+    font-size: 15px;
+    color: white;
+}
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Nunito");
 
