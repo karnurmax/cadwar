@@ -1,6 +1,6 @@
 <template>
     <b-modal
-        id="employeesEditModal"
+        id="historiesEditModal"
         title="Добавление новой базы"
         @ok="saveItem"
     >
@@ -11,7 +11,6 @@
                 label-for="input-1"
             >
                 <b-form-select
-                    @change="onDbChange"
                     id="input-1"
                     v-model="item.base_id"
                 >
@@ -20,50 +19,19 @@
                     }}</option>
                 </b-form-select>
             </b-form-group>
-
-            <b-form-group id="input-group-2" label="Имя :" label-for="input-2">
-                <b-form-input
+            <b-form-group
+                id="input-group-2"
+                label="Работник:"
+                label-for="input-2"
+            >
+                <b-form-select
                     id="input-2"
-                    v-model="item.name"
-                    type="text"
-                    required
-                    placeholder="Имя"
-                ></b-form-input>
-            </b-form-group>
-            <b-form-group
-                id="input-group-3"
-                label="Фамилия :"
-                label-for="input-3"
-            >
-                <b-form-input
-                    id="input-3"
-                    v-model="item.surname"
-                    type="text"
-                    required
-                    placeholder="Фамилия"
-                ></b-form-input>
-            </b-form-group>
-            <b-form-group
-                id="input-group-4"
-                label="Отчество :"
-                label-for="input-4"
-            >
-                <b-form-input
-                    id="input-4"
-                    v-model="item.lastname"
-                    type="text"
-                    required
-                    placeholder="Отчество"
-                ></b-form-input>
-            </b-form-group>
-            <b-form-group id="input-group-5" label="ИИН :" label-for="input-5">
-                <b-form-input
-                    id="input-5"
-                    v-model="item.iin"
-                    type="text"
-                    required
-                    placeholder="ИИН"
-                ></b-form-input>
+                    v-model="item.employee_id"
+                >
+                    <option v-for="emp in empList" :value="emp.id">{{
+                        fioOfEmployee(emp)
+                    }}</option>
+                </b-form-select>
             </b-form-group>
 
             <template v-slot:modal-footer>
@@ -77,22 +45,22 @@
 <script>
 import crudService from "../../../services/crud";
 export default {
-    props: ["dbList", "item"],
+    props: ["dbList", "item", "empList"],
     methods: {
         onSubmit() {},
         saveItem(e) {
             e.preventDefault();
-            crudService.updateItem("employees", this.item).then(res => {
+            crudService.updateItem("histories", this.item).then(res => {
                 if (res.status === 200) {
                     this.$emit("updated", res.data);
-                    this.$bvModal.hide("employeesEditModal");
+                    this.$bvModal.hide("historiesEditModal");
                 } else {
                     window.alert("Ошибка");
                 }
             });
         },
-        onDbChange(dbItemId) {
-            this.item.base_id = dbItemId;
+        fioOfEmployee({ name, surname, lastname }) {
+            return `${surname} ${name} ${lastname}`;
         }
     }
 };

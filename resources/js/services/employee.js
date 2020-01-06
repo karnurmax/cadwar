@@ -7,7 +7,10 @@ export default {
             files
         );
     },
-    getAllWithFiles(){
+    getAllWithFiles() {
         return http.get(apiUrls.getEmployeesWithFiles);
+    },
+    downloadFile(id) {
+        return http.get(apiUrls.employeeDownloadFile.replace("{id}", id));
     }
 };

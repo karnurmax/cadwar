@@ -10,9 +10,11 @@ class EmployeesController extends Controller
 {
     public function upload(Request $request, $id)
     {
+        //public_path()- получение пути к public :)
         $files = $_FILES["files"];
         $fnames = $files["name"];
 
+        $savedFiles = [];
         for ($i = 0; $i < count($fnames); $i++) {
             $tmpPath = $files["tmp_name"][$i];
             $parent = dirname($_SERVER['DOCUMENT_ROOT']);
@@ -31,12 +33,19 @@ class EmployeesController extends Controller
             $empFile->filename = $fnames[$i];
             $empFile->filepath = $newPath;
             $empFile->save();
+            array_push($savedFiles, $empFile->toJson());
+
         }
-        return "OK";
+        return $savedFiles;
     }
     public function getWithFiles()
     {
         return Employee::with('files')->get();
     }
-
+    public function downloadFile(Request $request, $id)
+    {
+        $ef = EmployeeFile::find($id);
+        
+        return response()->download(public_path($ef->filepath));
+    }
 }

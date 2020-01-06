@@ -11829,10 +11829,11 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_crud__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/crud */ "./resources/js/services/crud.js");
-/* harmony import */ var _crud_employees_add__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./crud/employees/add */ "./resources/js/components/crud/employees/add.vue");
-/* harmony import */ var _crud_employees_edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./crud/employees/edit */ "./resources/js/components/crud/employees/edit.vue");
-/* harmony import */ var _crud_employees_remove__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./crud/employees/remove */ "./resources/js/components/crud/employees/remove.vue");
-/* harmony import */ var _crud_employees_viewfiles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./crud/employees/viewfiles */ "./resources/js/components/crud/employees/viewfiles.vue");
+/* harmony import */ var _services_employee__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/employee */ "./resources/js/services/employee.js");
+/* harmony import */ var _crud_employees_add__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./crud/employees/add */ "./resources/js/components/crud/employees/add.vue");
+/* harmony import */ var _crud_employees_edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./crud/employees/edit */ "./resources/js/components/crud/employees/edit.vue");
+/* harmony import */ var _crud_employees_remove__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./crud/employees/remove */ "./resources/js/components/crud/employees/remove.vue");
+/* harmony import */ var _crud_employees_viewfiles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./crud/employees/viewfiles */ "./resources/js/components/crud/employees/viewfiles.vue");
 //
 //
 //
@@ -11892,7 +11893,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
+
 
 
 
@@ -11900,10 +11901,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    AddModal: _crud_employees_add__WEBPACK_IMPORTED_MODULE_1__["default"],
-    EditModal: _crud_employees_edit__WEBPACK_IMPORTED_MODULE_2__["default"],
-    RemoveModal: _crud_employees_remove__WEBPACK_IMPORTED_MODULE_3__["default"],
-    ViewFilesModal: _crud_employees_viewfiles__WEBPACK_IMPORTED_MODULE_4__["default"]
+    AddModal: _crud_employees_add__WEBPACK_IMPORTED_MODULE_2__["default"],
+    EditModal: _crud_employees_edit__WEBPACK_IMPORTED_MODULE_3__["default"],
+    RemoveModal: _crud_employees_remove__WEBPACK_IMPORTED_MODULE_4__["default"],
+    ViewFilesModal: _crud_employees_viewfiles__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
   data: function data() {
     return {
@@ -11942,25 +11943,17 @@ __webpack_require__.r(__webpack_exports__);
 
     _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getAll('bases').then(function (res) {
       _this.dbList = res.data;
-      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getAll('employee_files').then(function (res) {
-        _this.emp_files = res.data;
 
-        _this.loadData().then(function (res) {
-          return _this.fillData(res.data);
-        });
+      _this.loadData().then(function (res) {
+        return _this.fillData(res.data);
       });
     });
   },
   methods: {
     loadData: function loadData() {
-      return _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getAll('employees');
+      return _services_employee__WEBPACK_IMPORTED_MODULE_1__["default"].getAllWithFiles();
     },
     fillData: function fillData(list) {
-      var _this2 = this;
-
-      list.map(function (i) {
-        return i.files = _this2.getEmpFiles(i.id);
-      });
       this.list = list;
     },
     addItem: function addItem() {
@@ -13046,9 +13039,13 @@ __webpack_require__.r(__webpack_exports__);
       e.preventDefault();
       _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].postNewItem("employees", this.item, this.files).then(function (res) {
         if (res.status === 200) {
-          _this.uploadFiles(res.data.id).then(function (uploaded) {
-            if (uploaded) {
-              _this.$emit("created", res.data);
+          var createdUser = res.data;
+
+          _this.uploadFiles(res.data.id).then(function (resUploaded) {
+            if (resUploaded.status === 200) {
+              createdUser.files = resUploaded.data;
+
+              _this.$emit("created", createdUser);
 
               _this.$bvModal.hide("employeesAddModal");
             } else window.alert("Ошибка");
@@ -13224,7 +13221,10 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       e.preventDefault();
-      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].updateItem("employees", this.item).then(function (res) {
+      var itemToPut = {};
+      Object.assign(itemToPut, this.item);
+      delete itemToPut.files;
+      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].updateItem("employees", itemToPut).then(function (res) {
         if (res.status === 200) {
           _this.$emit("updated", res.data);
 
@@ -13392,6 +13392,14 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_crud__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/crud */ "./resources/js/services/crud.js");
+/* harmony import */ var _services_employee__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../services/employee */ "./resources/js/services/employee.js");
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -13413,11 +13421,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["employee"],
   methods: {
     fioOfEmployee: function fioOfEmployee() {
       return !this.employee ? "" : "".concat(this.employee.surname || "", " ").concat(this.employee.name || "", " ").concat(this.employee.lastname || "");
+    },
+    downloadFile: function downloadFile(id) {
+      _services_employee__WEBPACK_IMPORTED_MODULE_1__["default"].downloadFile(id);
+    },
+    closeModal: function closeModal() {
+      this.$bvModal.hide("employeeFilesShowModal");
     }
   }
 });
@@ -13592,59 +13607,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["dbList", "item"],
+  props: ["dbList", "item", "empList"],
   methods: {
     onSubmit: function onSubmit() {},
     saveItem: function saveItem(e) {
       var _this = this;
 
       e.preventDefault();
-      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].updateItem("employees", this.item).then(function (res) {
+      _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].updateItem("histories", this.item).then(function (res) {
         if (res.status === 200) {
           _this.$emit("updated", res.data);
 
-          _this.$bvModal.hide("employeesEditModal");
+          _this.$bvModal.hide("historiesEditModal");
         } else {
           window.alert("Ошибка");
         }
       });
     },
-    onDbChange: function onDbChange(dbItemId) {
-      this.item.base_id = dbItemId;
+    fioOfEmployee: function fioOfEmployee(_ref) {
+      var name = _ref.name,
+          surname = _ref.surname,
+          lastname = _ref.lastname;
+      return "".concat(surname, " ").concat(name, " ").concat(lastname);
     }
   }
 });
@@ -80538,10 +80524,7 @@ var render = function() {
         on: { removed: _vm.itemRemoved }
       }),
       _vm._v(" "),
-      _c("ViewFilesModal", {
-        attrs: { employee: _vm.selectedItem },
-        on: { created: _vm.newItemCreated }
-      })
+      _c("ViewFilesModal", { attrs: { employee: _vm.selectedItem } })
     ],
     1
   )
@@ -80862,7 +80845,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            { staticClass: "col-12" },
+            { staticClass: "col-12", staticStyle: { display: "none" } },
             [
               _c(
                 "b-button",
@@ -82531,7 +82514,22 @@ var render = function() {
       attrs: {
         id: "employeeFilesShowModal",
         title: "Просмотр файлов работника: " + _vm.fioOfEmployee()
-      }
+      },
+      scopedSlots: _vm._u([
+        {
+          key: "modal-footer",
+          fn: function() {
+            return [
+              _c(
+                "b-button",
+                { attrs: { type: "button" }, on: { click: _vm.closeModal } },
+                [_vm._v("Закрыть")]
+              )
+            ]
+          },
+          proxy: true
+        }
+      ])
     },
     [
       _vm.employee != null
@@ -82550,7 +82548,15 @@ var render = function() {
                     "\n            " + _vm._s(f.filename) + "\n            "
                   ),
                   _c(
-                    "b-link",
+                    "b-button",
+                    {
+                      attrs: { type: "button", variant: "primary" },
+                      on: {
+                        click: function($event) {
+                          return _vm.downloadFile(f.id)
+                        }
+                      }
+                    },
                     [_c("font-awesome-icon", { attrs: { icon: "download" } })],
                     1
                   )
@@ -82814,7 +82820,7 @@ var render = function() {
   return _c(
     "b-modal",
     {
-      attrs: { id: "employeesEditModal", title: "Добавление новой базы" },
+      attrs: { id: "historiesEditModal", title: "Добавление новой базы" },
       on: { ok: _vm.saveItem }
     },
     [
@@ -82857,7 +82863,6 @@ var render = function() {
                 "b-form-select",
                 {
                   attrs: { id: "input-1" },
-                  on: { change: _vm.onDbChange },
                   model: {
                     value: _vm.item.base_id,
                     callback: function($$v) {
@@ -82882,113 +82887,30 @@ var render = function() {
             {
               attrs: {
                 id: "input-group-2",
-                label: "Имя :",
+                label: "Работник:",
                 "label-for": "input-2"
               }
             },
             [
-              _c("b-form-input", {
-                attrs: {
-                  id: "input-2",
-                  type: "text",
-                  required: "",
-                  placeholder: "Имя"
+              _c(
+                "b-form-select",
+                {
+                  attrs: { id: "input-2" },
+                  model: {
+                    value: _vm.item.employee_id,
+                    callback: function($$v) {
+                      _vm.$set(_vm.item, "employee_id", $$v)
+                    },
+                    expression: "item.employee_id"
+                  }
                 },
-                model: {
-                  value: _vm.item.name,
-                  callback: function($$v) {
-                    _vm.$set(_vm.item, "name", $$v)
-                  },
-                  expression: "item.name"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-form-group",
-            {
-              attrs: {
-                id: "input-group-3",
-                label: "Фамилия :",
-                "label-for": "input-3"
-              }
-            },
-            [
-              _c("b-form-input", {
-                attrs: {
-                  id: "input-3",
-                  type: "text",
-                  required: "",
-                  placeholder: "Фамилия"
-                },
-                model: {
-                  value: _vm.item.surname,
-                  callback: function($$v) {
-                    _vm.$set(_vm.item, "surname", $$v)
-                  },
-                  expression: "item.surname"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-form-group",
-            {
-              attrs: {
-                id: "input-group-4",
-                label: "Отчество :",
-                "label-for": "input-4"
-              }
-            },
-            [
-              _c("b-form-input", {
-                attrs: {
-                  id: "input-4",
-                  type: "text",
-                  required: "",
-                  placeholder: "Отчество"
-                },
-                model: {
-                  value: _vm.item.lastname,
-                  callback: function($$v) {
-                    _vm.$set(_vm.item, "lastname", $$v)
-                  },
-                  expression: "item.lastname"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-form-group",
-            {
-              attrs: {
-                id: "input-group-5",
-                label: "ИИН :",
-                "label-for": "input-5"
-              }
-            },
-            [
-              _c("b-form-input", {
-                attrs: {
-                  id: "input-5",
-                  type: "text",
-                  required: "",
-                  placeholder: "ИИН"
-                },
-                model: {
-                  value: _vm.item.iin,
-                  callback: function($$v) {
-                    _vm.$set(_vm.item, "iin", $$v)
-                  },
-                  expression: "item.iin"
-                }
-              })
+                _vm._l(_vm.empList, function(emp) {
+                  return _c("option", { domProps: { value: emp.id } }, [
+                    _vm._v(_vm._s(_vm.fioOfEmployee(emp)))
+                  ])
+                }),
+                0
+              )
             ],
             1
           )
@@ -101260,7 +101182,9 @@ __webpack_require__.r(__webpack_exports__);
   register: "auth/register",
   resetPassword: "auth/reset",
   crud: "crud",
-  employeeFilesUpload: "employees/{id}/files/upload"
+  employeeFilesUpload: "employees/{id}/files/upload",
+  getEmployeesWithFiles: "employees/get/with-files",
+  employeeDownloadFile: "employees/files/download/{id}"
 });
 
 /***/ }),
@@ -101346,6 +101270,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   uploadFile: function uploadFile(userId, files) {
     return _http__WEBPACK_IMPORTED_MODULE_0__["default"].uploadFile(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].employeeFilesUpload.replace("{id}", userId), files);
+  },
+  getAllWithFiles: function getAllWithFiles() {
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].get(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].getEmployeesWithFiles);
+  },
+  downloadFile: function downloadFile(id) {
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].get(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].employeeDownloadFile.replace("{id}", id));
   }
 });
 

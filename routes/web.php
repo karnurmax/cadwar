@@ -81,6 +81,8 @@ Route::middleware(['CrudWhiteList'])->group(function () {
 
 Route::prefix('employees')->group(function () {
     Route::get('get/with-files', 'EmployeesController@getWithFiles');
+    Route::get('files/download/{id}','EmployeesController@downloadFile');
+    
     Route::post('{id}/files/upload', 'EmployeesController@upload');
 });
 

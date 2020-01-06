@@ -48,8 +48,7 @@
             </b-table>
           
         </div>
-         <Loading :active.sync="isLoading" 
-        :is-full-page="true"></Loading>
+        <Loading :active.sync="isLoading" :is-full-page="true"></Loading>
         <AddModal @created="newItemCreated" :dbList="dbList"></AddModal>
         <EditModal @updated="itemUpdated" :item="getSelectedItem" :dbList="dbList"></EditModal>
         <RemoveModal @removed="itemRemoved" :item="getSelectedItem" :dbList="dbList"></RemoveModal>

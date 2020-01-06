@@ -66,7 +66,7 @@
                 ></b-form-input>
             </b-form-group>
 
-            <br/>
+            <br />
             <b-form-group
                 id="input-group-6"
                 label="Прикрепленные файлы :"
@@ -119,7 +119,10 @@ export default {
         onSubmit() {},
         saveItem(e) {
             e.preventDefault();
-            crudService.updateItem("employees", this.item).then(res => {
+            const itemToPut = {};
+            Object.assign(itemToPut, this.item);
+            delete itemToPut.files;
+            crudService.updateItem("employees", itemToPut).then(res => {
                 if (res.status === 200) {
                     this.$emit("updated", res.data);
                     this.$bvModal.hide("employeesEditModal");
@@ -159,8 +162,8 @@ export default {
         fioOfEmployee() {
             return !this.item
                 ? ""
-                : `${this.item.surname || ""} ${this.item.name ||
-                      ""} ${this.item.lastname || ""}`;
+                : `${this.item.surname || ""} ${this.item.name || ""} ${this
+                      .item.lastname || ""}`;
         }
     }
 };

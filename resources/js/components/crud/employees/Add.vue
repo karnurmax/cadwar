@@ -123,9 +123,9 @@ export default {
                     if (res.status === 200) {
                         const createdUser = res.data;
 
-                        this.uploadFiles(res.data.id).then(uploaded => {
-                            if (uploaded) {
-                                createdUser.files = this.files;
+                        this.uploadFiles(res.data.id).then(resUploaded => {
+                            if (resUploaded.status === 200) {
+                                createdUser.files = resUploaded.data;
                                 this.$emit("created", createdUser);
                                 this.$bvModal.hide("employeesAddModal");
                             } else window.alert("Ошибка");
