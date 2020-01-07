@@ -3,6 +3,7 @@
         id="employeesEditModal"
         :title="'Редактировать данные ' + fioOfEmployee()"
         @ok="saveItem"
+        @show="onModalShow"
     >
         <b-form @submit="onSubmit">
             <b-form-group
@@ -65,11 +66,28 @@
                     placeholder="ИИН"
                 ></b-form-input>
             </b-form-group>
-
-            <br />
+            <hr />
+            <b-form-group
+                id="input-group-7"
+                label="Удаление прикрепленных файлов"
+                label-for="input-7"
+            >
+                <b-list-group>
+                    <b-list-group-item
+                        v-for="f in item.files"
+                        :key="f.lastModified"
+                        class="d-flex justify-content-between align-items-center"
+                    >
+                        {{ f.filename }}
+                        <b-link style="color:red;" @click="confirmAndRemove(f)">
+                            <font-awesome-icon icon="times" />
+                        </b-link>
+                    </b-list-group-item>
+                </b-list-group>
+            </b-form-group>
             <b-form-group
                 id="input-group-6"
-                label="Прикрепленные файлы :"
+                label="Прикрепить новые файлы :"
                 label-for="input-6"
             >
                 <input
@@ -108,6 +126,7 @@
 
 <script>
 import crudService from "../../../services/crud";
+import empService from "../../../services/employee";
 export default {
     props: ["dbList", "item"],
     data() {
@@ -115,7 +134,13 @@ export default {
             files: []
         };
     },
+    created() {
+        window.test = this;
+    },
     methods: {
+        onModalShow() {
+            this.files = [];
+        },
         onSubmit() {},
         saveItem(e) {
             e.preventDefault();
@@ -124,6 +149,16 @@ export default {
             delete itemToPut.files;
             crudService.updateItem("employees", itemToPut).then(res => {
                 if (res.status === 200) {
+                    this.uploadFiles(this.item.id).then(resUploaded => {
+                        if (resUploaded.status === 200) {
+                            const arr = resUploaded.data;
+                            arr.forEach(fs => {
+                                this.item.files.push(JSON.parse(fs));
+                            });
+                            this.$emit("created", this.item);
+                            this.$bvModal.hide("employeesAddModal");
+                        } else window.alert("Ошибка");
+                    });
                     this.$emit("updated", res.data);
                     this.$bvModal.hide("employeesEditModal");
                 } else {
@@ -164,6 +199,36 @@ export default {
                 ? ""
                 : `${this.item.surname || ""} ${this.item.name || ""} ${this
                       .item.lastname || ""}`;
+        },
+        confirmAndRemove(file) {
+            this.$bvModal
+                .msgBoxConfirm("Удаленный файл нельзя восстановить", {
+                    title: "Удалить файл ?",
+                    size: "sm",
+                    buttonSize: "sm",
+                    okVariant: "danger",
+                    okTitle: "ДА",
+                    cancelTitle: "НЕТ",
+                    footerClass: "p-2",
+                    hideHeaderClose: false,
+                    centered: true
+                })
+                .then(confirmed => {
+                    if (confirmed) {
+                        empService
+                            .removeFileOnServer(file.id)
+                            .then(res => {
+                                const idx = this.item.files.indexOf(file);
+                                this.item.files.splice(idx, 1);
+                            })
+                            .catch(() => {
+                                window.alert("ошибка");
+                            });
+                    }
+                })
+                .catch(() => {
+                    window.alert("ошибка");
+                });
         }
     }
 };

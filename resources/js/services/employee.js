@@ -7,6 +7,9 @@ export default {
             files
         );
     },
+    removeFileOnServer(id) {
+        return http.post(apiUrls.employeeFilesRemove.replace("{id}", id));
+    },
     getAllWithFiles() {
         return http.get(apiUrls.getEmployeesWithFiles);
     },

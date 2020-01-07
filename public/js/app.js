@@ -11662,11 +11662,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {
-    console.log('Component mounted.');
-  }
-});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
 
@@ -13099,6 +13107,25 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_crud__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/crud */ "./resources/js/services/crud.js");
+/* harmony import */ var _services_employee__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../services/employee */ "./resources/js/services/employee.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -13208,6 +13235,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["dbList", "item"],
   data: function data() {
@@ -13215,7 +13243,13 @@ __webpack_require__.r(__webpack_exports__);
       files: []
     };
   },
+  created: function created() {
+    window.test = this;
+  },
   methods: {
+    onModalShow: function onModalShow() {
+      this.files = [];
+    },
     onSubmit: function onSubmit() {},
     saveItem: function saveItem(e) {
       var _this = this;
@@ -13226,6 +13260,19 @@ __webpack_require__.r(__webpack_exports__);
       delete itemToPut.files;
       _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].updateItem("employees", itemToPut).then(function (res) {
         if (res.status === 200) {
+          _this.uploadFiles(_this.item.id).then(function (resUploaded) {
+            if (resUploaded.status === 200) {
+              var arr = resUploaded.data;
+              arr.forEach(function (fs) {
+                _this.item.files.push(JSON.parse(fs));
+              });
+
+              _this.$emit("created", _this.item);
+
+              _this.$bvModal.hide("employeesAddModal");
+            } else window.alert("Ошибка");
+          });
+
           _this.$emit("updated", res.data);
 
           _this.$bvModal.hide("employeesEditModal");
@@ -13261,10 +13308,37 @@ __webpack_require__.r(__webpack_exports__);
       this.files.splice(idx, 1);
     },
     uploadFiles: function uploadFiles(userId) {
-      return empService.uploadFile(userId, this.files);
+      return _services_employee__WEBPACK_IMPORTED_MODULE_1__["default"].uploadFile(userId, this.files);
     },
     fioOfEmployee: function fioOfEmployee() {
       return !this.item ? "" : "".concat(this.item.surname || "", " ").concat(this.item.name || "", " ").concat(this.item.lastname || "");
+    },
+    confirmAndRemove: function confirmAndRemove(file) {
+      var _this3 = this;
+
+      this.$bvModal.msgBoxConfirm("Удаленный файл нельзя восстановить", {
+        title: "Удалить файл ?",
+        size: "sm",
+        buttonSize: "sm",
+        okVariant: "danger",
+        okTitle: "ДА",
+        cancelTitle: "НЕТ",
+        footerClass: "p-2",
+        hideHeaderClose: false,
+        centered: true
+      }).then(function (confirmed) {
+        if (confirmed) {
+          _services_employee__WEBPACK_IMPORTED_MODULE_1__["default"].removeFileOnServer(file.id).then(function (res) {
+            var idx = _this3.item.files.indexOf(file);
+
+            _this3.item.files.splice(idx, 1);
+          })["catch"](function () {
+            window.alert("ошибка");
+          });
+        }
+      })["catch"](function () {
+        window.alert("ошибка");
+      });
     }
   }
 });
@@ -82019,7 +82093,7 @@ var render = function() {
         id: "employeesEditModal",
         title: "Редактировать данные " + _vm.fioOfEmployee()
       },
-      on: { ok: _vm.saveItem }
+      on: { ok: _vm.saveItem, show: _vm.onModalShow }
     },
     [
       _c(
@@ -82197,14 +82271,63 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("br"),
+          _c("hr"),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-7",
+                label: "Удаление прикрепленных файлов",
+                "label-for": "input-7"
+              }
+            },
+            [
+              _c(
+                "b-list-group",
+                _vm._l(_vm.item.files, function(f) {
+                  return _c(
+                    "b-list-group-item",
+                    {
+                      key: f.lastModified,
+                      staticClass:
+                        "d-flex justify-content-between align-items-center"
+                    },
+                    [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(f.filename) +
+                          "\n                    "
+                      ),
+                      _c(
+                        "b-link",
+                        {
+                          staticStyle: { color: "red" },
+                          on: {
+                            click: function($event) {
+                              return _vm.confirmAndRemove(f)
+                            }
+                          }
+                        },
+                        [_c("font-awesome-icon", { attrs: { icon: "times" } })],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                }),
+                1
+              )
+            ],
+            1
+          ),
           _vm._v(" "),
           _c(
             "b-form-group",
             {
               attrs: {
                 id: "input-group-6",
-                label: "Прикрепленные файлы :",
+                label: "Прикрепить новые файлы :",
                 "label-for": "input-6"
               }
             },
@@ -101184,7 +101307,8 @@ __webpack_require__.r(__webpack_exports__);
   crud: "crud",
   employeeFilesUpload: "employees/{id}/files/upload",
   getEmployeesWithFiles: "employees/get/with-files",
-  employeeDownloadFile: "employees/files/download/{id}"
+  employeeDownloadFile: "employees/files/download/{id}",
+  employeeFilesRemove: "employees/files/remove/{id}"
 });
 
 /***/ }),
@@ -101270,6 +101394,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   uploadFile: function uploadFile(userId, files) {
     return _http__WEBPACK_IMPORTED_MODULE_0__["default"].uploadFile(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].employeeFilesUpload.replace("{id}", userId), files);
+  },
+  removeFileOnServer: function removeFileOnServer(id) {
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].post(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].employeeFilesRemove.replace("{id}", id));
   },
   getAllWithFiles: function getAllWithFiles() {
     return _http__WEBPACK_IMPORTED_MODULE_0__["default"].get(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].getEmployeesWithFiles);

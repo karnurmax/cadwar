@@ -38,6 +38,19 @@ class EmployeesController extends Controller
         }
         return $savedFiles;
     }
+    public function removeFile(Request $request, $id)
+    {
+        $ef = EmployeeFile::findOrFail($id);
+        try {
+            $removed = unlink(public_path($ef->filepath));
+            if ($removed) {
+                $ef->delete();
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage(), 500);
+        }
+        return "OK";
+    }
     public function getWithFiles()
     {
         return Employee::with('files')->get();
@@ -45,7 +58,7 @@ class EmployeesController extends Controller
     public function downloadFile(Request $request, $id)
     {
         $ef = EmployeeFile::find($id);
-        
+
         return response()->download(public_path($ef->filepath));
     }
 }

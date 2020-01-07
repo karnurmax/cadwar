@@ -6,5 +6,6 @@ export default {
     crud: "crud",
     employeeFilesUpload: "employees/{id}/files/upload",
     getEmployeesWithFiles: "employees/get/with-files",
-    employeeDownloadFile:"employees/files/download/{id}"
+    employeeDownloadFile:"employees/files/download/{id}",
+    employeeFilesRemove:"employees/files/remove/{id}"
 };
