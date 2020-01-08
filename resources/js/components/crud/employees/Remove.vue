@@ -10,11 +10,7 @@
                 label="База данных:"
                 label-for="input-1"
             >
-                <b-form-select
-                    disabled
-                    id="input-1"
-                    v-model="item.base_id"
-                >
+                <b-form-select disabled id="input-1" v-model="item.base_id">
                     <option v-for="db in dbList" :value="db.id">{{
                         db.name
                     }}</option>
@@ -65,6 +61,21 @@
                     required
                 ></b-form-input>
             </b-form-group>
+            <b-form-group
+                id="input-group-7"
+                label="Удаление прикрепленных файлов"
+                label-for="input-7"
+            >
+                <b-list-group>
+                    <b-list-group-item
+                        v-for="f in item.files"
+                        :key="f.lastModified"
+                        class="d-flex justify-content-between align-items-center"
+                    >
+                        {{ f.filename }}
+                    </b-list-group-item>
+                </b-list-group>
+            </b-form-group>
 
             <template v-slot:modal-footer>
                 <b-button type="button">Отмена</b-button>
@@ -76,21 +87,26 @@
 
 <script>
 import crudService from "../../../services/crud";
+import empService from "../../../services/employee";
 export default {
     props: ["dbList", "item"],
     methods: {
         onSubmit() {},
         saveItem(e) {
             e.preventDefault();
-            crudService.removeItem("employees", this.item).then(res => {
-                if (res.status === 200) {
-                    this.$emit("removed", res.data);//id
-                    this.$bvModal.hide("employeesRemoveModal");
-                } else {
-                    window.alert("Ошибка");
-                }
-            });
-        },
+            empService
+                .removeFileListOnServer(this.item.files.map(q => q.id))
+                .then(() => {
+                    crudService.removeItem("employees", this.item.id).then(res => {
+                        if (res.status === 200) {
+                            this.$emit("removed", res.data); //id
+                            this.$bvModal.hide("employeesRemoveModal");
+                        } else {
+                            window.alert("Ошибка");
+                        }
+                    });
+                });
+        }
     }
 };
 </script>

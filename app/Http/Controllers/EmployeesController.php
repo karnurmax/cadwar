@@ -38,11 +38,12 @@ class EmployeesController extends Controller
         }
         return $savedFiles;
     }
+
     public function removeFile(Request $request, $id)
     {
         $ef = EmployeeFile::findOrFail($id);
         try {
-            $removed = unlink(public_path($ef->filepath));
+            $removed = unlink(public_path($ef->guid));
             if ($removed) {
                 $ef->delete();
             }
@@ -51,6 +52,19 @@ class EmployeesController extends Controller
         }
         return "OK";
     }
+
+    public function removeFileList(Request $request)
+    {
+        $data = $request->all();
+        $ids = $data["ids"];
+        $efList = EmployeeFile::whereIn('id', $ids)->get();
+        foreach ($efList as $ef) {
+            $removed = unlink(public_path($ef->filepath));
+            $ef->delete();
+        }
+        return "OK";
+    }
+
     public function getWithFiles()
     {
         return Employee::with('files')->get();

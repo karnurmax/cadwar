@@ -134,9 +134,6 @@ export default {
             files: []
         };
     },
-    created() {
-        window.test = this;
-    },
     methods: {
         onModalShow() {
             this.files = [];
@@ -216,7 +213,7 @@ export default {
                 .then(confirmed => {
                     if (confirmed) {
                         empService
-                            .removeFileOnServer(file.id)
+                            .removeFileListOnServer(file.id)
                             .then(res => {
                                 const idx = this.item.files.indexOf(file);
                                 this.item.files.splice(idx, 1);
