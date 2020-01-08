@@ -13481,6 +13481,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_crud__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/crud */ "./resources/js/services/crud.js");
 /* harmony import */ var _services_employee__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../services/employee */ "./resources/js/services/employee.js");
+/* harmony import */ var _services_apiUrls__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../services/apiUrls */ "./resources/js/services/apiUrls.js");
 //
 //
 //
@@ -13504,10 +13505,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -13518,6 +13516,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     downloadFile: function downloadFile(id) {
       _services_employee__WEBPACK_IMPORTED_MODULE_1__["default"].downloadFile(id);
+    },
+    downloadFileHref: function downloadFileHref(id) {
+      return _services_apiUrls__WEBPACK_IMPORTED_MODULE_2__["default"].employeeDownloadFile.replace("{id}", id);
     },
     closeModal: function closeModal() {
       this.$bvModal.hide("employeeFilesShowModal");
@@ -82720,13 +82721,11 @@ var render = function() {
                     "\n            " + _vm._s(f.filename) + "\n            "
                   ),
                   _c(
-                    "b-button",
+                    "b-link",
                     {
-                      attrs: { type: "button", variant: "primary" },
-                      on: {
-                        click: function($event) {
-                          return _vm.downloadFile(f.id)
-                        }
+                      attrs: {
+                        href: _vm.downloadFileHref(f.id),
+                        target: "_blank"
                       }
                     },
                     [_c("font-awesome-icon", { attrs: { icon: "download" } })],

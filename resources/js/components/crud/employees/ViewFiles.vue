@@ -10,13 +10,9 @@
                 class="d-flex justify-content-between align-items-center"
             >
                 {{ f.filename }}
-                <b-button
-                    type="button"
-                    variant="primary"
-                    @click="downloadFile(f.id)"
-                >
-                    <font-awesome-icon icon="download" />
-                </b-button>
+                <b-link :href="downloadFileHref(f.id)" target="_blank"
+                    ><font-awesome-icon icon="download"
+                /></b-link>
             </b-list-group-item>
         </b-list-group>
         <template v-slot:modal-footer>
@@ -28,6 +24,7 @@
 <script>
 import crudService from "../../../services/crud";
 import empService from "../../../services/employee";
+import apiUrls from "../../../services/apiUrls";
 export default {
     props: ["employee"],
     methods: {
@@ -39,6 +36,9 @@ export default {
         },
         downloadFile(id) {
             empService.downloadFile(id);
+        },
+        downloadFileHref(id) {
+            return apiUrls.employeeDownloadFile.replace("{id}", id);
         },
         closeModal() {
             this.$bvModal.hide("employeeFilesShowModal");
