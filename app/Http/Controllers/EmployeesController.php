@@ -11,6 +11,9 @@ class EmployeesController extends Controller
     public function upload(Request $request, $id)
     {
         //public_path()- получение пути к public :)
+        if (!isset($_FILES["files"])) {
+            return [];
+        }
         $files = $_FILES["files"];
         $fnames = $files["name"];
 
