@@ -177,7 +177,7 @@ export default {
             return name;
         },
         fioOfEmployee({name,surname,lastname}){
-            return `${surname} ${name} ${lastname}`;
+            return `${surname || ""} ${name || ""} ${lastname || ""}`;
         },
         resetFilters(){
             this.selectedDb=null;

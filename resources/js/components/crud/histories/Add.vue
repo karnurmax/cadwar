@@ -23,7 +23,7 @@
             >
                 <b-form-select v-model="item.employee_id" id="input-2">
                     <option v-for="emp in empList" :value="emp.id">{{
-                        `${emp.surname} ${emp.name} ${emp.lastname}`
+                        `${emp.surname || ""} ${emp.name || ""} ${emp.lastname || ""}`
                     }}</option>
                 </b-form-select>
             </b-form-group>

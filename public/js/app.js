@@ -12384,7 +12384,7 @@ __webpack_require__.r(__webpack_exports__);
       var name = _ref2.name,
           surname = _ref2.surname,
           lastname = _ref2.lastname;
-      return "".concat(surname, " ").concat(name, " ").concat(lastname);
+      return "".concat(surname || "", " ").concat(name || "", " ").concat(lastname || "");
     },
     resetFilters: function resetFilters() {
       this.selectedDb = null;
@@ -82855,7 +82855,13 @@ var render = function() {
                 _vm._l(_vm.empList, function(emp) {
                   return _c("option", { domProps: { value: emp.id } }, [
                     _vm._v(
-                      _vm._s(emp.surname + " " + emp.name + " " + emp.lastname)
+                      _vm._s(
+                        (emp.surname || "") +
+                          " " +
+                          (emp.name || "") +
+                          " " +
+                          (emp.lastname || "")
+                      )
                     )
                   ])
                 }),
