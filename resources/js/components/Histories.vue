@@ -199,6 +199,8 @@ export default {
         getSelectedItem() {
             const obj = {};
             Object.assign(obj, this.selectedItem);
+            obj.from && (obj.from = obj.from.substring(0,10));
+            obj.to && (obj.to = obj.to.substring(0,10));
             return obj;
         }
     }

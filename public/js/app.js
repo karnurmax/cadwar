@@ -12408,6 +12408,8 @@ __webpack_require__.r(__webpack_exports__);
     getSelectedItem: function getSelectedItem() {
       var obj = {};
       Object.assign(obj, this.selectedItem);
+      obj.from && (obj.from = obj.from.substring(0, 10));
+      obj.to && (obj.to = obj.to.substring(0, 10));
       return obj;
     }
   }
@@ -13696,9 +13698,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["dbList", "item", "empList"],
+  created: function created() {
+    window.test = this;
+  },
   methods: {
     onSubmit: function onSubmit() {},
     saveItem: function saveItem(e) {
@@ -82997,7 +83028,7 @@ var render = function() {
   return _c(
     "b-modal",
     {
-      attrs: { id: "historiesEditModal", title: "Добавление новой базы" },
+      attrs: { id: "historiesEditModal", title: "Изменения истории" },
       on: { ok: _vm.saveItem }
     },
     [
@@ -83064,7 +83095,7 @@ var render = function() {
             {
               attrs: {
                 id: "input-group-2",
-                label: "Работник:",
+                label: "ФИО работника:",
                 "label-for": "input-2"
               }
             },
@@ -83083,11 +83114,115 @@ var render = function() {
                 },
                 _vm._l(_vm.empList, function(emp) {
                   return _c("option", { domProps: { value: emp.id } }, [
-                    _vm._v(_vm._s(_vm.fioOfEmployee(emp)))
+                    _vm._v(
+                      _vm._s(
+                        (emp.surname || "") +
+                          " " +
+                          (emp.name || "") +
+                          " " +
+                          (emp.lastname || "")
+                      )
+                    )
                   ])
                 }),
                 0
               )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-3",
+                label: "Где работал :",
+                "label-for": "input-3"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: { id: "input-3", type: "text", required: "" },
+                model: {
+                  value: _vm.item.workplace,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "workplace", $$v)
+                  },
+                  expression: "item.workplace"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-4",
+                label: "От :",
+                "label-for": "input-4"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: { id: "input-4", type: "date" },
+                model: {
+                  value: _vm.item.from,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "from", $$v)
+                  },
+                  expression: "item.from"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-5",
+                label: "До :",
+                "label-for": "input-5"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: { id: "input-5", type: "date" },
+                model: {
+                  value: _vm.item.to,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "to", $$v)
+                  },
+                  expression: "item.to"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-6",
+                label: "Инфо :",
+                "label-for": "input-6"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: { id: "input-6", type: "text" },
+                model: {
+                  value: _vm.item.description,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "description", $$v)
+                  },
+                  expression: "item.description"
+                }
+              })
             ],
             1
           )
@@ -100656,15 +100791,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************************************!*\
   !*** ./resources/js/components/crud/employees/remove.vue ***!
   \***********************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _remove_vue_vue_type_template_id_73436778___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./remove.vue?vue&type=template&id=73436778& */ "./resources/js/components/crud/employees/remove.vue?vue&type=template&id=73436778&");
 /* harmony import */ var _remove_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./remove.vue?vue&type=script&lang=js& */ "./resources/js/components/crud/employees/remove.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _remove_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _remove_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -100694,7 +100828,7 @@ component.options.__file = "resources/js/components/crud/employees/remove.vue"
 /*!************************************************************************************!*\
   !*** ./resources/js/components/crud/employees/remove.vue?vue&type=script&lang=js& ***!
   \************************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
