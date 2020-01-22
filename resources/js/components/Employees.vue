@@ -13,12 +13,10 @@
              <b-table :fields="fields" :items="list" :striped="true" :bordered="true"
              :sort-by.sync="sortBy"
              >
-                <!-- A virtual column -->
                 <template v-slot:cell(index)="data">
                     {{ data.index + 1 }}
                 </template>
                 
-                <!-- A custom formatted column -->
                 <template v-slot:cell(fio)="data">
                      <b>{{ data.item.surname }} {{(data.item.name && data.item.name[0])}} {{(data.item.lastname && data.item.lastname[0])}}</b>
                 </template>
@@ -26,16 +24,46 @@
                 <template v-slot:cell(iin)="data">
                      <b>{{ data.item.iin }}</b>
                 </template>
+                
+                <template v-slot:cell(position)="data">
+                     <b>Position</b>
+                </template>
+
+                <template v-slot:cell(citizenship)="data">
+                     <b>citizenship</b>
+                </template>
+
                 <template v-slot:cell(base)="data">
                      <b>{{ getBaseName(data.item.base_id) }}</b>
                 </template>
+
+                <template v-slot:cell(status)="data">
+                     <b>status</b>
+                </template>
+
+                <template v-slot:cell(dateOfEmployment)="data">
+                     <b>dateOfEmployment</b>
+                </template>
+
+                <template v-slot:cell(dateOfDismissal)="data">
+                     <b>dateOfDismissal</b>
+                </template>
+
+                <template v-slot:cell(reasonForDismissal)="data">
+                     <b>reasonForDismissal</b>
+                </template>
+
+                <template v-slot:cell(comments)="data">
+                     <b>comments</b>
+                </template>
+
                  <template v-slot:cell(files)="data">
                     <b-link @click="viewFiles(data.item)" v-if="data.item.files && data.item.files.length">
                         <b>Файлы: {{data.item.files.length}} </b>
                     </b-link>
                     <b v-else>Файлов нет</b>
                 </template>
-                <!-- A virtual composite column -->
+                
                 <template v-slot:cell(actions)="data">
                     <b-button @click="editItem(data.item)">
                         <font-awesome-icon icon="pencil-alt" />
@@ -80,7 +108,14 @@ export default {
                  { key: 'index', label: '№' },
                  { key: 'fio', label: 'ФИО',sortable: true },
                  { key: 'iin', label: 'ИИН',sortable: true },
+                 { key: 'position', label: 'Должность'},
+                 { key: 'citizenship', label: 'Гражданство'},
                  {key:'base',label:'База',sortable:true},
+                 { key: 'status', label: 'Статус'},
+                 { key: 'dateOfEmployment', label: 'Дата приема'},
+                 { key: 'dateOfDismissal', label: 'Дата увольнения'},
+                 { key: 'reasonForDismissal', label: 'Причина увольнения'},
+                 { key: 'comments', label: 'Комментарии'},
                  {key:'files',label:'Файлы'},
                  { key: 'actions', label: 'Действия'},
             ],
