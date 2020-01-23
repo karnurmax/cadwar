@@ -26,6 +26,11 @@ class CreateEmployeesTable extends Migration
             $table->smallInteger('to_year')->nullable();
             $table->enum('evaluation', ['низкий', 'справедливо', 'удовлетворительное', 'хорошо', 'отлично']);
 
+            $table->timestamp('dateOfEmployment')->nullable();
+            $table->timestamp('dateOfDismissal')->nullable();
+            $table->string('reasonForDismissal')->nullable();
+            $table->string('comments')->nullable();
+
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
 
