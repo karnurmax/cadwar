@@ -10,4 +10,16 @@ class Employee extends Model
     {
         return $this->hasMany('App\EmployeeFile');
     }
+    public function citizenships()
+    {
+        return $this->belongsTo('App\Citizenship');
+    }
+    public function positions()
+    {
+        return $this->belongsTo('App\Position');
+    }
+    public function statuses()
+    {
+        return $this->belongsTo('App\EmployeeStatus');
+    }
 }

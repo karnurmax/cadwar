@@ -18,7 +18,7 @@ class CreateEmployeesTable extends Migration
             $table->string('name')->nullable();
             $table->string('surname')->nullable();
             $table->string('lastname')->nullable();
-            $table->string('position')->nullable();
+
             $table->char('iin', 12);
             $table->char('phone', 12)->nullable();
             $table->integer('job_experience_months')->default(0);
@@ -31,6 +31,15 @@ class CreateEmployeesTable extends Migration
 
             $table->unsignedBigInteger('base_id');
             $table->foreign('base_id')->references('id')->on('bases')->onDelete('cascade');
+
+            $table->unsignedBigInteger('position_id')->nullable();
+            $table->foreign('position_id')->references('id')->on('positions')->onDelete('cascade');
+
+            $table->unsignedBigInteger('citizenship_id')->nullable();
+            $table->foreign('citizenship_id')->references('id')->on('citizenships')->onDelete('cascade');
+
+            $table->unsignedBigInteger('employee_status_id')->nullable();
+            $table->foreign('employee_status_id')->references('id')->on('employee_statuses')->onDelete('cascade');
         });
     }
 

@@ -70,7 +70,7 @@ class EmployeesController extends Controller
 
     public function getWithFiles()
     {
-        return Employee::with('files')->get();
+        return Employee::with('files')->with('citizenships')->with('positions')->with('statuses')->get();
     }
     public function downloadFile(Request $request, $id)
     {

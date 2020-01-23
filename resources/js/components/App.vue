@@ -24,6 +24,11 @@
                             >Истории</router-link
                         >
                     </b-nav-item>
+                    <b-nav-item>
+                        <router-link :to="{ name: 'statementTemplates' }" title="Истории"
+                            >Шаблоны заявлении</router-link
+                        >
+                    </b-nav-item>
                 </b-navbar-nav>
 
                 <!-- Right aligned nav items -->
