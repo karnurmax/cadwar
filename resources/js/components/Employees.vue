@@ -39,23 +39,23 @@
                     </template>
 
                     <template v-slot:cell(status)="data">
-                        <b>{{getStatusName(data.item.status_id)}}</b>
+                        <b>{{getStatusName(data.item.employee_status_id)}}</b>
                     </template>
 
                     <template v-slot:cell(dateOfEmployment)="data">
-                        <b>dateOfEmployment</b>
+                        <b>{{ getDates(data.item.dateOfEmployment) }}</b>
                     </template>
 
                     <template v-slot:cell(dateOfDismissal)="data">
-                        <b>dateOfDismissal</b>
+                        <b>{{ getDates(data.item.dateOfDismissal) }}</b>
                     </template>
 
                     <template v-slot:cell(reasonForDismissal)="data">
-                        <b>reasonForDismissal</b>
+                        <b>{{ data.item.reasonForDismissal }}</b>
                     </template>
 
                     <template v-slot:cell(comments)="data">
-                        <b>comments</b>
+                        <b>{{ data.item.comments }}</b>
                     </template>
 
                     <template v-slot:cell(files)="data">
@@ -79,7 +79,9 @@
         </div>
         <Loading :active.sync="isLoading" :is-full-page="true"></Loading>
         <AddModal @created="newItemCreated" :dbList="dbList"
-        :positionList="positions" :citizenshipList="citizenships"></AddModal>
+        :positionList="positions" :citizenshipList="citizenships"
+        :statusList="employeeStatuses"
+        ></AddModal>
         <EditModal @updated="itemUpdated" :item="getSelectedItem" :dbList="dbList"></EditModal>
         <RemoveModal @removed="itemRemoved" :item="getSelectedItem" :dbList="dbList"></RemoveModal>
         <ViewFilesModal :employee="selectedItem"></ViewFilesModal>
@@ -196,7 +198,7 @@ export default {
             return db ? db.name : '';
         },
         getStatusName(id){
-            const db = this.employeeStatuses.find(b=>b.id===id)
+            const db = this.employeeStatuses.find(b=>b.id===id);
             return db ? db.name : '';
         },
         viewFiles(item){
@@ -205,6 +207,12 @@ export default {
         },
         getEmpFiles(emp_id){
             return this.emp_files.filter(ef=>ef.employee_id===emp_id);
+        },
+        getDates(dt){
+            if(!dt)
+                return '';
+            dt = new Date(dt);
+            return !isNaN( dt.getTime()) ? dt.toLocaleDateString() : '';
         }
     },
     computed: {
