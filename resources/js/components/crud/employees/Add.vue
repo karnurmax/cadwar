@@ -94,6 +94,21 @@
             </b-form-group>
 
             <b-form-group
+                id="input-group-12"
+                label="Статус:"
+                label-for="input-12"
+            >
+                <b-form-select @change="onStatusChange" id="input-12">
+                    <option
+                        v-for="db in statusList"
+                        :value="db.id"
+                        :key="db.id"
+                        >{{ db.name }}</option
+                    >
+                </b-form-select>
+            </b-form-group>
+
+            <b-form-group
                 id="input-group-7"
                 label="Дата приема:"
                 label-for="input-7"
@@ -114,6 +129,20 @@
                     id="input-8"
                     v-model="item.dateOfDismissal"
                     type="date"
+                ></b-form-input>
+            </b-form-group>
+            
+            <b-form-group
+                id="input-group-13"
+                label="Причина увольнения :"
+                label-for="input-13"
+            >
+                <b-form-input
+                    id="input-13"
+                    v-model="item.reasonForDismissal"
+                    type="text"
+                    required
+                    placeholder="Причина увольнения"
                 ></b-form-input>
             </b-form-group>
 
@@ -176,7 +205,7 @@
 import crudService from "../../../services/crud";
 import empService from "../../../services/employee";
 export default {
-    props: ["dbList", "positionList", "citizenshipList"],
+    props: ["dbList", "positionList", "citizenshipList", "statusList"],
     data() {
         return {
             item: {},
@@ -213,6 +242,9 @@ export default {
         },
         onCitizenshipChange(id) {
             this.item.citizenship_id = id;
+        },
+        onStatusChange(id) {
+            this.item.employee_status_id = id;
         },
         onFileChange(e) {
             if (!e.target.value) return;
