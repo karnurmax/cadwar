@@ -11936,6 +11936,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -12092,6 +12094,11 @@ __webpack_require__.r(__webpack_exports__);
       return this.emp_files.filter(function (ef) {
         return ef.employee_id === emp_id;
       });
+    },
+    getDates: function getDates(dt) {
+      if (!dt) return '';
+      dt = new Date(dt);
+      return !isNaN(dt.getTime()) ? dt.toLocaleDateString() : '';
     }
   },
   computed: {
@@ -13205,10 +13212,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["dbList", "positionList", "citizenshipList"],
+  props: ["dbList", "positionList", "citizenshipList", "statusList"],
   data: function data() {
     return {
       item: {},
@@ -13247,6 +13283,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     onCitizenshipChange: function onCitizenshipChange(id) {
       this.item.citizenship_id = id;
+    },
+    onStatusChange: function onStatusChange(id) {
+      this.item.employee_status_id = id;
     },
     onFileChange: function onFileChange(e) {
       var _this2 = this;
@@ -80829,7 +80868,11 @@ var render = function() {
                   fn: function(data) {
                     return [
                       _c("b", [
-                        _vm._v(_vm._s(_vm.getStatusName(data.item.status_id)))
+                        _vm._v(
+                          _vm._s(
+                            _vm.getStatusName(data.item.employee_status_id)
+                          )
+                        )
                       ])
                     ]
                   }
@@ -80837,25 +80880,35 @@ var render = function() {
                 {
                   key: "cell(dateOfEmployment)",
                   fn: function(data) {
-                    return [_c("b", [_vm._v("dateOfEmployment")])]
+                    return [
+                      _c("b", [
+                        _vm._v(_vm._s(_vm.getDates(data.item.dateOfEmployment)))
+                      ])
+                    ]
                   }
                 },
                 {
                   key: "cell(dateOfDismissal)",
                   fn: function(data) {
-                    return [_c("b", [_vm._v("dateOfDismissal")])]
+                    return [
+                      _c("b", [
+                        _vm._v(_vm._s(_vm.getDates(data.item.dateOfDismissal)))
+                      ])
+                    ]
                   }
                 },
                 {
                   key: "cell(reasonForDismissal)",
                   fn: function(data) {
-                    return [_c("b", [_vm._v("reasonForDismissal")])]
+                    return [
+                      _c("b", [_vm._v(_vm._s(data.item.reasonForDismissal))])
+                    ]
                   }
                 },
                 {
                   key: "cell(comments)",
                   fn: function(data) {
-                    return [_c("b", [_vm._v("comments")])]
+                    return [_c("b", [_vm._v(_vm._s(data.item.comments))])]
                   }
                 },
                 {
@@ -80943,7 +80996,8 @@ var render = function() {
         attrs: {
           dbList: _vm.dbList,
           positionList: _vm.positions,
-          citizenshipList: _vm.citizenships
+          citizenshipList: _vm.citizenships,
+          statusList: _vm.employeeStatuses
         },
         on: { created: _vm.newItemCreated }
       }),
@@ -82430,6 +82484,35 @@ var render = function() {
             "b-form-group",
             {
               attrs: {
+                id: "input-group-12",
+                label: "Статус:",
+                "label-for": "input-12"
+              }
+            },
+            [
+              _c(
+                "b-form-select",
+                {
+                  attrs: { id: "input-12" },
+                  on: { change: _vm.onStatusChange }
+                },
+                _vm._l(_vm.statusList, function(db) {
+                  return _c(
+                    "option",
+                    { key: db.id, domProps: { value: db.id } },
+                    [_vm._v(_vm._s(db.name))]
+                  )
+                }),
+                0
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
                 id: "input-group-7",
                 label: "Дата приема:",
                 "label-for": "input-7"
@@ -82468,6 +82551,35 @@ var render = function() {
                     _vm.$set(_vm.item, "dateOfDismissal", $$v)
                   },
                   expression: "item.dateOfDismissal"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-13",
+                label: "Причина увольнения :",
+                "label-for": "input-13"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  id: "input-13",
+                  type: "text",
+                  required: "",
+                  placeholder: "Причина увольнения"
+                },
+                model: {
+                  value: _vm.item.reasonForDismissal,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "reasonForDismissal", $$v)
+                  },
+                  expression: "item.reasonForDismissal"
                 }
               })
             ],
