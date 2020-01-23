@@ -1,5 +1,5 @@
 <template>
-<div>Statement Templates
+<div>Келесі этап, ин ша Аллаһ
 </div>
 </template>
 
