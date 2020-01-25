@@ -82,7 +82,10 @@
         :positionList="positions" :citizenshipList="citizenships"
         :statusList="employeeStatuses"
         ></AddModal>
-        <EditModal @updated="itemUpdated" :item="getSelectedItem" :dbList="dbList"></EditModal>
+        <EditModal @updated="itemUpdated" :item="getSelectedItem" :dbList="dbList"
+        :positionList="positions" :citizenshipList="citizenships"
+        :statusList="employeeStatuses"
+        ></EditModal>
         <RemoveModal @removed="itemRemoved" :item="getSelectedItem" :dbList="dbList"></RemoveModal>
         <ViewFilesModal :employee="selectedItem"></ViewFilesModal>
 
@@ -219,6 +222,8 @@ export default {
         getSelectedItem(){
             const obj = {};
             Object.assign(obj,this.selectedItem);
+            obj.dateOfEmployment && (obj.dateOfEmployment = obj.dateOfEmployment.substring(0,10));
+            obj.dateOfDismissal && (obj.dateOfDismissal = obj.dateOfDismissal.substring(0,10));
             return obj;
         }
     },

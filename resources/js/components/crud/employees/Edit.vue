@@ -66,6 +66,106 @@
                     placeholder="ИИН"
                 ></b-form-input>
             </b-form-group>
+
+            <b-form-group
+                id="input-group-10"
+                label="Должность:"
+                label-for="input-10"
+            >
+                <b-form-select
+                    @change="onPositionChange"
+                    id="input-10"
+                    v-model="item.position_id"
+                >
+                    <option
+                        v-for="db in positionList"
+                        :value="db.id"
+                        :key="db.id"
+                        >{{ db.name }}</option
+                    >
+                </b-form-select>
+            </b-form-group>
+
+            <b-form-group
+                id="input-group-11"
+                label="Гражданство:"
+                label-for="input-11"
+            >
+                <b-form-select
+                    @change="onCitizenshipChange"
+                    id="input-11"
+                    v-model="item.citizenship_id"
+                >
+                    <option
+                        v-for="db in citizenshipList"
+                        :value="db.id"
+                        :key="db.id"
+                        >{{ db.name }}</option
+                    >
+                </b-form-select>
+            </b-form-group>
+
+            <b-form-group
+                id="input-group-12"
+                label="Статус:"
+                label-for="input-12"
+            >
+                <b-form-select
+                    @change="onStatusChange"
+                    id="input-12"
+                    v-model="item.employee_status_id"
+                >
+                    <option
+                        v-for="db in statusList"
+                        :value="db.id"
+                        :key="db.id"
+                        >{{ db.name }}</option
+                    >
+                </b-form-select>
+            </b-form-group>
+
+            <b-form-group id="input-group-7" label="Дата приема:">
+                <b-form-input
+                    v-model="item.dateOfEmployment"
+                    type="date"
+                ></b-form-input>
+            </b-form-group>
+
+            <b-form-group id="input-group-8" label="Дата увольнения :">
+                <b-form-input
+                    v-model="item.dateOfDismissal"
+                    type="date"
+                ></b-form-input>
+            </b-form-group>
+
+            <b-form-group
+                id="input-group-13"
+                label="Причина увольнения :"
+                label-for="input-13"
+            >
+                <b-form-input
+                    id="input-13"
+                    v-model="item.reasonForDismissal"
+                    type="text"
+                    required
+                    placeholder="Причина увольнения"
+                ></b-form-input>
+            </b-form-group>
+
+            <b-form-group
+                id="input-group-9"
+                label="Комментарий :"
+                label-for="input-9"
+            >
+                <b-form-input
+                    id="input-9"
+                    v-model="item.comments"
+                    type="text"
+                    required
+                    placeholder="Имя"
+                ></b-form-input>
+            </b-form-group>
+
             <hr />
             <b-form-group
                 id="input-group-7"
@@ -128,11 +228,14 @@
 import crudService from "../../../services/crud";
 import empService from "../../../services/employee";
 export default {
-    props: ["dbList", "item"],
+    props: ["dbList", "item", "positionList", "citizenshipList", "statusList"],
     data() {
         return {
             files: []
         };
+    },
+    created() {
+        window["test"] = this;
     },
     methods: {
         onModalShow() {
@@ -165,6 +268,15 @@ export default {
         },
         onDbChange(dbItemId) {
             this.item.base_id = dbItemId;
+        },
+        onPositionChange(id) {
+            this.item.position_id = id;
+        },
+        onCitizenshipChange(id) {
+            this.item.citizenship_id = id;
+        },
+        onStatusChange(id) {
+            this.item.employee_status_id = id;
         },
         onFileChange(e) {
             if (!e.target.value) return;

@@ -11938,6 +11938,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -12105,6 +12108,8 @@ __webpack_require__.r(__webpack_exports__);
     getSelectedItem: function getSelectedItem() {
       var obj = {};
       Object.assign(obj, this.selectedItem);
+      obj.dateOfEmployment && (obj.dateOfEmployment = obj.dateOfEmployment.substring(0, 10));
+      obj.dateOfDismissal && (obj.dateOfDismissal = obj.dateOfDismissal.substring(0, 10));
       return obj;
     }
   }
@@ -13455,14 +13460,117 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["dbList", "item"],
+  props: ["dbList", "item", "positionList", "citizenshipList", "statusList"],
   data: function data() {
     return {
       files: []
     };
+  },
+  created: function created() {
+    window["test"] = this;
   },
   methods: {
     onModalShow: function onModalShow() {
@@ -13501,6 +13609,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     onDbChange: function onDbChange(dbItemId) {
       this.item.base_id = dbItemId;
+    },
+    onPositionChange: function onPositionChange(id) {
+      this.item.position_id = id;
+    },
+    onCitizenshipChange: function onCitizenshipChange(id) {
+      this.item.citizenship_id = id;
+    },
+    onStatusChange: function onStatusChange(id) {
+      this.item.employee_status_id = id;
     },
     onFileChange: function onFileChange(e) {
       var _this2 = this;
@@ -81003,7 +81120,13 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("EditModal", {
-        attrs: { item: _vm.getSelectedItem, dbList: _vm.dbList },
+        attrs: {
+          item: _vm.getSelectedItem,
+          dbList: _vm.dbList,
+          positionList: _vm.positions,
+          citizenshipList: _vm.citizenships,
+          statusList: _vm.employeeStatuses
+        },
         on: { updated: _vm.itemUpdated }
       }),
       _vm._v(" "),
@@ -82896,6 +83019,208 @@ var render = function() {
                     _vm.$set(_vm.item, "iin", $$v)
                   },
                   expression: "item.iin"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-10",
+                label: "Должность:",
+                "label-for": "input-10"
+              }
+            },
+            [
+              _c(
+                "b-form-select",
+                {
+                  attrs: { id: "input-10" },
+                  on: { change: _vm.onPositionChange },
+                  model: {
+                    value: _vm.item.position_id,
+                    callback: function($$v) {
+                      _vm.$set(_vm.item, "position_id", $$v)
+                    },
+                    expression: "item.position_id"
+                  }
+                },
+                _vm._l(_vm.positionList, function(db) {
+                  return _c(
+                    "option",
+                    { key: db.id, domProps: { value: db.id } },
+                    [_vm._v(_vm._s(db.name))]
+                  )
+                }),
+                0
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-11",
+                label: "Гражданство:",
+                "label-for": "input-11"
+              }
+            },
+            [
+              _c(
+                "b-form-select",
+                {
+                  attrs: { id: "input-11" },
+                  on: { change: _vm.onCitizenshipChange },
+                  model: {
+                    value: _vm.item.citizenship_id,
+                    callback: function($$v) {
+                      _vm.$set(_vm.item, "citizenship_id", $$v)
+                    },
+                    expression: "item.citizenship_id"
+                  }
+                },
+                _vm._l(_vm.citizenshipList, function(db) {
+                  return _c(
+                    "option",
+                    { key: db.id, domProps: { value: db.id } },
+                    [_vm._v(_vm._s(db.name))]
+                  )
+                }),
+                0
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-12",
+                label: "Статус:",
+                "label-for": "input-12"
+              }
+            },
+            [
+              _c(
+                "b-form-select",
+                {
+                  attrs: { id: "input-12" },
+                  on: { change: _vm.onStatusChange },
+                  model: {
+                    value: _vm.item.employee_status_id,
+                    callback: function($$v) {
+                      _vm.$set(_vm.item, "employee_status_id", $$v)
+                    },
+                    expression: "item.employee_status_id"
+                  }
+                },
+                _vm._l(_vm.statusList, function(db) {
+                  return _c(
+                    "option",
+                    { key: db.id, domProps: { value: db.id } },
+                    [_vm._v(_vm._s(db.name))]
+                  )
+                }),
+                0
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            { attrs: { id: "input-group-7", label: "Дата приема:" } },
+            [
+              _c("b-form-input", {
+                attrs: { type: "date" },
+                model: {
+                  value: _vm.item.dateOfEmployment,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "dateOfEmployment", $$v)
+                  },
+                  expression: "item.dateOfEmployment"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            { attrs: { id: "input-group-8", label: "Дата увольнения :" } },
+            [
+              _c("b-form-input", {
+                attrs: { type: "date" },
+                model: {
+                  value: _vm.item.dateOfDismissal,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "dateOfDismissal", $$v)
+                  },
+                  expression: "item.dateOfDismissal"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-13",
+                label: "Причина увольнения :",
+                "label-for": "input-13"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  id: "input-13",
+                  type: "text",
+                  required: "",
+                  placeholder: "Причина увольнения"
+                },
+                model: {
+                  value: _vm.item.reasonForDismissal,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "reasonForDismissal", $$v)
+                  },
+                  expression: "item.reasonForDismissal"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "input-group-9",
+                label: "Комментарий :",
+                "label-for": "input-9"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  id: "input-9",
+                  type: "text",
+                  required: "",
+                  placeholder: "Имя"
+                },
+                model: {
+                  value: _vm.item.comments,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "comments", $$v)
+                  },
+                  expression: "item.comments"
                 }
               })
             ],
