@@ -86,7 +86,9 @@
         :positionList="positions" :citizenshipList="citizenships"
         :statusList="employeeStatuses"
         ></EditModal>
-        <RemoveModal @removed="itemRemoved" :item="getSelectedItem" :dbList="dbList"></RemoveModal>
+        <RemoveModal @removed="itemRemoved" :item="getSelectedItem" :dbList="dbList"
+        :positionList="positions" :citizenshipList="citizenships"
+        :statusList="employeeStatuses"></RemoveModal>
         <ViewFilesModal :employee="selectedItem"></ViewFilesModal>
 
     </div>
