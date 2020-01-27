@@ -25,7 +25,9 @@
                         >
                     </b-nav-item>
                     <b-nav-item>
-                        <router-link :to="{ name: 'statementTemplates' }" title="Истории"
+                        <router-link
+                            :to="{ name: 'statementTemplates' }"
+                            title="Истории"
                             >Шаблоны заявлении</router-link
                         >
                     </b-nav-item>
@@ -55,7 +57,9 @@
                             <em>Пользователь</em>
                         </template>
                         <b-dropdown-item href="#">Профиль</b-dropdown-item>
-                        <b-dropdown-item href="#">Выйти</b-dropdown-item>
+                        <b-dropdown-item href="#" @click="logout"
+                            >Выйти</b-dropdown-item
+                        >
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
             </b-collapse>
@@ -65,5 +69,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+    methods: {
+        logout() {
+            window.document.getElementById("logout-form").submit();
+        }
+    }
+};
 </script>

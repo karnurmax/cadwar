@@ -11679,7 +11679,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  methods: {
+    logout: function logout() {
+      window.document.getElementById("logout-form").submit();
+    }
+  }
+});
 
 /***/ }),
 
@@ -80751,9 +80761,11 @@ var render = function() {
                         _vm._v("Профиль")
                       ]),
                       _vm._v(" "),
-                      _c("b-dropdown-item", { attrs: { href: "#" } }, [
-                        _vm._v("Выйти")
-                      ])
+                      _c(
+                        "b-dropdown-item",
+                        { attrs: { href: "#" }, on: { click: _vm.logout } },
+                        [_vm._v("Выйти")]
+                      )
                     ],
                     1
                   )
