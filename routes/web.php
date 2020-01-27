@@ -16,25 +16,25 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::prefix('auth')->group(function () {
+// Route::prefix('auth')->group(function () {
 
-    if (filter_var(env('ALLOWED_TO_REGISTER'), FILTER_VALIDATE_BOOLEAN)) {
-        Route::post('register', 'AuthController@register');
-    }
+//     if (filter_var(env('ALLOWED_TO_REGISTER'), FILTER_VALIDATE_BOOLEAN)) {
+//         Route::post('register', 'AuthController@register');
+//     }
 
-    Route::get('code/{code}', 'AuthController@code');
-    Route::post('login', 'AuthController@login');
-    Route::post('reset', 'AuthController@reset');
-});
+//     Route::get('code/{code}', 'AuthController@code');
+//     Route::post('login', 'AuthController@login');
+//     Route::post('reset', 'AuthController@reset');
+// });
 
 Route::get('/artisan/migraterefresh', 'ArtisanController@MigrateRefresh');
 
-// $allowedToRegister = filter_var(env('ALLOWED_TO_REGISTER'), FILTER_VALIDATE_BOOLEAN);
-// if ($allowedToRegister) {
-//     Auth::routes();
-// } else {
-//     Auth::routes(['register' => false]);
-// }
+$allowedToRegister = filter_var(env('ALLOWED_TO_REGISTER'), FILTER_VALIDATE_BOOLEAN);
+if ($allowedToRegister) {
+    Auth::routes();
+} else {
+    Auth::routes(['register' => false]);
+}
 
 Route::get('/home', 'HomeController@index')->name('home');
 
