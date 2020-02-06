@@ -8,5 +8,6 @@ export default {
     getEmployeesWithFiles: "employees/get/with-files",
     employeeDownloadFile: "employees/files/download/{id}",
     employeeFileRemove: "employees/files/remove/{id}",
-    employeeFileListRemove: "employees/files/removelist"
+    employeeFileListRemove: "employees/files/removelist",
+    getCurrentUser: "getCurrentUser"
 };

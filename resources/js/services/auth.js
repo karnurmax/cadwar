@@ -13,6 +13,6 @@ export default {
         return http.post(apiUrls.resetPassword, data);
     },
     getCurrentUser() {
-        return new User("qwe@qwe.qwe", "user1");
+        return http.get(apiUrls.getCurrentUser);
     }
 };

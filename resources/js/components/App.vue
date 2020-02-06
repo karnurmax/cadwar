@@ -46,7 +46,11 @@
                         >
                     </b-nav-form>
 
-                    <b-nav-item-dropdown text="Язык" right>
+                    <b-nav-item-dropdown
+                        text="Язык"
+                        right
+                        style="display:none;"
+                    >
                         <b-dropdown-item href="#">RU</b-dropdown-item>
                         <b-dropdown-item href="#">Скоро..)</b-dropdown-item>
                     </b-nav-item-dropdown>
@@ -56,7 +60,9 @@
                         <template v-slot:button-content>
                             <em>Пользователь</em>
                         </template>
-                        <b-dropdown-item href="#">Профиль</b-dropdown-item>
+                        <b-dropdown-item href="#">{{
+                            userEmail
+                        }}</b-dropdown-item>
                         <b-dropdown-item href="#" @click="logout"
                             >Выйти</b-dropdown-item
                         >
@@ -70,9 +76,23 @@
 
 <script>
 export default {
+    data() {
+        return {
+            user: null
+        };
+    },
+    created() {
+        
+    },
     methods: {
         logout() {
             window.document.getElementById("logout-form").submit();
+        }
+    },
+    computed: {
+        userEmail() {
+            if (!this.user) return "";
+            return !!this.user.email ? this.user.email : "";
         }
     }
 };
