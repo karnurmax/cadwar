@@ -11683,10 +11683,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      user: null
+    };
+  },
+  created: function created() {},
   methods: {
     logout: function logout() {
       window.document.getElementById("logout-form").submit();
+    }
+  },
+  computed: {
+    userEmail: function userEmail() {
+      if (!this.user) return "";
+      return !!this.user.email ? this.user.email : "";
     }
   }
 });
@@ -12053,6 +12071,14 @@ __webpack_require__.r(__webpack_exports__);
       this.$bvModal.show('employeesAddModal');
     },
     newItemCreated: function newItemCreated(item) {
+      if (!item) return;
+
+      if (item.files && item.files.length) {
+        item.files = item.files.map(function (f) {
+          return JSON.parse(f);
+        });
+      }
+
       this.list.push(item);
     },
     editItem: function editItem(item) {
@@ -13256,8 +13282,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -13267,6 +13291,9 @@ __webpack_require__.r(__webpack_exports__);
       item: {},
       files: []
     };
+  },
+  created: function created() {
+    window["test"] = this;
   },
   methods: {
     onSubmit: function onSubmit() {},
@@ -13562,16 +13589,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -13581,9 +13598,7 @@ __webpack_require__.r(__webpack_exports__);
       files: []
     };
   },
-  created: function created() {
-    window["test"] = this;
-  },
+  created: function created() {},
   methods: {
     onModalShow: function onModalShow() {
       this.files = [];
@@ -80728,7 +80743,10 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "b-nav-item-dropdown",
-                    { attrs: { text: "Язык", right: "" } },
+                    {
+                      staticStyle: { display: "none" },
+                      attrs: { text: "Язык", right: "" }
+                    },
                     [
                       _c("b-dropdown-item", { attrs: { href: "#" } }, [
                         _vm._v("RU")
@@ -80758,7 +80776,7 @@ var render = function() {
                     [
                       _vm._v(" "),
                       _c("b-dropdown-item", { attrs: { href: "#" } }, [
-                        _vm._v("Профиль")
+                        _vm._v(_vm._s(_vm.userEmail))
                       ]),
                       _vm._v(" "),
                       _c(
@@ -82679,21 +82697,21 @@ var render = function() {
               }
             },
             [
-              _c(
-                "b-form-select",
-                {
-                  attrs: { id: "input-10" },
-                  on: { change: _vm.onPositionChange }
+              _c("b-form-input", {
+                attrs: {
+                  id: "input-10",
+                  type: "text",
+                  required: "",
+                  placeholder: "Должность"
                 },
-                _vm._l(_vm.positionList, function(db) {
-                  return _c(
-                    "option",
-                    { key: db.id, domProps: { value: db.id } },
-                    [_vm._v(_vm._s(db.name))]
-                  )
-                }),
-                0
-              )
+                model: {
+                  value: _vm.item.position,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "position", $$v)
+                  },
+                  expression: "item.position"
+                }
+              })
             ],
             1
           ),
@@ -82708,21 +82726,21 @@ var render = function() {
               }
             },
             [
-              _c(
-                "b-form-select",
-                {
-                  attrs: { id: "input-11" },
-                  on: { change: _vm.onCitizenshipChange }
+              _c("b-form-input", {
+                attrs: {
+                  id: "input-11",
+                  type: "text",
+                  required: "",
+                  placeholder: "Гражданство"
                 },
-                _vm._l(_vm.citizenshipList, function(db) {
-                  return _c(
-                    "option",
-                    { key: db.id, domProps: { value: db.id } },
-                    [_vm._v(_vm._s(db.name))]
-                  )
-                }),
-                0
-              )
+                model: {
+                  value: _vm.item.citizenship,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "citizenship", $$v)
+                  },
+                  expression: "item.citizenship"
+                }
+              })
             ],
             1
           ),
@@ -83159,28 +83177,21 @@ var render = function() {
               }
             },
             [
-              _c(
-                "b-form-select",
-                {
-                  attrs: { id: "input-10" },
-                  on: { change: _vm.onPositionChange },
-                  model: {
-                    value: _vm.item.position_id,
-                    callback: function($$v) {
-                      _vm.$set(_vm.item, "position_id", $$v)
-                    },
-                    expression: "item.position_id"
-                  }
+              _c("b-form-input", {
+                attrs: {
+                  id: "input-10",
+                  type: "text",
+                  required: "",
+                  placeholder: "Должность"
                 },
-                _vm._l(_vm.positionList, function(db) {
-                  return _c(
-                    "option",
-                    { key: db.id, domProps: { value: db.id } },
-                    [_vm._v(_vm._s(db.name))]
-                  )
-                }),
-                0
-              )
+                model: {
+                  value: _vm.item.position,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "position", $$v)
+                  },
+                  expression: "item.position"
+                }
+              })
             ],
             1
           ),
@@ -83195,28 +83206,21 @@ var render = function() {
               }
             },
             [
-              _c(
-                "b-form-select",
-                {
-                  attrs: { id: "input-11" },
-                  on: { change: _vm.onCitizenshipChange },
-                  model: {
-                    value: _vm.item.citizenship_id,
-                    callback: function($$v) {
-                      _vm.$set(_vm.item, "citizenship_id", $$v)
-                    },
-                    expression: "item.citizenship_id"
-                  }
+              _c("b-form-input", {
+                attrs: {
+                  id: "input-11",
+                  type: "text",
+                  required: "",
+                  placeholder: "Гражданство"
                 },
-                _vm._l(_vm.citizenshipList, function(db) {
-                  return _c(
-                    "option",
-                    { key: db.id, domProps: { value: db.id } },
-                    [_vm._v(_vm._s(db.name))]
-                  )
-                }),
-                0
-              )
+                model: {
+                  value: _vm.item.citizenship,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "citizenship", $$v)
+                  },
+                  expression: "item.citizenship"
+                }
+              })
             ],
             1
           ),
@@ -102824,7 +102828,8 @@ __webpack_require__.r(__webpack_exports__);
   getEmployeesWithFiles: "employees/get/with-files",
   employeeDownloadFile: "employees/files/download/{id}",
   employeeFileRemove: "employees/files/remove/{id}",
-  employeeFileListRemove: "employees/files/removelist"
+  employeeFileListRemove: "employees/files/removelist",
+  getCurrentUser: "getCurrentUser"
 });
 
 /***/ }),
@@ -102855,7 +102860,7 @@ __webpack_require__.r(__webpack_exports__);
     return _http__WEBPACK_IMPORTED_MODULE_1__["default"].post(_apiUrls__WEBPACK_IMPORTED_MODULE_2__["default"].resetPassword, data);
   },
   getCurrentUser: function getCurrentUser() {
-    return new _models_user__WEBPACK_IMPORTED_MODULE_0__["default"]("qwe@qwe.qwe", "user1");
+    return _http__WEBPACK_IMPORTED_MODULE_1__["default"].get(_apiUrls__WEBPACK_IMPORTED_MODULE_2__["default"].getCurrentUser);
   }
 });
 
