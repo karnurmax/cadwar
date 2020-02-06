@@ -72,18 +72,13 @@
                 label="Должность:"
                 label-for="input-10"
             >
-                <b-form-select
-                    @change="onPositionChange"
+                <b-form-input
                     id="input-10"
-                    v-model="item.position_id"
-                >
-                    <option
-                        v-for="db in positionList"
-                        :value="db.id"
-                        :key="db.id"
-                        >{{ db.name }}</option
-                    >
-                </b-form-select>
+                    v-model="item.position"
+                    type="text"
+                    required
+                    placeholder="Должность"
+                ></b-form-input>
             </b-form-group>
 
             <b-form-group
@@ -91,18 +86,13 @@
                 label="Гражданство:"
                 label-for="input-11"
             >
-                <b-form-select
-                    @change="onCitizenshipChange"
+                <b-form-input
                     id="input-11"
-                    v-model="item.citizenship_id"
-                >
-                    <option
-                        v-for="db in citizenshipList"
-                        :value="db.id"
-                        :key="db.id"
-                        >{{ db.name }}</option
-                    >
-                </b-form-select>
+                    v-model="item.citizenship"
+                    type="text"
+                    required
+                    placeholder="Гражданство"
+                ></b-form-input>
             </b-form-group>
 
             <b-form-group
@@ -234,9 +224,7 @@ export default {
             files: []
         };
     },
-    created() {
-        window["test"] = this;
-    },
+    created() {},
     methods: {
         onModalShow() {
             this.files = [];
