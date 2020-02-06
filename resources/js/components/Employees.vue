@@ -168,6 +168,11 @@ export default {
             this.$bvModal.show('employeesAddModal');
         },
         newItemCreated(item){
+            if(!item)
+            return;
+            if(item.files&&item.files.length){
+                item.files = item.files.map(f=>JSON.parse(f));
+            }
             this.list.push(item);
         },
         editItem(item){
