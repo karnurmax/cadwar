@@ -8,7 +8,7 @@ use \App\EmployeeFile;
 
 class EmployeesController extends Controller
 {
-    public function upload(Request $request, $id)
+    public function upload(Request $request, $iin)
     {
         //public_path()- получение пути к public :)
         if (!isset($_FILES["files"])) {
@@ -18,21 +18,20 @@ class EmployeesController extends Controller
         $fnames = $files["name"];
 
         $savedFiles = [];
+        $folderToUpload = "../uploads/$iin";
+        if (!file_exists($folderToUpload)) {
+            mkdir($folderToUpload, 0777, true);
+        }
         for ($i = 0; $i < count($fnames); $i++) {
             $tmpPath = $files["tmp_name"][$i];
-            $parent = dirname($_SERVER['DOCUMENT_ROOT']);
-            $parent .= "\\uploads\\";
 
-            $guid = \App\Helpers\Randomizer::GetString(20);
-            mkdir("../uploads/$guid");
-            $newPath = "../uploads/$guid/$fnames[$i]";
+            $newPath = "$folderToUpload/$fnames[$i]";
             $moved = move_uploaded_file($tmpPath, $newPath);
             if (!$moved) {
                 continue;
             }
             $empFile = new EmployeeFile;
-            $empFile->employee_id = $id;
-            $empFile->guid = $guid;
+            $empFile->iin = $iin;
             $empFile->filename = $fnames[$i];
             $empFile->filepath = $newPath;
             $empFile->save();

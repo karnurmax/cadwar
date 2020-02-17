@@ -26,7 +26,13 @@ export default [
             {
                 path: "/statementTemplates",
                 name: "statementTemplates",
-                component: require("./components/StatementTemplates.vue").default
+                component: require("./components/StatementTemplates.vue")
+                    .default
+            },
+            {
+                path: "/loadData",
+                name: "loadData",
+                component: require("./components/LoadData.vue").default
             }
         ]
     },

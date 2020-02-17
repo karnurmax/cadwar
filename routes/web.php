@@ -65,7 +65,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('files/download/{id}', 'EmployeesController@downloadFile');
         Route::post('files/remove/{id}', 'EmployeesController@removeFile');
         Route::post('files/removelist', 'EmployeesController@removeFileList');
-        Route::post('{id}/files/upload', 'EmployeesController@upload');
+        Route::post('{iin}/files/upload', 'EmployeesController@upload');
     });
 });
 

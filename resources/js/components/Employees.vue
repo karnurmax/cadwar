@@ -1,16 +1,16 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="page-title">
+            <div class="page-title col-12">
                 <p>
                     <h2>Рабочие
                         <b-button @click="addItem()" variant="primary">
-                                    <font-awesome-icon icon="plus" /> Добавить
+                            <font-awesome-icon icon="plus" /> Добавить
                         </b-button>
                     </h2>
                 </p>
             </div>
-            <div class="div1">
+            <div class="div1 col-12">
                 <b-table :fields="fields" :items="list" :striped="true" :bordered="true"
                 :sort-by.sync="sortBy"
                 >
@@ -27,15 +27,11 @@
                     </template>
                     
                     <template v-slot:cell(position)="data">
-                        <b>{{getPositionName(data.item.position_id)}}</b>
+                        <b>{{ data.item.position }}</b>
                     </template>
 
                     <template v-slot:cell(citizenship)="data">
-                        <b>{{getCitizenshipName(data.item.citizenship_id)}}</b>
-                    </template>
-
-                    <template v-slot:cell(base)="data">
-                        <b>{{ getBaseName(data.item.base_id) }}</b>
+                        <b>{{ data.item.citizenship }}</b>
                     </template>
 
                     <template v-slot:cell(status)="data">
@@ -79,15 +75,12 @@
         </div>
         <Loading :active.sync="isLoading" :is-full-page="true"></Loading>
         <AddModal @created="newItemCreated" :dbList="dbList"
-        :positionList="positions" :citizenshipList="citizenships"
         :statusList="employeeStatuses"
         ></AddModal>
         <EditModal @updated="itemUpdated" :item="getSelectedItem" :dbList="dbList"
-        :positionList="positions" :citizenshipList="citizenships"
         :statusList="employeeStatuses"
         ></EditModal>
         <RemoveModal @removed="itemRemoved" :item="getSelectedItem" :dbList="dbList"
-        :positionList="positions" :citizenshipList="citizenships"
         :statusList="employeeStatuses"></RemoveModal>
         <ViewFilesModal :employee="selectedItem"></ViewFilesModal>
 
@@ -119,13 +112,12 @@ export default {
                  { key: 'iin', label: 'ИИН',sortable: true },
                  { key: 'position', label: 'Должность'},
                  { key: 'citizenship', label: 'Гражданство'},
-                 {key:'base',label:'База',sortable:true},
                  { key: 'status', label: 'Статус'},
                  { key: 'dateOfEmployment', label: 'Дата приема'},
                  { key: 'dateOfDismissal', label: 'Дата увольнения'},
                  { key: 'reasonForDismissal', label: 'Причина увольнения'},
                  { key: 'comments', label: 'Комментарии'},
-                 {key:'files',label:'Файлы'},
+                 { key:'files',label:'Файлы'},
                  { key: 'actions', label: 'Действия'},
             ],
             isLoading:false,
@@ -133,25 +125,17 @@ export default {
             selectedItem:null,
             dbList:[],
             emp_files:[],
-            positions:[],
-            citizenships:[],
             employeeStatuses:[]
         };
     },
     created(){
         crudService.getAll('employee_statuses').then(res=>{
             this.employeeStatuses = res.data;
-            crudService.getAll('positions').then(res=>{
-                this.positions = res.data;
-                crudService.getAll('citizenships').then(res=>{
-                    this.citizenships = res.data;
-                    crudService.getAll('bases').then(res=>{
-                        this.dbList=res.data;
-                        this.loadData()
-                            .then(res=>this.fillData(res.data));
-                    }); 
-                });
-            });
+            crudService.getAll('bases').then(resDB=>{
+                this.dbList=resDB.data;
+                this.loadData()
+                    .then(resList=>this.fillData(resList.data));
+            }); 
         });
         
         

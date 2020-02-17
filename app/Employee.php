@@ -8,7 +8,7 @@ class Employee extends Model
 {
     public function files()
     {
-        return $this->hasMany('App\EmployeeFile');
+        return $this->hasMany('App\EmployeeFile', 'iin', 'iin');
     }
     public function citizenships()
     {

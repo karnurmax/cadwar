@@ -3,7 +3,7 @@ import apiUrls from "./apiUrls";
 export default {
     uploadFile(userId, files) {
         return http.uploadFile(
-            apiUrls.employeeFilesUpload.replace("{id}", userId),
+            apiUrls.employeeFilesUpload.replace("{iin}", userId),
             files
         );
     },

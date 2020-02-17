@@ -26,5 +26,9 @@
     <div id="app">
         <router-view></router-view>
     </div>
+    <script>
+    window.user = {!!json_encode(Auth::user())!!};
+    console.log(window.user);
+    </script>
 </body>
 </html>

@@ -5,18 +5,6 @@
         @ok="saveItem"
     >
         <b-form @submit="onSubmit">
-            <b-form-group
-                id="input-group-1"
-                label="База данных:"
-                label-for="input-1"
-            >
-                <b-form-select @change="onDbChange" id="input-1">
-                    <option v-for="db in dbList" :value="db.id" :key="db.id">{{
-                        db.name
-                    }}</option>
-                </b-form-select>
-            </b-form-group>
-
             <b-form-group id="input-group-2" label="Имя :" label-for="input-2">
                 <b-form-input
                     id="input-2"
@@ -210,33 +198,25 @@ export default {
             files: []
         };
     },
-    created() {
-        window["test"] = this;
-    },
     methods: {
         onSubmit() {},
         saveItem(e) {
             e.preventDefault();
-            crudService
-                .postNewItem("employees", this.item, this.files)
-                .then(res => {
-                    if (res.status === 200) {
-                        const createdUser = res.data;
+            crudService.postNewItem("employees", this.item).then(res => {
+                if (res.status === 200) {
+                    const createdUser = res.data;
 
-                        this.uploadFiles(res.data.id).then(resUploaded => {
-                            if (resUploaded.status === 200) {
-                                createdUser.files = resUploaded.data;
-                                this.$emit("created", createdUser);
-                                this.$bvModal.hide("employeesAddModal");
-                            } else window.alert("Ошибка");
-                        });
-                    } else {
-                        window.alert("Ошибка");
-                    }
-                });
-        },
-        onDbChange(id) {
-            this.item.base_id = id;
+                    this.uploadFiles(res.data.iin).then(resUploaded => {
+                        if (resUploaded.status === 200) {
+                            createdUser.files = resUploaded.data;
+                            this.$emit("created", createdUser);
+                            this.$bvModal.hide("employeesAddModal");
+                        } else window.alert("Ошибка");
+                    });
+                } else {
+                    window.alert("Ошибка");
+                }
+            });
         },
         onPositionChange(id) {
             this.item.position_id = id;

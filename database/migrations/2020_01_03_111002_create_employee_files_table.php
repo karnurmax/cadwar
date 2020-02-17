@@ -15,15 +15,15 @@ class CreateEmployeeFilesTable extends Migration
     {
         Schema::create('employee_files', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->uuid('guid');
+
             $table->string('filename');
             $table->string('filepath');
 
+            $table->string('iin');
+            $table->foreign('iin')->references('iin')->on('employees')->onDelete('cascade');
+            
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-            
-            $table->unsignedBigInteger('employee_id');
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
     }
 

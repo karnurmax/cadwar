@@ -4,7 +4,7 @@ export default {
     register: "auth/register",
     resetPassword: "auth/reset",
     crud: "crud",
-    employeeFilesUpload: "employees/{id}/files/upload",
+    employeeFilesUpload: "employees/{iin}/files/upload",
     getEmployeesWithFiles: "employees/get/with-files",
     employeeDownloadFile: "employees/files/download/{id}",
     employeeFileRemove: "employees/files/remove/{id}",

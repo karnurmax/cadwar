@@ -19,7 +19,7 @@ class CreateEmployeesTable extends Migration
             $table->string('surname')->nullable();
             $table->string('lastname')->nullable();
 
-            $table->char('iin', 12);
+            $table->string('iin', 12)->unique();
             $table->char('phone', 12)->nullable();
             $table->integer('job_experience_months')->default(0);
             $table->smallInteger('from_year')->nullable();
@@ -34,7 +34,7 @@ class CreateEmployeesTable extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
 
-            $table->unsignedBigInteger('base_id');
+            $table->unsignedBigInteger('base_id')->nullable();
             $table->foreign('base_id')->references('id')->on('bases')->onDelete('cascade');
 
             $table->string('position')->nullable();

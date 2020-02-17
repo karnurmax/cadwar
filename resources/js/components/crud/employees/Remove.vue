@@ -5,18 +5,7 @@
         @ok="saveItem"
     >
         <b-form @submit="onSubmit">
-            <b-form-group
-                id="input-group-1"
-                label="База данных:"
-                label-for="input-1"
-            >
-                <b-form-select disabled id="input-1" v-model="item.base_id">
-                    <option v-for="db in dbList" :value="db.id">{{
-                        db.name
-                    }}</option>
-                </b-form-select>
-            </b-form-group>
-
+            
             <b-form-group id="input-group-2" label="Имя :" label-for="input-2">
                 <b-form-input
                     disabled

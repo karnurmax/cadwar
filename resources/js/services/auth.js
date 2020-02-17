@@ -13,6 +13,7 @@ export default {
         return http.post(apiUrls.resetPassword, data);
     },
     getCurrentUser() {
-        return http.get(apiUrls.getCurrentUser);
+        return window.user;
+        //return http.get(apiUrls.getCurrentUser);
     }
 };
