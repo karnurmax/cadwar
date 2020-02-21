@@ -7,9 +7,42 @@
                         <b-button @click="addItem()" variant="primary">
                             <font-awesome-icon icon="plus" /> Добавить
                         </b-button>
+                        
+                        <b-button v-b-toggle.filtersdiv variant="secondary">
+                            <font-awesome-icon icon="filter" />Фильтры
+                        </b-button>
                     </h2>
                 </p>
             </div>
+            
+            <b-collapse id="filtersdiv" class="mt-2">
+                <b-card>
+                    <b-form-group label="Должность">
+                        <b-form-checkbox-group
+                            v-model="filters.selectedPositions"
+                            :options="positionDict"
+                            name="position-filters"
+                            stacked
+                        ></b-form-checkbox-group>
+                    </b-form-group>
+                    <b-form-group label="Национальность">
+                        <b-form-checkbox-group
+                            v-model="filters.selectedCitizenships"
+                            :options="citizenshipDict"
+                            name="citizenship-filters"
+                            stacked
+                        ></b-form-checkbox-group>
+                    </b-form-group>
+                    <b-form-group label="Статус">
+                        <b-form-checkbox-group
+                            v-model="filters.selectedStatuses"
+                            :options="statusDict"
+                            name="status-filters"
+                            stacked
+                        ></b-form-checkbox-group>
+                    </b-form-group>
+                </b-card>
+            </b-collapse>
             <div class="div1 col-12">
                 <b-table :fields="fields" :items="list" :striped="true" :bordered="true"
                 :sort-by.sync="sortBy"
@@ -125,7 +158,17 @@ export default {
             selectedItem:null,
             dbList:[],
             emp_files:[],
-            employeeStatuses:[]
+            employeeStatuses:[],
+
+            showFilters:false,
+            positionDict:[],
+            citizenshipDict:[],
+            statusDict:[],
+            filters:{
+                selectedPositions:[],
+                selectedCitizenships:[],
+                selectedStatuses:[],
+            }
         };
     },
     created(){

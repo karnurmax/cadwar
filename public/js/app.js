@@ -11966,6 +11966,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -12026,7 +12059,16 @@ __webpack_require__.r(__webpack_exports__);
       selectedItem: null,
       dbList: [],
       emp_files: [],
-      employeeStatuses: []
+      employeeStatuses: [],
+      showFilters: false,
+      positionDict: [],
+      citizenshipDict: [],
+      statusDict: [],
+      filters: {
+        selectedPositions: [],
+        selectedCitizenships: [],
+        selectedStatuses: []
+      }
     };
   },
   created: function created() {
@@ -81038,26 +81080,130 @@ var render = function() {
     "div",
     { staticClass: "container-fluid" },
     [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "page-title col-12" }, [
-          _c("p"),
-          _c(
-            "h2",
-            [
-              _vm._v("Рабочие\n                    "),
-              _c(
-                "b-button",
-                {
-                  attrs: { variant: "primary" },
-                  on: {
-                    click: function($event) {
-                      return _vm.addItem()
+      _c(
+        "div",
+        { staticClass: "row" },
+        [
+          _c("div", { staticClass: "page-title col-12" }, [
+            _c("p"),
+            _c(
+              "h2",
+              [
+                _vm._v("Рабочие\n                    "),
+                _c(
+                  "b-button",
+                  {
+                    attrs: { variant: "primary" },
+                    on: {
+                      click: function($event) {
+                        return _vm.addItem()
+                      }
                     }
-                  }
-                },
+                  },
+                  [
+                    _c("font-awesome-icon", { attrs: { icon: "plus" } }),
+                    _vm._v(" Добавить\n                    ")
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "b-button",
+                  {
+                    directives: [
+                      {
+                        name: "b-toggle",
+                        rawName: "v-b-toggle.filtersdiv",
+                        modifiers: { filtersdiv: true }
+                      }
+                    ],
+                    attrs: { variant: "secondary" }
+                  },
+                  [
+                    _c("font-awesome-icon", { attrs: { icon: "filter" } }),
+                    _vm._v("Фильтры\n                    ")
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("p")
+          ]),
+          _vm._v(" "),
+          _c(
+            "b-collapse",
+            { staticClass: "mt-2", attrs: { id: "filtersdiv" } },
+            [
+              _c(
+                "b-card",
                 [
-                  _c("font-awesome-icon", { attrs: { icon: "plus" } }),
-                  _vm._v(" Добавить\n                    ")
+                  _c(
+                    "b-form-group",
+                    { attrs: { label: "Должность" } },
+                    [
+                      _c("b-form-checkbox-group", {
+                        attrs: {
+                          options: _vm.positionDict,
+                          name: "position-filters",
+                          stacked: ""
+                        },
+                        model: {
+                          value: _vm.filters.selectedPositions,
+                          callback: function($$v) {
+                            _vm.$set(_vm.filters, "selectedPositions", $$v)
+                          },
+                          expression: "filters.selectedPositions"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-form-group",
+                    { attrs: { label: "Национальность" } },
+                    [
+                      _c("b-form-checkbox-group", {
+                        attrs: {
+                          options: _vm.citizenshipDict,
+                          name: "citizenship-filters",
+                          stacked: ""
+                        },
+                        model: {
+                          value: _vm.filters.selectedCitizenships,
+                          callback: function($$v) {
+                            _vm.$set(_vm.filters, "selectedCitizenships", $$v)
+                          },
+                          expression: "filters.selectedCitizenships"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-form-group",
+                    { attrs: { label: "Статус" } },
+                    [
+                      _c("b-form-checkbox-group", {
+                        attrs: {
+                          options: _vm.statusDict,
+                          name: "status-filters",
+                          stacked: ""
+                        },
+                        model: {
+                          value: _vm.filters.selectedStatuses,
+                          callback: function($$v) {
+                            _vm.$set(_vm.filters, "selectedStatuses", $$v)
+                          },
+                          expression: "filters.selectedStatuses"
+                        }
+                      })
+                    ],
+                    1
+                  )
                 ],
                 1
               )
@@ -81065,195 +81211,204 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("p")
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "div1 col-12" },
-          [
-            _c("b-table", {
-              attrs: {
-                fields: _vm.fields,
-                items: _vm.list,
-                striped: true,
-                bordered: true,
-                "sort-by": _vm.sortBy
-              },
-              on: {
-                "update:sortBy": function($event) {
-                  _vm.sortBy = $event
+          _c(
+            "div",
+            { staticClass: "div1 col-12" },
+            [
+              _c("b-table", {
+                attrs: {
+                  fields: _vm.fields,
+                  items: _vm.list,
+                  striped: true,
+                  bordered: true,
+                  "sort-by": _vm.sortBy
                 },
-                "update:sort-by": function($event) {
-                  _vm.sortBy = $event
-                }
-              },
-              scopedSlots: _vm._u([
-                {
-                  key: "cell(index)",
-                  fn: function(data) {
-                    return [
-                      _vm._v(
-                        "\n                    " +
-                          _vm._s(data.index + 1) +
-                          "\n                "
-                      )
-                    ]
+                on: {
+                  "update:sortBy": function($event) {
+                    _vm.sortBy = $event
+                  },
+                  "update:sort-by": function($event) {
+                    _vm.sortBy = $event
                   }
                 },
-                {
-                  key: "cell(fio)",
-                  fn: function(data) {
-                    return [
-                      _c("b", [
+                scopedSlots: _vm._u([
+                  {
+                    key: "cell(index)",
+                    fn: function(data) {
+                      return [
                         _vm._v(
-                          _vm._s(data.item.surname) +
-                            " " +
-                            _vm._s(data.item.name && data.item.name[0]) +
-                            " " +
-                            _vm._s(data.item.lastname && data.item.lastname[0])
+                          "\n                    " +
+                            _vm._s(data.index + 1) +
+                            "\n                "
                         )
-                      ])
-                    ]
-                  }
-                },
-                {
-                  key: "cell(iin)",
-                  fn: function(data) {
-                    return [_c("b", [_vm._v(_vm._s(data.item.iin))])]
-                  }
-                },
-                {
-                  key: "cell(position)",
-                  fn: function(data) {
-                    return [_c("b", [_vm._v(_vm._s(data.item.position))])]
-                  }
-                },
-                {
-                  key: "cell(citizenship)",
-                  fn: function(data) {
-                    return [_c("b", [_vm._v(_vm._s(data.item.citizenship))])]
-                  }
-                },
-                {
-                  key: "cell(status)",
-                  fn: function(data) {
-                    return [
-                      _c("b", [
-                        _vm._v(
-                          _vm._s(
-                            _vm.getStatusName(data.item.employee_status_id)
+                      ]
+                    }
+                  },
+                  {
+                    key: "cell(fio)",
+                    fn: function(data) {
+                      return [
+                        _c("b", [
+                          _vm._v(
+                            _vm._s(data.item.surname) +
+                              " " +
+                              _vm._s(data.item.name && data.item.name[0]) +
+                              " " +
+                              _vm._s(
+                                data.item.lastname && data.item.lastname[0]
+                              )
                           )
-                        )
-                      ])
-                    ]
-                  }
-                },
-                {
-                  key: "cell(dateOfEmployment)",
-                  fn: function(data) {
-                    return [
-                      _c("b", [
-                        _vm._v(_vm._s(_vm.getDates(data.item.dateOfEmployment)))
-                      ])
-                    ]
-                  }
-                },
-                {
-                  key: "cell(dateOfDismissal)",
-                  fn: function(data) {
-                    return [
-                      _c("b", [
-                        _vm._v(_vm._s(_vm.getDates(data.item.dateOfDismissal)))
-                      ])
-                    ]
-                  }
-                },
-                {
-                  key: "cell(reasonForDismissal)",
-                  fn: function(data) {
-                    return [
-                      _c("b", [_vm._v(_vm._s(data.item.reasonForDismissal))])
-                    ]
-                  }
-                },
-                {
-                  key: "cell(comments)",
-                  fn: function(data) {
-                    return [_c("b", [_vm._v(_vm._s(data.item.comments))])]
-                  }
-                },
-                {
-                  key: "cell(files)",
-                  fn: function(data) {
-                    return [
-                      data.item.files && data.item.files.length
-                        ? _c(
-                            "b-link",
-                            {
-                              on: {
-                                click: function($event) {
-                                  return _vm.viewFiles(data.item)
+                        ])
+                      ]
+                    }
+                  },
+                  {
+                    key: "cell(iin)",
+                    fn: function(data) {
+                      return [_c("b", [_vm._v(_vm._s(data.item.iin))])]
+                    }
+                  },
+                  {
+                    key: "cell(position)",
+                    fn: function(data) {
+                      return [_c("b", [_vm._v(_vm._s(data.item.position))])]
+                    }
+                  },
+                  {
+                    key: "cell(citizenship)",
+                    fn: function(data) {
+                      return [_c("b", [_vm._v(_vm._s(data.item.citizenship))])]
+                    }
+                  },
+                  {
+                    key: "cell(status)",
+                    fn: function(data) {
+                      return [
+                        _c("b", [
+                          _vm._v(
+                            _vm._s(
+                              _vm.getStatusName(data.item.employee_status_id)
+                            )
+                          )
+                        ])
+                      ]
+                    }
+                  },
+                  {
+                    key: "cell(dateOfEmployment)",
+                    fn: function(data) {
+                      return [
+                        _c("b", [
+                          _vm._v(
+                            _vm._s(_vm.getDates(data.item.dateOfEmployment))
+                          )
+                        ])
+                      ]
+                    }
+                  },
+                  {
+                    key: "cell(dateOfDismissal)",
+                    fn: function(data) {
+                      return [
+                        _c("b", [
+                          _vm._v(
+                            _vm._s(_vm.getDates(data.item.dateOfDismissal))
+                          )
+                        ])
+                      ]
+                    }
+                  },
+                  {
+                    key: "cell(reasonForDismissal)",
+                    fn: function(data) {
+                      return [
+                        _c("b", [_vm._v(_vm._s(data.item.reasonForDismissal))])
+                      ]
+                    }
+                  },
+                  {
+                    key: "cell(comments)",
+                    fn: function(data) {
+                      return [_c("b", [_vm._v(_vm._s(data.item.comments))])]
+                    }
+                  },
+                  {
+                    key: "cell(files)",
+                    fn: function(data) {
+                      return [
+                        data.item.files && data.item.files.length
+                          ? _c(
+                              "b-link",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    return _vm.viewFiles(data.item)
+                                  }
                                 }
+                              },
+                              [
+                                _c("b", [
+                                  _vm._v(
+                                    "Файлы: " +
+                                      _vm._s(data.item.files.length) +
+                                      " "
+                                  )
+                                ])
+                              ]
+                            )
+                          : _c("b", [_vm._v("Файлов нет")])
+                      ]
+                    }
+                  },
+                  {
+                    key: "cell(actions)",
+                    fn: function(data) {
+                      return [
+                        _c(
+                          "b-button",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.editItem(data.item)
                               }
-                            },
-                            [
-                              _c("b", [
-                                _vm._v(
-                                  "Файлы: " +
-                                    _vm._s(data.item.files.length) +
-                                    " "
-                                )
-                              ])
-                            ]
-                          )
-                        : _c("b", [_vm._v("Файлов нет")])
-                    ]
-                  }
-                },
-                {
-                  key: "cell(actions)",
-                  fn: function(data) {
-                    return [
-                      _c(
-                        "b-button",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.editItem(data.item)
                             }
-                          }
-                        },
-                        [
-                          _c("font-awesome-icon", {
-                            attrs: { icon: "pencil-alt" }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-button",
-                        {
-                          attrs: { variant: "danger" },
-                          on: {
-                            click: function($event) {
-                              return _vm.removeItem(data.item)
+                          },
+                          [
+                            _c("font-awesome-icon", {
+                              attrs: { icon: "pencil-alt" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-button",
+                          {
+                            attrs: { variant: "danger" },
+                            on: {
+                              click: function($event) {
+                                return _vm.removeItem(data.item)
+                              }
                             }
-                          }
-                        },
-                        [_c("font-awesome-icon", { attrs: { icon: "trash" } })],
-                        1
-                      )
-                    ]
+                          },
+                          [
+                            _c("font-awesome-icon", {
+                              attrs: { icon: "trash" }
+                            })
+                          ],
+                          1
+                        )
+                      ]
+                    }
                   }
-                }
-              ])
-            })
-          ],
-          1
-        )
-      ]),
+                ])
+              })
+            ],
+            1
+          )
+        ],
+        1
+      ),
       _vm._v(" "),
       _c("Loading", {
         attrs: { active: _vm.isLoading, "is-full-page": true },
@@ -100902,7 +101057,7 @@ Vue.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
 
 
-_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_2__["library"].add(_fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faPlus"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faWindowClose"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faDatabase"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faEye"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faUserSecret"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faCalendar"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faPen"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faPencilAlt"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faUsers"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faTrash"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faFileAlt"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faSearch"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faDownload"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faTimes"]);
+_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_2__["library"].add(_fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faPlus"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faWindowClose"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faDatabase"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faEye"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faUserSecret"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faCalendar"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faPen"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faPencilAlt"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faUsers"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faTrash"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faFileAlt"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faSearch"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faDownload"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faTimes"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faFilter"]);
 Vue.component("font-awesome-icon", _fortawesome_vue_fontawesome__WEBPACK_IMPORTED_MODULE_4__["FontAwesomeIcon"]);
 
 var routes = __webpack_require__(/*! ./routes.js */ "./resources/js/routes.js")["default"];
