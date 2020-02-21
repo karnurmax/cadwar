@@ -9,5 +9,6 @@ export default {
     employeeDownloadFile: "employees/files/download/{id}",
     employeeFileRemove: "employees/files/remove/{id}",
     employeeFileListRemove: "employees/files/removelist",
-    getCurrentUser: "getCurrentUser"
+    getCurrentUser: "getCurrentUser",
+    loadCSV: "uploaddb/csv"
 };

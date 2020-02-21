@@ -11,7 +11,10 @@ use \Illuminate\Routing\Router;
 | contains the "web" middleware group. Now create something great!
 |
  */
-
+Route::prefix("uploaddb")->group(function (Router $router) {
+    Route::post("csv", "UploadDbController@csv");
+    Route::get("csv", "UploadDbController@csv");
+});
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', function () {
         return view('home');

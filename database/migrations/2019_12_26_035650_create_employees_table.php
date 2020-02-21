@@ -20,7 +20,7 @@ class CreateEmployeesTable extends Migration
             $table->string('lastname')->nullable();
 
             $table->string('iin', 12)->unique();
-            $table->char('phone', 12)->nullable();
+            $table->char('phone', 22)->nullable();
             $table->integer('job_experience_months')->default(0);
             $table->smallInteger('from_year')->nullable();
             $table->smallInteger('to_year')->nullable();
@@ -45,6 +45,7 @@ class CreateEmployeesTable extends Migration
             $table->unsignedBigInteger('citizenship_id')->nullable();
             $table->foreign('citizenship_id')->references('id')->on('citizenships')->onDelete('cascade');
 
+            $table->string('status')->nullable();
             $table->unsignedBigInteger('employee_status_id')->nullable();
             $table->foreign('employee_status_id')->references('id')->on('employee_statuses')->onDelete('cascade');
         });

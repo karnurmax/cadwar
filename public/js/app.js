@@ -12545,6 +12545,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_loadData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/loadData */ "./resources/js/services/loadData.js");
 //
 //
 //
@@ -12568,6 +12569,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -12579,26 +12581,24 @@ __webpack_require__.r(__webpack_exports__);
       var self = this;
       window['test'] = e;
       if (!e.target.files.length) return;
-      var file = e.target.files[0];
-      var reader = new FileReader();
-      reader.readAsText(file);
-
-      reader.onload = function (event) {
-        var csv = event.target.result;
-        var rows = csv.split('\n');
-
-        for (var i = 1; i < rows.length; i++) {
-          //split by separator (,) and get the columns
-          var cols = self.getValuesArray(rows[i]);
-          window.console.log(cols); //move column by column
-
-          for (var j = 0; j < cols.length; j++) {
-            /*the value of the current column.
-            Do whatever you want with the value*/
-            var value = cols[j];
-          }
-        }
-      };
+      var file = e.target.files;
+      _services_loadData__WEBPACK_IMPORTED_MODULE_0__["default"].loadCSV(file).then(function (res) {
+        window.console.log(res);
+        window.alert("База загружена успешно");
+      })["catch"](function (err) {
+        window.console.log(err);
+        window.alert("Произошла ошибка");
+      });
+      return; // const reader = new FileReader();
+      // reader.readAsText(file);
+      // reader.onload = function(event) {
+      //     var csv = event.target.result;
+      //     var rows = csv.split('\n');
+      //     for (var i = 1; i < rows.length; i++) {
+      //         //split by separator (,) and get the columns
+      //         let cols = self.getValuesArray(rows[i]);
+      //     }
+      // }
     },
     getValuesArray: function getValuesArray(row) {
       var vals = [];
@@ -102899,7 +102899,8 @@ __webpack_require__.r(__webpack_exports__);
   employeeDownloadFile: "employees/files/download/{id}",
   employeeFileRemove: "employees/files/remove/{id}",
   employeeFileListRemove: "employees/files/removelist",
-  getCurrentUser: "getCurrentUser"
+  getCurrentUser: "getCurrentUser",
+  loadCSV: "uploaddb/csv"
 });
 
 /***/ }),
@@ -103049,6 +103050,27 @@ axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common = {
         "Content-Type": "multipart/form-data"
       }
     });
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/services/loadData.js":
+/*!*******************************************!*\
+  !*** ./resources/js/services/loadData.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _apiUrls__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiUrls */ "./resources/js/services/apiUrls.js");
+/* harmony import */ var _http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./http */ "./resources/js/services/http.js");
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  loadCSV: function loadCSV(data) {
+    return _http__WEBPACK_IMPORTED_MODULE_1__["default"].uploadFile(_apiUrls__WEBPACK_IMPORTED_MODULE_0__["default"].loadCSV, data);
   }
 });
 
