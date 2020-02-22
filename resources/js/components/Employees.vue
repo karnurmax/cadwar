@@ -15,8 +15,8 @@
                 </p>
             </div>
             
-            <b-collapse id="filtersdiv" class="mt-2">
-                <b-card>
+            <b-collapse id="filtersdiv" class="col-12">
+                <div class="col-4">
                     <b-form-group label="Должность">
                         <b-form-checkbox-group
                             v-model="filters.selectedPositions"
@@ -25,6 +25,8 @@
                             stacked
                         ></b-form-checkbox-group>
                     </b-form-group>
+                </div>
+                <div class="col-4">
                     <b-form-group label="Национальность">
                         <b-form-checkbox-group
                             v-model="filters.selectedCitizenships"
@@ -33,6 +35,8 @@
                             stacked
                         ></b-form-checkbox-group>
                     </b-form-group>
+                </div>
+                <div class="col-4">
                     <b-form-group label="Статус">
                         <b-form-checkbox-group
                             v-model="filters.selectedStatuses"
@@ -41,7 +45,7 @@
                             stacked
                         ></b-form-checkbox-group>
                     </b-form-group>
-                </b-card>
+                </div>
             </b-collapse>
             <div class="div1 col-12">
                 <b-table :fields="fields" :items="list" :striped="true" :bordered="true"
@@ -161,9 +165,18 @@ export default {
             employeeStatuses:[],
 
             showFilters:false,
-            positionDict:[],
-            citizenshipDict:[],
-            statusDict:[],
+            positionDict:[
+                {text:'testName1',value:'test-val1'},
+                {text:'testName2',value:'test-val2'}
+            ],
+            citizenshipDict:[
+                {text:'testName1',value:'test-val1'},
+                {text:'testName2',value:'test-val2'}
+            ],
+            statusDict:[
+                {text:'testName1',value:'test-val1'},
+                {text:'testName2',value:'test-val2'}
+            ],
             filters:{
                 selectedPositions:[],
                 selectedCitizenships:[],
@@ -250,6 +263,10 @@ export default {
                 return '';
             dt = new Date(dt);
             return !isNaN( dt.getTime()) ? dt.toLocaleDateString() : '';
+        },
+        itemClicked(e){
+            window.console.log(e);
+
         }
     },
     computed: {

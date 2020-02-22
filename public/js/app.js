@@ -11999,6 +11999,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -12061,9 +12065,27 @@ __webpack_require__.r(__webpack_exports__);
       emp_files: [],
       employeeStatuses: [],
       showFilters: false,
-      positionDict: [],
-      citizenshipDict: [],
-      statusDict: [],
+      positionDict: [{
+        text: 'testName1',
+        value: 'test-val1'
+      }, {
+        text: 'testName2',
+        value: 'test-val2'
+      }],
+      citizenshipDict: [{
+        text: 'testName1',
+        value: 'test-val1'
+      }, {
+        text: 'testName2',
+        value: 'test-val2'
+      }],
+      statusDict: [{
+        text: 'testName1',
+        value: 'test-val1'
+      }, {
+        text: 'testName2',
+        value: 'test-val2'
+      }],
       filters: {
         selectedPositions: [],
         selectedCitizenships: [],
@@ -12165,6 +12187,9 @@ __webpack_require__.r(__webpack_exports__);
       if (!dt) return '';
       dt = new Date(dt);
       return !isNaN(dt.getTime()) ? dt.toLocaleDateString() : '';
+    },
+    itemClicked: function itemClicked(e) {
+      window.console.log(e);
     }
   },
   computed: {
@@ -81134,10 +81159,11 @@ var render = function() {
           _vm._v(" "),
           _c(
             "b-collapse",
-            { staticClass: "mt-2", attrs: { id: "filtersdiv" } },
+            { staticClass: "col-12", attrs: { id: "filtersdiv" } },
             [
               _c(
-                "b-card",
+                "div",
+                { staticClass: "col-4" },
                 [
                   _c(
                     "b-form-group",
@@ -81159,8 +81185,15 @@ var render = function() {
                       })
                     ],
                     1
-                  ),
-                  _vm._v(" "),
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-4" },
+                [
                   _c(
                     "b-form-group",
                     { attrs: { label: "Национальность" } },
@@ -81181,8 +81214,15 @@ var render = function() {
                       })
                     ],
                     1
-                  ),
-                  _vm._v(" "),
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-4" },
+                [
                   _c(
                     "b-form-group",
                     { attrs: { label: "Статус" } },
@@ -81207,8 +81247,7 @@ var render = function() {
                 ],
                 1
               )
-            ],
-            1
+            ]
           ),
           _vm._v(" "),
           _c(
