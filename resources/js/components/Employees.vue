@@ -16,36 +16,30 @@
             </div>
             
             <b-collapse id="filtersdiv" class="col-12">
-                <div class="col-4">
-                    <b-form-group label="Должность">
-                        <b-form-checkbox-group
-                            v-model="filters.selectedPositions"
-                            :options="positionDict"
-                            name="position-filters"
-                            stacked
-                        ></b-form-checkbox-group>
-                    </b-form-group>
+                <div class="col-6">
+                    <label>Должность</label>
+                    <multiselect v-model="filters.selectedPositions" :options="positionDict" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Должность" label="text" track-by="value" :preselect-first="false">
+                        <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length && !isOpen">{{ values.length }} options selected</span></template>
+                    </multiselect>
                 </div>
-                <div class="col-4">
-                    <b-form-group label="Национальность">
-                        <b-form-checkbox-group
-                            v-model="filters.selectedCitizenships"
-                            :options="citizenshipDict"
-                            name="citizenship-filters"
-                            stacked
-                        ></b-form-checkbox-group>
-                    </b-form-group>
+                <div class="col-6">
+                    <label>Национальность</label>
+                    <multiselect v-model="filters.selectedCitizenships" :options="citizenshipDict" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Национальность" label="text" track-by="value" :preselect-first="false">
+                        <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length && !isOpen">{{ values.length }} options selected</span></template>
+                    </multiselect>
                 </div>
-                <div class="col-4">
-                    <b-form-group label="Статус">
-                        <b-form-checkbox-group
-                            v-model="filters.selectedStatuses"
-                            :options="statusDict"
-                            name="status-filters"
-                            stacked
-                        ></b-form-checkbox-group>
-                    </b-form-group>
+                <div class="col-6">
+                    <label>Статус</label>
+                    <multiselect v-model="filters.selectedStatuses" :options="statusDict" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Статус" label="text" track-by="value" :preselect-first="false">
+                        <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length && !isOpen">{{ values.length }} options selected</span></template>
+                    </multiselect>
                 </div>
+                <div class="col-6">
+                    <br>
+                        <b-button variant="outline-primary" @click="clearFilters">Сбросить</b-button>
+                        <b-button @click="applyFilters">Применить</b-button>
+                </div>
+                <hr/>
             </b-collapse>
             <div class="div1 col-12">
                 <b-table :fields="fields" :items="list" :striped="true" :bordered="true"
@@ -132,13 +126,14 @@ import EditModal from './crud/employees/edit';
 import RemoveModal from './crud/employees/remove';
 import ViewFilesModal from './crud/employees/viewfiles';
 
-
+import Multiselect from 'vue-multiselect';
 export default {
     components:{
         AddModal,
         EditModal,
         RemoveModal,
-        ViewFilesModal
+        ViewFilesModal,
+        Multiselect
     },
     data() {
         return {
@@ -266,7 +261,12 @@ export default {
         },
         itemClicked(e){
             window.console.log(e);
+        },
+        clearFilters(){
 
+        },
+        applyFilters(){
+            
         }
     },
     computed: {

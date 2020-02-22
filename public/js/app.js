@@ -11877,6 +11877,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _crud_employees_edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./crud/employees/edit */ "./resources/js/components/crud/employees/edit.vue");
 /* harmony import */ var _crud_employees_remove__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./crud/employees/remove */ "./resources/js/components/crud/employees/remove.vue");
 /* harmony import */ var _crud_employees_viewfiles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./crud/employees/viewfiles */ "./resources/js/components/crud/employees/viewfiles.vue");
+/* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-multiselect */ "./node_modules/vue-multiselect/dist/vue-multiselect.min.js");
+/* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vue_multiselect__WEBPACK_IMPORTED_MODULE_6__);
 //
 //
 //
@@ -11997,12 +11999,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
+
 
 
 
@@ -12014,7 +12011,8 @@ __webpack_require__.r(__webpack_exports__);
     AddModal: _crud_employees_add__WEBPACK_IMPORTED_MODULE_2__["default"],
     EditModal: _crud_employees_edit__WEBPACK_IMPORTED_MODULE_3__["default"],
     RemoveModal: _crud_employees_remove__WEBPACK_IMPORTED_MODULE_4__["default"],
-    ViewFilesModal: _crud_employees_viewfiles__WEBPACK_IMPORTED_MODULE_5__["default"]
+    ViewFilesModal: _crud_employees_viewfiles__WEBPACK_IMPORTED_MODULE_5__["default"],
+    Multiselect: vue_multiselect__WEBPACK_IMPORTED_MODULE_6___default.a
   },
   data: function data() {
     return {
@@ -12190,7 +12188,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     itemClicked: function itemClicked(e) {
       window.console.log(e);
-    }
+    },
+    clearFilters: function clearFilters() {},
+    applyFilters: function applyFilters() {}
   },
   computed: {
     getSelectedItem: function getSelectedItem() {
@@ -81163,90 +81163,189 @@ var render = function() {
             [
               _c(
                 "div",
-                { staticClass: "col-4" },
+                { staticClass: "col-6" },
                 [
-                  _c(
-                    "b-form-group",
-                    { attrs: { label: "Должность" } },
-                    [
-                      _c("b-form-checkbox-group", {
-                        attrs: {
-                          options: _vm.positionDict,
-                          name: "position-filters",
-                          stacked: ""
-                        },
-                        model: {
-                          value: _vm.filters.selectedPositions,
-                          callback: function($$v) {
-                            _vm.$set(_vm.filters, "selectedPositions", $$v)
-                          },
-                          expression: "filters.selectedPositions"
+                  _c("label", [_vm._v("Должность")]),
+                  _vm._v(" "),
+                  _c("multiselect", {
+                    attrs: {
+                      options: _vm.positionDict,
+                      multiple: true,
+                      "close-on-select": false,
+                      "clear-on-select": false,
+                      "preserve-search": true,
+                      placeholder: "Должность",
+                      label: "text",
+                      "track-by": "value",
+                      "preselect-first": false
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "selection",
+                        fn: function(ref) {
+                          var values = ref.values
+                          var search = ref.search
+                          var isOpen = ref.isOpen
+                          return [
+                            values.length && !isOpen
+                              ? _c(
+                                  "span",
+                                  { staticClass: "multiselect__single" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(values.length) +
+                                        " options selected"
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
                         }
-                      })
-                    ],
-                    1
-                  )
+                      }
+                    ]),
+                    model: {
+                      value: _vm.filters.selectedPositions,
+                      callback: function($$v) {
+                        _vm.$set(_vm.filters, "selectedPositions", $$v)
+                      },
+                      expression: "filters.selectedPositions"
+                    }
+                  })
                 ],
                 1
               ),
               _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "col-4" },
+                { staticClass: "col-6" },
                 [
-                  _c(
-                    "b-form-group",
-                    { attrs: { label: "Национальность" } },
-                    [
-                      _c("b-form-checkbox-group", {
-                        attrs: {
-                          options: _vm.citizenshipDict,
-                          name: "citizenship-filters",
-                          stacked: ""
-                        },
-                        model: {
-                          value: _vm.filters.selectedCitizenships,
-                          callback: function($$v) {
-                            _vm.$set(_vm.filters, "selectedCitizenships", $$v)
-                          },
-                          expression: "filters.selectedCitizenships"
+                  _c("label", [_vm._v("Национальность")]),
+                  _vm._v(" "),
+                  _c("multiselect", {
+                    attrs: {
+                      options: _vm.citizenshipDict,
+                      multiple: true,
+                      "close-on-select": false,
+                      "clear-on-select": false,
+                      "preserve-search": true,
+                      placeholder: "Национальность",
+                      label: "text",
+                      "track-by": "value",
+                      "preselect-first": false
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "selection",
+                        fn: function(ref) {
+                          var values = ref.values
+                          var search = ref.search
+                          var isOpen = ref.isOpen
+                          return [
+                            values.length && !isOpen
+                              ? _c(
+                                  "span",
+                                  { staticClass: "multiselect__single" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(values.length) +
+                                        " options selected"
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
                         }
-                      })
-                    ],
-                    1
-                  )
+                      }
+                    ]),
+                    model: {
+                      value: _vm.filters.selectedCitizenships,
+                      callback: function($$v) {
+                        _vm.$set(_vm.filters, "selectedCitizenships", $$v)
+                      },
+                      expression: "filters.selectedCitizenships"
+                    }
+                  })
                 ],
                 1
               ),
               _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "col-4" },
+                { staticClass: "col-6" },
                 [
-                  _c(
-                    "b-form-group",
-                    { attrs: { label: "Статус" } },
-                    [
-                      _c("b-form-checkbox-group", {
-                        attrs: {
-                          options: _vm.statusDict,
-                          name: "status-filters",
-                          stacked: ""
-                        },
-                        model: {
-                          value: _vm.filters.selectedStatuses,
-                          callback: function($$v) {
-                            _vm.$set(_vm.filters, "selectedStatuses", $$v)
-                          },
-                          expression: "filters.selectedStatuses"
+                  _c("label", [_vm._v("Статус")]),
+                  _vm._v(" "),
+                  _c("multiselect", {
+                    attrs: {
+                      options: _vm.statusDict,
+                      multiple: true,
+                      "close-on-select": false,
+                      "clear-on-select": false,
+                      "preserve-search": true,
+                      placeholder: "Статус",
+                      label: "text",
+                      "track-by": "value",
+                      "preselect-first": false
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "selection",
+                        fn: function(ref) {
+                          var values = ref.values
+                          var search = ref.search
+                          var isOpen = ref.isOpen
+                          return [
+                            values.length && !isOpen
+                              ? _c(
+                                  "span",
+                                  { staticClass: "multiselect__single" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(values.length) +
+                                        " options selected"
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
                         }
-                      })
-                    ],
-                    1
-                  )
+                      }
+                    ]),
+                    model: {
+                      value: _vm.filters.selectedStatuses,
+                      callback: function($$v) {
+                        _vm.$set(_vm.filters, "selectedStatuses", $$v)
+                      },
+                      expression: "filters.selectedStatuses"
+                    }
+                  })
                 ],
                 1
-              )
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-6" },
+                [
+                  _c("br"),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: { variant: "outline-primary" },
+                      on: { click: _vm.clearFilters }
+                    },
+                    [_vm._v("Сбросить")]
+                  ),
+                  _vm._v(" "),
+                  _c("b-button", { on: { click: _vm.applyFilters } }, [
+                    _vm._v("Применить")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("hr")
             ]
           ),
           _vm._v(" "),
