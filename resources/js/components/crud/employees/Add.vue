@@ -226,6 +226,7 @@ export default {
         },
         onStatusChange(id) {
             this.item.employee_status_id = id;
+            this.item.status = this.statusList.find(q => q.id == id).name;
         },
         onFileChange(e) {
             if (!e.target.value) return;
