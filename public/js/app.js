@@ -12186,7 +12186,9 @@ __webpack_require__.r(__webpack_exports__);
       });
       return db ? db.name : '';
     },
-    getStatusName: function getStatusName(id) {
+    getStatusName: function getStatusName(item) {
+      var id = item.employee_status_id;
+      if (!id) return item;
       var db = this.employeeStatuses.find(function (b) {
         return b.id === id;
       });
@@ -81489,13 +81491,7 @@ var render = function() {
                     key: "cell(status)",
                     fn: function(data) {
                       return [
-                        _c("b", [
-                          _vm._v(
-                            _vm._s(
-                              _vm.getStatusName(data.item.employee_status_id)
-                            )
-                          )
-                        ])
+                        _c("b", [_vm._v(_vm._s(_vm.getStatusName(data.item)))])
                       ]
                     }
                   },
