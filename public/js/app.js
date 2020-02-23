@@ -12186,12 +12186,6 @@ __webpack_require__.r(__webpack_exports__);
       });
       return db ? db.name : '';
     },
-    getStatusName: function getStatusName(id) {
-      var db = this.employeeStatuses.find(function (b) {
-        return b.id === id;
-      });
-      return db ? db.name : '';
-    },
     viewFiles: function viewFiles(item) {
       this.selectedItem = item;
       this.$bvModal.show('employeeFilesShowModal');
@@ -81488,15 +81482,7 @@ var render = function() {
                   {
                     key: "cell(status)",
                     fn: function(data) {
-                      return [
-                        _c("b", [
-                          _vm._v(
-                            _vm._s(
-                              _vm.getStatusName(data.item.employee_status_id)
-                            )
-                          )
-                        ])
-                      ]
+                      return [_c("b", [_vm._v(_vm._s(data.item.status))])]
                     }
                   },
                   {

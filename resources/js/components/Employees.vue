@@ -66,7 +66,7 @@
                     </template>
 
                     <template v-slot:cell(status)="data">
-                        <b>{{getStatusName(data.item.employee_status_id)}}</b>
+                        <b>{{data.item.status}}</b>
                     </template>
 
                     <template v-slot:cell(dateOfEmployment)="data">
@@ -261,10 +261,6 @@ export default {
         },
         getCitizenshipName(id){
             const db = this.citizenships.find(b=>b.id===id)
-            return db ? db.name : '';
-        },
-        getStatusName(id){
-            const db = this.employeeStatuses.find(b=>b.id===id);
             return db ? db.name : '';
         },
         viewFiles(item){
