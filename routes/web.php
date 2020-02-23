@@ -70,6 +70,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('files/removelist', 'EmployeesController@removeFileList');
         Route::post('{iin}/files/upload', 'EmployeesController@upload');
     });
+
+    Route::get('distinct/{tableName}/{column}', 'DistinctController@get');
 });
 
 Route::get('/artisan/migraterefresh', 'ArtisanController@MigrateRefresh');

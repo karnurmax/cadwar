@@ -12057,6 +12057,7 @@ __webpack_require__.r(__webpack_exports__);
         label: 'Действия'
       }],
       isLoading: false,
+      store: [],
       list: [],
       selectedItem: null,
       dbList: [],
@@ -12104,12 +12105,22 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     });
+    _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getDistinct('employees', 'position').then(function (res) {
+      _this.positionDict = res.data;
+    });
+    _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getDistinct('employees', 'citizenship').then(function (res) {
+      _this.citizenshipDict = res.data;
+    });
+    _services_crud__WEBPACK_IMPORTED_MODULE_0__["default"].getDistinct('employees', 'status').then(function (res) {
+      _this.statusDict = res.data;
+    });
   },
   methods: {
     loadData: function loadData() {
       return _services_employee__WEBPACK_IMPORTED_MODULE_1__["default"].getAllWithFiles();
     },
     fillData: function fillData(list) {
+      this.store = list;
       this.list = list;
     },
     addItem: function addItem() {
@@ -12124,6 +12135,7 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
 
+      this.store.push(item);
       this.list.push(item);
     },
     editItem: function editItem(item) {
@@ -12132,10 +12144,14 @@ __webpack_require__.r(__webpack_exports__);
     },
     itemUpdated: function itemUpdated(item) {
       if (!item) return;
+      var olds = this.store.find(function (i) {
+        return i.id == item.id;
+      });
+      if (!!olds) Object.assign(olds, item);
       var old = this.list.find(function (i) {
         return i.id == item.id;
       });
-      Object.assign(old, item);
+      if (!!old) Object.assign(old, item);
     },
     removeItem: function removeItem(item) {
       this.selectedItem = item;
@@ -12143,10 +12159,14 @@ __webpack_require__.r(__webpack_exports__);
     },
     itemRemoved: function itemRemoved(id) {
       if (!id) return;
+      var idxs = this.store.findIndex(function (x) {
+        return x.id === id;
+      });
+      if (idxs != -1) this.store.splice(idxs, 1);
       var idx = this.list.findIndex(function (x) {
         return x.id === id;
       });
-      this.list.splice(idx, 1);
+      if (idx != -1) this.list.splice(idx, 1);
     },
     getBaseName: function getBaseName(id) {
       var db = this.dbList.find(function (b) {
@@ -12189,8 +12209,49 @@ __webpack_require__.r(__webpack_exports__);
     itemClicked: function itemClicked(e) {
       window.console.log(e);
     },
-    clearFilters: function clearFilters() {},
-    applyFilters: function applyFilters() {}
+    getSelectedFilters: function getSelectedFilters(values) {
+      return values.map(function (v) {
+        return v.text;
+      }).join(',');
+    },
+    clearFilters: function clearFilters() {
+      this.filters.selectedPositions = [];
+      this.filters.selectedCitizenships = [];
+      this.filters.selectedStatuses = [];
+      this.list = this.store;
+    },
+    applyFilters: function applyFilters() {
+      var filtered = this.store;
+
+      if (this.filters.selectedPositions.length) {
+        var posFilter = this.filters.selectedPositions;
+        filtered = filtered.filter(function (x) {
+          return posFilter.findIndex(function (q) {
+            return q.value === x.position;
+          }) > -1;
+        });
+      }
+
+      if (this.filters.selectedCitizenships.length) {
+        var citFilter = this.filters.selectedCitizenships;
+        filtered = filtered.filter(function (x) {
+          return citFilter.findIndex(function (q) {
+            return q.value === x.citizenship;
+          }) > -1;
+        });
+      }
+
+      if (this.filters.selectedStatuses.length) {
+        var statFilter = this.filters.selectedStatuses;
+        filtered = filtered.filter(function (x) {
+          return statFilter.findIndex(function (q) {
+            return q.value === x.status;
+          }) > -1;
+        });
+      }
+
+      this.list = filtered;
+    }
   },
   computed: {
     getSelectedItem: function getSelectedItem() {
@@ -13460,6 +13521,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     onStatusChange: function onStatusChange(id) {
       this.item.employee_status_id = id;
+      this.item.status = this.statusList.find(function (q) {
+        return q.id == id;
+      }).name;
     },
     onFileChange: function onFileChange(e) {
       var _this2 = this;
@@ -81193,8 +81257,9 @@ var render = function() {
                                   { staticClass: "multiselect__single" },
                                   [
                                     _vm._v(
-                                      _vm._s(values.length) +
-                                        " options selected"
+                                      " " +
+                                        _vm._s(_vm.getSelectedFilters(values)) +
+                                        " "
                                     )
                                   ]
                                 )
@@ -81247,8 +81312,9 @@ var render = function() {
                                   { staticClass: "multiselect__single" },
                                   [
                                     _vm._v(
-                                      _vm._s(values.length) +
-                                        " options selected"
+                                      " " +
+                                        _vm._s(_vm.getSelectedFilters(values)) +
+                                        " "
                                     )
                                   ]
                                 )
@@ -81301,8 +81367,9 @@ var render = function() {
                                   { staticClass: "multiselect__single" },
                                   [
                                     _vm._v(
-                                      _vm._s(values.length) +
-                                        " options selected"
+                                      " " +
+                                        _vm._s(_vm.getSelectedFilters(values)) +
+                                        " "
                                     )
                                   ]
                                 )
@@ -103193,7 +103260,8 @@ __webpack_require__.r(__webpack_exports__);
   employeeFileRemove: "employees/files/remove/{id}",
   employeeFileListRemove: "employees/files/removelist",
   getCurrentUser: "getCurrentUser",
-  loadCSV: "uploaddb/csv"
+  loadCSV: "uploaddb/csv",
+  getDistinctUrl: "distinct"
 });
 
 /***/ }),
@@ -103258,6 +103326,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   removeItem: function removeItem(tableName, id) {
     return _http__WEBPACK_IMPORTED_MODULE_0__["default"].remove("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].crud, "/").concat(tableName, "/").concat(id));
+  },
+  getDistinct: function getDistinct(tableName, column) {
+    return _http__WEBPACK_IMPORTED_MODULE_0__["default"].get("".concat(_apiUrls__WEBPACK_IMPORTED_MODULE_1__["default"].getDistinctUrl, "/").concat(tableName, "/").concat(column));
   }
 });
 

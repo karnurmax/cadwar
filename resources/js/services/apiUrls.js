@@ -10,5 +10,6 @@ export default {
     employeeFileRemove: "employees/files/remove/{id}",
     employeeFileListRemove: "employees/files/removelist",
     getCurrentUser: "getCurrentUser",
-    loadCSV: "uploaddb/csv"
+    loadCSV: "uploaddb/csv",
+    getDistinctUrl: "distinct"
 };

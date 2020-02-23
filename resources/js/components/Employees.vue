@@ -19,19 +19,19 @@
                 <div class="col-6">
                     <label>Должность</label>
                     <multiselect v-model="filters.selectedPositions" :options="positionDict" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Должность" label="text" track-by="value" :preselect-first="false">
-                        <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length && !isOpen">{{ values.length }} options selected</span></template>
+                        <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length && !isOpen"> {{ getSelectedFilters(values)}} </span></template>
                     </multiselect>
                 </div>
                 <div class="col-6">
                     <label>Национальность</label>
                     <multiselect v-model="filters.selectedCitizenships" :options="citizenshipDict" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Национальность" label="text" track-by="value" :preselect-first="false">
-                        <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length && !isOpen">{{ values.length }} options selected</span></template>
+                        <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length && !isOpen"> {{ getSelectedFilters(values)}} </span></template>
                     </multiselect>
                 </div>
                 <div class="col-6">
                     <label>Статус</label>
                     <multiselect v-model="filters.selectedStatuses" :options="statusDict" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Статус" label="text" track-by="value" :preselect-first="false">
-                        <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length && !isOpen">{{ values.length }} options selected</span></template>
+                        <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length && !isOpen"> {{ getSelectedFilters(values)}} </span></template>
                     </multiselect>
                 </div>
                 <div class="col-6">
@@ -153,6 +153,7 @@ export default {
                  { key: 'actions', label: 'Действия'},
             ],
             isLoading:false,
+            store:[],
             list:[],
             selectedItem:null,
             dbList:[],
@@ -188,7 +189,15 @@ export default {
                     .then(resList=>this.fillData(resList.data));
             }); 
         });
-        
+        crudService.getDistinct('employees','position').then(res=>{
+            this.positionDict = res.data;
+        });
+        crudService.getDistinct('employees','citizenship').then(res=>{
+            this.citizenshipDict = res.data;
+        });
+        crudService.getDistinct('employees','status').then(res=>{
+            this.statusDict = res.data;
+        });
         
         
     },
@@ -197,6 +206,7 @@ export default {
             return empService.getAllWithFiles();
         },
         fillData(list){
+            this.store = list;
             this.list = list;
         },
         addItem(){
@@ -208,6 +218,7 @@ export default {
             if(item.files&&item.files.length){
                 item.files = item.files.map(f=>JSON.parse(f));
             }
+            this.store.push(item);
             this.list.push(item);
         },
         editItem(item){
@@ -217,8 +228,13 @@ export default {
         itemUpdated(item){
             if(!item)
                 return;
+            const olds = this.store.find(i=>i.id==item.id);
+            if(!!olds)
+                Object.assign(olds, item);
+            
             const old = this.list.find(i=>i.id==item.id);
-            Object.assign(old, item);
+            if(!!old)
+                Object.assign(old, item);
         },
         removeItem(item){
             this.selectedItem = item;
@@ -227,8 +243,13 @@ export default {
         itemRemoved(id){
             if(!id)
                 return;
+            const idxs = this.store.findIndex(x=>x.id===id);
+            if(idxs!=-1)
+                this.store.splice(idxs,1);
+
             const idx = this.list.findIndex(x=>x.id===id);
-            this.list.splice(idx,1);
+            if(idx!=-1)
+                this.list.splice(idx,1);
         },
         getBaseName(id){
             const db = this.dbList.find(b=>b.id===id)
@@ -262,11 +283,30 @@ export default {
         itemClicked(e){
             window.console.log(e);
         },
+        getSelectedFilters(values){
+            return values.map(v=>v.text).join(',');
+        },
         clearFilters(){
-
+            this.filters.selectedPositions=[];
+            this.filters.selectedCitizenships=[];
+            this.filters.selectedStatuses=[];
+            this.list = this.store;
         },
         applyFilters(){
-            
+            let filtered = this.store;
+            if(this.filters.selectedPositions.length){
+                const posFilter = this.filters.selectedPositions;
+                filtered = filtered.filter(x=>posFilter.findIndex(q=>q.value === x.position) > -1);
+            }
+            if(this.filters.selectedCitizenships.length){
+                const citFilter = this.filters.selectedCitizenships;
+                filtered = filtered.filter(x=>citFilter.findIndex(q=>q.value === x.citizenship) > -1);
+            }
+            if(this.filters.selectedStatuses.length){
+                const statFilter = this.filters.selectedStatuses;
+                filtered = filtered.filter(x=>statFilter.findIndex(q=>q.value === x.status) > -1);
+            }
+            this.list = filtered;
         }
     },
     computed: {

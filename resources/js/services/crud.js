@@ -15,5 +15,8 @@ export default {
     },
     removeItem(tableName, id) {
         return http.remove(`${apiUrls.crud}/${tableName}/${id}`);
+    },
+    getDistinct(tableName, column) {
+        return http.get(`${apiUrls.getDistinctUrl}/${tableName}/${column}`);
     }
 };
