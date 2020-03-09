@@ -11999,6 +11999,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -12028,6 +12031,9 @@ __webpack_require__.r(__webpack_exports__);
         key: 'iin',
         label: 'ИИН',
         sortable: true
+      }, {
+        key: 'phone',
+        label: 'Телефон'
       }, {
         key: 'position',
         label: 'Должность'
@@ -81465,6 +81471,12 @@ var render = function() {
                     key: "cell(iin)",
                     fn: function(data) {
                       return [_c("b", [_vm._v(_vm._s(data.item.iin))])]
+                    }
+                  },
+                  {
+                    key: "cell(phone)",
+                    fn: function(data) {
+                      return [_c("b", [_vm._v(_vm._s(data.item.phone))])]
                     }
                   },
                   {

@@ -56,6 +56,9 @@
                     <template v-slot:cell(iin)="data">
                         <b>{{ data.item.iin }}</b>
                     </template>
+                    <template v-slot:cell(phone)="data">
+                        <b>{{ data.item.phone }}</b>
+                    </template>
                     
                     <template v-slot:cell(position)="data">
                         <b>{{ data.item.position }}</b>
@@ -142,6 +145,7 @@ export default {
                  { key: 'index', label: '№' },
                  { key: 'fio', label: 'ФИО',sortable: true },
                  { key: 'iin', label: 'ИИН',sortable: true },
+                 { key: 'phone', label: 'Телефон' },
                  { key: 'position', label: 'Должность'},
                  { key: 'citizenship', label: 'Гражданство'},
                  { key: 'status', label: 'Статус'},
