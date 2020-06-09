@@ -50,6 +50,15 @@
                     placeholder="ИИН"
                 ></b-form-input>
             </b-form-group>
+            <b-form-group id="input-group-14" label="Телефон :" label-for="input-14">
+                <b-form-input
+                    id="input-14"
+                    v-model="item.phone"
+                    type="text"
+                    required
+                    placeholder="Телефон"
+                ></b-form-input>
+            </b-form-group>
 
             <b-form-group
                 id="input-group-10"
